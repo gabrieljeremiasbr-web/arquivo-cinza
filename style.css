@@ -4511,3 +4511,17 @@ footer {
 }
 #tela-mestre .master-management-links button:active {background:#7a2838}
 #tela-mestre .master-management-links button:focus-visible {outline:2px solid #f2a0a8;outline-offset:3px}
+
+/* Área do Mestre — resumo legível e mesa sem cadastro obrigatório */
+#tela-mestre .master-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:20px 0 4px}
+#tela-mestre .master-overview-stat{display:flex;flex-direction:column;justify-content:center;gap:8px;min-height:100px;padding:18px 20px;border:1px solid #783b48;border-radius:12px;background:linear-gradient(145deg,#28161e,#130e13);box-shadow:0 8px 20px #0003}
+#tela-mestre .master-overview-stat span{font-size:11px;font-weight:700;letter-spacing:1.7px;color:#e0a6aa}
+#tela-mestre .master-overview-stat strong{font-size:clamp(26px,3vw,38px);line-height:1;color:#fff0e7;font-variant-numeric:tabular-nums}
+#tela-mestre .session-entry-card{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:24px}
+#tela-mestre .session-entry-card h3{margin:0;font-size:clamp(21px,2.5vw,30px)}
+#tela-mestre .session-entry-card p{max-width:65ch;line-height:1.6}
+#tela-mestre .session-entry-card .primary{margin-top:auto;min-height:48px}
+#tela-mestre .master-management-intro{margin-top:20px}
+#tela-sessao .master-card{min-width:0}
+@media(max-width:760px){#tela-mestre .master-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){#tela-mestre .master-overview-stat{padding:14px;min-height:84px}#tela-mestre .master-overview-stat span{font-size:9px;letter-spacing:1px}}
