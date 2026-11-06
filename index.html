@@ -599,6 +599,32 @@
                   <h4>✦ ADICIONAR EQUIPAMENTO</h4>
                   <span>NOVO REGISTRO</span>
                 </div>
+                <div class="cs-inventory-catalog">
+                  <label for="inventario-catalogo">Lista de itens sugeridos</label>
+                  <select id="inventario-catalogo" aria-describedby="inventario-catalogo-ajuda">
+                    <option value="">Selecione um item da lista...</option>
+                    <optgroup label="Investigação">
+                      <option>Lanterna</option><option>Lanterna UV</option><option>Lupa</option>
+                      <option>Câmera fotográfica</option><option>Gravador de áudio</option>
+                      <option>Bloco de anotações</option><option>Caneta</option><option>Mapa</option>
+                      <option>Kit de coleta de evidências</option><option>Luvas descartáveis</option>
+                    </optgroup>
+                    <optgroup label="Comunicação e tecnologia">
+                      <option>Celular</option><option>Rádio comunicador</option><option>Notebook</option>
+                      <option>Carregador portátil</option><option>Pen drive</option>
+                    </optgroup>
+                    <optgroup label="Exploração e sobrevivência">
+                      <option>Mochila</option><option>Corda</option><option>Isqueiro</option>
+                      <option>Canivete utilitário</option><option>Kit de primeiros socorros</option>
+                      <option>Garrafa de água</option><option>Ração de viagem</option><option>Pilhas</option>
+                    </optgroup>
+                    <optgroup label="Objetos pessoais">
+                      <option>Carteira</option><option>Chaves</option><option>Relógio</option>
+                      <option>Documento de identidade</option><option>Guarda-chuva</option>
+                    </optgroup>
+                  </select>
+                  <p id="inventario-catalogo-ajuda">Escolha um item para preencher o nome ou escreva um item personalizado abaixo.</p>
+                </div>
                 <form id="form-inventario" class="inventory-form">
                   <label for="item-nome">Nome do item
                     <input id="item-nome" required maxlength="120" autocomplete="off" placeholder="Ex.: Lanterna">
