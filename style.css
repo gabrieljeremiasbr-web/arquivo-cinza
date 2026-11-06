@@ -4556,3 +4556,285 @@ footer {
 #tela-mestre .master-player-info button{width:100%;margin-top:4px;min-height:40px}
 #tela-mestre .master-players-empty{grid-column:1/-1;margin:0;padding:24px;border:1px dashed #70404a;border-radius:10px;color:#d6bfc2;text-align:center}
 @media(max-width:480px){#tela-mestre .master-players-panel{padding:16px}#tela-mestre .master-player-card{padding:12px;gap:10px}#tela-mestre .master-player-portrait{width:58px;height:75px}}
+
+
+/* Dossiê lateral — fichas reais dos jogadores na Área do Mestre */
+#tela-mestre .master-dossier-panel {
+  overflow:hidden;
+  padding:0;
+  border-color:#81414e;
+  background:linear-gradient(140deg,#24161d,#120d12 85%);
+}
+#tela-mestre .master-dossier-panel .master-players-heading {
+  margin:0;
+  padding:24px 28px 22px;
+  border-bottom:1px solid #5d303b;
+  background:linear-gradient(120deg,#2a1820,#1b1118 75%);
+}
+#tela-mestre .master-dossier-panel .master-players-heading h3 {
+  font-size:clamp(21px,2.4vw,29px);
+  letter-spacing:.2px;
+}
+#tela-mestre .master-dossier-panel .master-players-heading .outline {
+  min-height:43px;
+  background:#371821;
+  border-color:#98404d;
+}
+#tela-mestre .master-dossier-panel .master-players-heading .outline:hover {
+  background:#5e2532;
+}
+#tela-mestre .master-dossier-toolbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+  padding:17px 20px;
+  border-bottom:1px solid #51303a;
+  background:#180f15;
+}
+#tela-mestre .master-dossier-search {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex:1 1 250px;
+  max-width:500px;
+  min-width:0;
+  padding:0 12px;
+  border:1px solid #79505b;
+  border-radius:8px;
+  background:#100c11;
+  color:#d5a5ad;
+}
+#tela-mestre .master-dossier-search span {font-size:22px}
+#tela-mestre .master-dossier-search input {
+  min-width:0;
+  width:100%;
+  height:43px;
+  padding:5px 0;
+  background:transparent;
+  border:0;
+  outline:0;
+  color:#f8eae0;
+}
+#tela-mestre .master-dossier-search:focus-within {
+  border-color:#ed6d7c;
+  box-shadow:0 0 0 2px #b23c4c45;
+}
+#tela-mestre .master-dossier-search input::placeholder {color:#a58b91}
+#tela-mestre .master-dossier-counter {color:#d0adb2;font-size:12px}
+#tela-mestre .master-players-grid.master-dossier-layout {
+  display:grid;
+  grid-template-columns:minmax(205px,250px) minmax(0,1fr);
+  gap:0;
+  align-items:stretch;
+  min-height:470px;
+}
+#tela-mestre .master-dossier-sidebar {
+  min-width:0;
+  background:linear-gradient(#170f15,#100b10);
+  border-right:1px solid #63323e;
+}
+#tela-mestre .master-dossier-sidebar-title {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 16px 11px;
+  color:#df9fa7;
+  font-size:10px;
+  letter-spacing:2px;
+  font-weight:800;
+}
+#tela-mestre .master-dossier-list {
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  padding:0 10px 17px;
+}
+#tela-mestre .master-dossier-player {
+  display:flex;
+  gap:11px;
+  align-items:center;
+  width:100%;
+  min-width:0;
+  min-height:78px;
+  padding:9px;
+  background:transparent;
+  color:#f4e0da;
+  border:1px solid transparent;
+  border-radius:9px;
+  text-align:left;
+  transition:background .15s,border-color .15s;
+}
+#tela-mestre .master-dossier-player:hover {background:#30202a;border-color:#76404b}
+#tela-mestre .master-dossier-player.is-selected {
+  background:linear-gradient(90deg,#49222e,#2a1721);
+  border-color:#b24c5d;
+  box-shadow:inset 3px 0 #ee5e73;
+}
+#tela-mestre .master-dossier-thumb {
+  display:grid;
+  place-items:center;
+  flex:0 0 49px;
+  width:49px;
+  height:56px;
+  overflow:hidden;
+  border-radius:6px;
+  border:1px solid #894854;
+  background:linear-gradient(145deg,#51313f,#21141c);
+  color:#f6bec2;
+  font-size:27px;
+}
+#tela-mestre .master-dossier-thumb img,
+#tela-mestre .master-dossier-portrait img {
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+#tela-mestre .master-dossier-player-text {
+  display:flex;
+  flex:1;
+  flex-direction:column;
+  min-width:0;
+  gap:3px;
+}
+#tela-mestre .master-dossier-player-text strong {
+  font-size:13px;
+  color:#f8e3d9;
+  overflow-wrap:anywhere;
+}
+#tela-mestre .master-dossier-player-text small {color:#bba5a9;font-size:11px}
+#tela-mestre .master-dossier-player-text .master-dossier-player-life {color:#e78c95;font-size:10px}
+#tela-mestre .master-dossier-chevron {color:#d48b99;font-size:25px}
+#tela-mestre .master-dossier-sidebar-empty {padding:15px;color:#caa8ad;font-size:12px}
+#tela-mestre .master-dossier-detail {
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  gap:18px;
+  padding:clamp(16px,2.2vw,27px);
+  background:radial-gradient(ellipse at 95% 0%,#391b284f,transparent 60%),#1b1219;
+}
+#tela-mestre .master-dossier-hero {
+  display:grid;
+  grid-template-columns:92px minmax(0,1fr) auto;
+  align-items:center;
+  gap:18px;
+  padding-bottom:19px;
+  border-bottom:1px solid #53313b;
+}
+#tela-mestre .master-dossier-portrait {
+  display:grid;
+  place-items:center;
+  width:92px;
+  height:113px;
+  overflow:hidden;
+  border:1px solid #a05b64;
+  border-radius:8px;
+  background:#452a36;
+  color:#f2bdc4;
+  font-size:47px;
+  box-shadow:0 8px 18px #0007;
+}
+#tela-mestre .master-dossier-kicker {font-size:10px;letter-spacing:2px;color:#e28893;font-weight:700}
+#tela-mestre .master-dossier-identity h4 {
+  margin:8px 0 6px;
+  font:normal clamp(24px,3vw,36px)/1.05 Georgia,serif;
+  color:#f5dfd3;
+  overflow-wrap:anywhere;
+}
+#tela-mestre .master-dossier-identity p {margin:0;color:#bda8ad}
+#tela-mestre .master-dossier-defense {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-width:79px;
+  gap:6px;
+  padding:12px;
+  border:1px solid #c04c5a;
+  border-radius:9px;
+  background:#301820;
+}
+#tela-mestre .master-dossier-defense span {font-size:10px;letter-spacing:1.5px;color:#e8aeb4}
+#tela-mestre .master-dossier-defense strong {font:normal 29px Georgia,serif;color:#ffe9db}
+#tela-mestre .master-dossier-resources {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+#tela-mestre .master-dossier-resource {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  padding:13px;
+  background:#251720;
+  border:1px solid #67404a;
+  border-radius:9px;
+}
+#tela-mestre .master-dossier-resource-label {font-weight:700;letter-spacing:1px;color:#d8b4b8;font-size:10px}
+#tela-mestre .master-dossier-resource strong {font-size:20px;line-height:1.2;color:#f4e7de;font-variant-numeric:tabular-nums}
+#tela-mestre .master-dossier-track {height:6px;border-radius:20px;background:#4f3440;overflow:hidden}
+#tela-mestre .master-dossier-track span {display:block;height:100%;border-radius:20px;background:#ec5b67}
+#tela-mestre .resource-san .master-dossier-track span {background:#ae88c5}
+#tela-mestre .resource-pe .master-dossier-track span {background:#75b1d0}
+#tela-mestre .master-dossier-columns {display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:10px;align-items:stretch}
+#tela-mestre .master-dossier-box {
+  min-width:0;
+  border:1px solid #64404c;
+  border-radius:9px;
+  background:linear-gradient(#271b23,#1c131b);
+  padding:15px;
+}
+#tela-mestre .master-dossier-box h5,
+#tela-mestre .master-dossier-story h5 {
+  color:#e8b4b5;
+  font-size:11px;
+  letter-spacing:1.1px;
+  margin:0 0 14px;
+}
+#tela-mestre .master-dossier-attributes {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+#tela-mestre .master-dossier-attribute {
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:center;
+  padding:9px 2px;
+  border-radius:6px;
+  background:#39222c;
+}
+#tela-mestre .master-dossier-attribute span {color:#ccabb1;font-size:10px}
+#tela-mestre .master-dossier-attribute strong {font-size:18px;color:#fff0e6}
+#tela-mestre .master-dossier-mini-list {margin:0;padding-left:17px;display:grid;gap:8px;color:#edcdd0;font-size:12px}
+#tela-mestre .master-dossier-mini-list li {overflow-wrap:anywhere}
+#tela-mestre .master-dossier-mini-list li::marker {color:#d65566}
+#tela-mestre .master-dossier-muted {font-size:12px;color:#bca4ab}
+#tela-mestre .master-dossier-story {border-top:1px solid #57323c;padding-top:15px}
+#tela-mestre .master-dossier-story p {max-height:140px;overflow:auto;color:#d4c1bf;white-space:pre-wrap;font-size:12px;line-height:1.6}
+#tela-mestre .master-dossier-actions {display:flex;justify-content:flex-end;padding-top:3px}
+#tela-mestre .master-dossier-open {min-width:220px;min-height:45px}
+#tela-mestre .master-dossier-detail>.master-players-empty {display:grid;place-items:center;min-height:300px}
+@media(max-width:1100px) {
+  #tela-mestre .master-dossier-columns {grid-template-columns:repeat(2,minmax(0,1fr))}
+  #tela-mestre .master-dossier-inventory {grid-column:1/-1}
+}
+@media(max-width:750px) {
+  #tela-mestre .master-players-grid.master-dossier-layout {grid-template-columns:1fr}
+  #tela-mestre .master-dossier-sidebar {border-right:0;border-bottom:1px solid #63323e}
+  #tela-mestre .master-dossier-list {flex-direction:row;overflow-x:auto;padding-bottom:14px}
+  #tela-mestre .master-dossier-player {flex:0 0 185px}
+}
+@media(max-width:520px) {
+  #tela-mestre .master-dossier-panel .master-players-heading {padding:19px 15px}
+  #tela-mestre .master-dossier-toolbar {padding:13px}
+  #tela-mestre .master-dossier-hero {grid-template-columns:66px minmax(0,1fr) auto;gap:10px}
+  #tela-mestre .master-dossier-portrait {width:66px;height:86px;font-size:29px}
+  #tela-mestre .master-dossier-kicker {font-size:8px;letter-spacing:1px}
+  #tela-mestre .master-dossier-defense {min-width:59px;padding:8px}
+  #tela-mestre .master-dossier-defense span {font-size:8px}
+  #tela-mestre .master-dossier-defense strong {font-size:23px}
+  #tela-mestre .master-dossier-resources {gap:6px}
+  #tela-mestre .master-dossier-resource {padding:9px}
+  #tela-mestre .master-dossier-resource-label {font-size:8px;letter-spacing:.1px}
+  #tela-mestre .master-dossier-resource strong {font-size:15px}
+  #tela-mestre .master-dossier-columns {grid-template-columns:1fr}
+  #tela-mestre .master-dossier-inventory {grid-column:auto}
+  #tela-mestre .master-dossier-open {width:100%}
+}
