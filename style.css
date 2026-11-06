@@ -5501,3 +5501,42 @@ footer {
   #tela-ficha .cs-summary-section .attribute-stage{min-height:380px}
   #tela-ficha .cs-summary-section .dice-wheel{height:380px}
 }
+
+/* Resumo em duas colunas: perícias à direita da roda de atributos */
+#tela-ficha .cs-summary-expanded{
+  grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+  align-items:start;
+  gap:14px;
+}
+#tela-ficha #ficha-resumo-roda,
+#tela-ficha #ficha-resumo-pericias-detalhes{
+  min-width:0;
+  width:100%;
+  margin:0;
+}
+#tela-ficha #ficha-resumo-pericias-detalhes{
+  align-content:start;
+  grid-template-columns:minmax(0,1fr);
+}
+#tela-ficha #ficha-resumo-pericias-detalhes .ability-skills{
+  max-height:660px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  scrollbar-width:thin;
+  scrollbar-color:#9a4054 #201017;
+}
+#tela-ficha #ficha-resumo-pericias-detalhes .skills-display{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+#tela-ficha #ficha-resumo-roda .attribute-stage{
+  min-height:460px;
+  max-width:100%;
+}
+#tela-ficha #ficha-resumo-roda .dice-wheel{
+  max-width:100%;
+}
+@media(max-width:1120px){
+  #tela-ficha .cs-summary-expanded{grid-template-columns:minmax(0,1fr)}
+  #tela-ficha #ficha-resumo-pericias-detalhes .ability-skills{max-height:none;overflow:visible}
+}
