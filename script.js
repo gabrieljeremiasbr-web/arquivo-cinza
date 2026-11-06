@@ -50,7 +50,8 @@ let campanhaCompartilhada = {
   pararEscuta: null
 };
 
-const periciasRPG = [
+// O legado preserva fichas antigas de investigação, sem converter CAR/PEC para PRE/VIG automaticamente.
+const periciasRPGLegado = [
   ['Acrobacia', 'AGL'],
   ['Adestramento', 'CAR'],
   ['Artes', 'CAR'],
@@ -81,14 +82,72 @@ const periciasRPG = [
   ['Tecnologia', 'INT'],
   ['Vontade', 'CAR']
 ];
-
-const atributosInfo = [
+const atributosInfoLegado = [
   ['agl', 'AGILIDADE', 'AGL'],
   ['for', 'FORÇA', 'FOR'],
   ['int', 'INTELIGÊNCIA', 'INT'],
   ['car', 'CARISMA', 'CAR'],
   ['pec', 'PERCEPÇÃO', 'PEC']
 ];
+
+const periciasRPG = [
+  ['Acrobacia', 'AGL'], ['Adestramento', 'PRE'], ['Artes', 'PRE'],
+  ['Atletismo', 'FOR'], ['Atualidades', 'INT'], ['Ciências', 'INT'],
+  ['Crime', 'AGL'], ['Diplomacia', 'PRE'], ['Enganação', 'PRE'],
+  ['Fortitude', 'VIG'], ['Furtividade', 'AGL'], ['Iniciativa', 'AGL'],
+  ['Intimidação', 'PRE'], ['Intuição', 'PRE'], ['Investigação', 'INT'],
+  ['Luta', 'FOR'], ['Medicina', 'INT'], ['Ocultismo', 'INT'],
+  ['Percepção', 'PRE'], ['Pilotagem', 'AGL'], ['Pontaria', 'AGL'],
+  ['Profissão', 'INT'], ['Reflexos', 'AGL'], ['Religião', 'PRE'],
+  ['Sobrevivência', 'INT'], ['Tática', 'INT'], ['Tecnologia', 'INT'], ['Vontade', 'PRE']
+];
+const atributosInfo = [
+  ['agl', 'AGILIDADE', 'AGL'],
+  ['for', 'FORÇA', 'FOR'],
+  ['int', 'INTELECTO', 'INT'],
+  ['pre', 'PRESENÇA', 'PRE'],
+  ['vig', 'VIGOR', 'VIG']
+];
+
+const REGRAS_CLASSE = {
+  combatente: { pv:20, pe:2, san:12, pvNivel:4, peNivel:2, sanNivel:3, periciasInt:1, periciasBase:3 },
+  especialista: { pv:16, pe:3, san:16, pvNivel:3, peNivel:3, sanNivel:4, periciasInt:1, periciasBase:7 },
+  ocultista: { pv:12, pe:4, san:20, pvNivel:2, peNivel:4, sanNivel:5, periciasInt:1, periciasBase:5 }
+};
+
+function fichaUsaRegrasAntigas(ficha) {
+  return !!ficha && (ficha.regras === 'legado' || (!ficha.regras && !('pre' in (ficha.atributos || {}))));
+}
+function nexFormulario() {
+  return $('personagem-classe-base').value === 'sobrevivente'
+    ? 0
+    : Number($('personagem-nex').value || 5);
+}
+function nexFicha(ficha) {
+  return fichaUsaRegrasAntigas(ficha) ? nexAtualDaMesa() : Number(ficha?.nex ?? 5);
+}
+function calcularValoresLivro(classe, atributos, nex, estagio) {
+  const agl = Number(atributos.agl) || 0;
+  const pre = Number(atributos.pre) || 0;
+  const vig = Number(atributos.vig) || 0;
+  if (classe === 'sobrevivente') {
+    const evolucoes = Math.max(0, Math.min(4, Number(estagio || 1) - 1));
+    return { pv:8+vig+2*evolucoes, pe:2+pre+evolucoes, san:8+2*evolucoes, defesa:10+agl };
+  }
+  const base = REGRAS_CLASSE[classe] || REGRAS_CLASSE.especialista;
+  const passos = Math.max(0, Math.floor((Number(nex || 5)-5)/5));
+  return {
+    pv:base.pv+vig+passos*(base.pvNivel+vig),
+    pe:base.pe+pre+passos*(base.peNivel+pre),
+    san:base.san+passos*base.sanNivel,
+    defesa:10+agl
+  };
+}
+function limitePericiasClasse(classe, int) {
+  if (classe === 'sobrevivente') return 1 + Math.max(0, Number(int) || 0);
+  const base = REGRAS_CLASSE[classe] || REGRAS_CLASSE.especialista;
+  return base.periciasBase + Math.max(0, Number(int) || 0);
+}
 
 /* ==========================================
    NAVEGAÇÃO
@@ -939,7 +998,9 @@ function atributoFichaPorSigla(sigla) {
     FOR: 'for',
     INT: 'int',
     CAR: 'car',
-    PEC: 'pec'
+    PEC: 'pec',
+    PRE: 'pre',
+    VIG: 'vig'
   }[sigla];
 }
 
