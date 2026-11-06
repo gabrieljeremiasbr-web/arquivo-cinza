@@ -1841,50 +1841,183 @@ function renderizarOrdemIniciativa() {
   });
 }
 
+let fichaMestreSelecionadaId = null;
+
 function renderizarFichasJogadoresMestre() {
-  const area = $('master-players-list');
-  if (!area) return;
-  area.replaceChildren();
-  const fichas = fichasDaMesa().filter(ficha => ficha.tipo !== 'npc');
-  if (!fichas.length) {
-    const vazio = document.createElement('p');
-    vazio.className = 'master-players-empty';
-    vazio.textContent = 'Nenhuma ficha de jogador encontrada. As fichas criadas nesta conta ou compartilhadas com a campanha aparecerão aqui.';
-    area.append(vazio);
+  const lista = $('master-players-list');
+  const detalhe = $('master-dossier-detail');
+  const campoBusca = $('master-players-search');
+  const contador = $('master-players-count');
+  if (!lista || !detalhe || !campoBusca || !contador) return;
+
+  const busca = campoBusca.value.trim().toLocaleLowerCase('pt-BR');
+  const fichas = fichasDaMesa()
+    .filter(ficha => ficha.tipo !== 'npc')
+    .sort((a, b) => String(a.titulo || '').localeCompare(String(b.titulo || ''), 'pt-BR'));
+  const encontradas = fichas.filter(ficha =>
+    (String(ficha.titulo || '') + ' ' + String(ficha.classe || '')).toLocaleLowerCase('pt-BR').includes(busca)
+  );
+
+  const criar = (tag, classe, texto) => {
+    const elemento = document.createElement(tag);
+    if (classe) elemento.className = classe;
+    if (texto !== undefined) elemento.textContent = String(texto);
+    return elemento;
+  };
+
+  contador.textContent = encontradas.length + ' de ' + fichas.length +
+    ' investigador' + (fichas.length === 1 ? '' : 'es');
+  lista.replaceChildren();
+  detalhe.replaceChildren();
+
+  if (!encontradas.length) {
+    const mensagem = fichas.length
+      ? 'Nenhum investigador corresponde à busca.'
+      : 'Nenhuma ficha encontrada. Crie um personagem ou compartilhe as fichas da campanha para consultá-las aqui.';
+    lista.append(criar('p', 'master-dossier-sidebar-empty', fichas.length ? 'Sem resultados' : 'Nenhum jogador ainda'));
+    detalhe.append(criar('p', 'master-players-empty', mensagem));
     return;
   }
-  fichas.forEach(ficha => {
-    const cartao = document.createElement('article');
-    cartao.className = 'master-player-card';
-    cartao.append(criarRetratoMestre(ficha, 'master-player-portrait'));
-    const conteudo = document.createElement('div');
-    conteudo.className = 'master-player-info';
-    const nome = document.createElement('h4');
-    nome.textContent = ficha.titulo || 'Investigador';
-    const classe = document.createElement('p');
-    classe.textContent = ficha.classe || 'Investigador';
-    const atributos = document.createElement('div');
-    atributos.className = 'master-player-stats';
-    for (const [rotulo, atual, maximo] of [
-      ['VIDA', ficha.pvAtual ?? ficha.pv ?? '—', ficha.pv ?? '—'],
-      ['SANIDADE', ficha.sanAtual ?? ficha.san ?? '—', ficha.san ?? '—'],
-      ['PE', ficha.peAtual ?? ficha.pe ?? '—', ficha.pe ?? '—']
-    ]) {
-      const dado = document.createElement('span');
-      dado.textContent = rotulo + ' ' + atual + '/' + maximo;
-      atributos.append(dado);
+
+  if (!encontradas.some(ficha => ficha.id === fichaMestreSelecionadaId)) {
+    fichaMestreSelecionadaId = encontradas[0].id;
+  }
+
+  encontradas.forEach(ficha => {
+    const selecionada = ficha.id === fichaMestreSelecionadaId;
+    const botaoJogador = criar('button', 'master-dossier-player' + (selecionada ? ' is-selected' : ''));
+    botaoJogador.type = 'button';
+    botaoJogador.setAttribute('aria-pressed', String(selecionada));
+    botaoJogador.append(criarRetratoMestre(ficha, 'master-dossier-thumb'));
+    const textos = criar('span', 'master-dossier-player-text');
+    textos.append(
+      criar('strong', '', ficha.titulo || 'Investigador'),
+      criar('small', '', ficha.classe || 'Investigador')
+    );
+    const vida = ficha.pvAtual ?? ficha.pv;
+    const pvMax = ficha.pv;
+    if (vida !== undefined && pvMax !== undefined) {
+      textos.append(criar('small', 'master-dossier-player-life', '♥ ' + vida + '/' + pvMax + ' PV'));
     }
-    const defesa = document.createElement('p');
-    defesa.className = 'master-player-defense';
-    defesa.textContent = 'DEFESA  ' + (ficha.defesa ?? '—');
-    const abrir = botao('VER FICHA COMPLETA', () => abrirFicha(ficha.id), 'outline');
-    conteudo.append(nome, classe, atributos, defesa, abrir);
-    cartao.append(conteudo);
-    area.append(cartao);
+    botaoJogador.append(textos, criar('span', 'master-dossier-chevron', '›'));
+    botaoJogador.onclick = () => {
+      fichaMestreSelecionadaId = ficha.id;
+      renderizarFichasJogadoresMestre();
+    };
+    lista.append(botaoJogador);
   });
+
+  const ficha = encontradas.find(item => item.id === fichaMestreSelecionadaId);
+  if (!ficha) return;
+
+  const topo = criar('div', 'master-dossier-hero');
+  const retrato = criarRetratoMestre(ficha, 'master-dossier-portrait');
+  const identidade = criar('div', 'master-dossier-identity');
+  identidade.append(
+    criar('span', 'master-dossier-kicker', 'DOSSIÊ DO INVESTIGADOR'),
+    criar('h4', '', ficha.titulo || 'Investigador'),
+    criar('p', '', ficha.classe || 'Investigador')
+  );
+  const defesa = criar('div', 'master-dossier-defense');
+  defesa.append(criar('span', '', 'DEFESA'), criar('strong', '', ficha.defesa ?? '—'));
+  topo.append(retrato, identidade, defesa);
+  detalhe.append(topo);
+
+  const recursos = criar('div', 'master-dossier-resources');
+  for (const [rotulo, campo, campoAtual, cor] of [
+    ['VIDA', 'pv', 'pvAtual', 'pv'],
+    ['SANIDADE', 'san', 'sanAtual', 'san'],
+    ['PONTOS DE ESFORÇO', 'pe', 'peAtual', 'pe']
+  ]) {
+    const maxRaw = ficha[campo];
+    const atualRaw = ficha[campoAtual] ?? maxRaw;
+    const max = Number(maxRaw);
+    const atual = Number(atualRaw);
+    const valido = maxRaw !== undefined && Number.isFinite(max) && max >= 0 && Number.isFinite(atual);
+    const cartao = criar('div', 'master-dossier-resource resource-' + cor);
+    cartao.append(
+      criar('span', 'master-dossier-resource-label', rotulo),
+      criar('strong', '', valido ? String(atualRaw) + ' / ' + String(maxRaw) : '—')
+    );
+    const barra = criar('div', 'master-dossier-track');
+    const preenchimento = criar('span', '');
+    preenchimento.style.width = valido && max > 0
+      ? String(Math.max(0, Math.min(100, atual / max * 100))) + '%'
+      : '0%';
+    barra.append(preenchimento);
+    cartao.append(barra);
+    recursos.append(cartao);
+  }
+  detalhe.append(recursos);
+
+  const conteudo = criar('div', 'master-dossier-columns');
+  const atributos = criar('section', 'master-dossier-box');
+  atributos.append(criar('h5', '', '◈ ATRIBUTOS'));
+  const valores = criar('div', 'master-dossier-attributes');
+  for (const [chave, nome, sigla] of atributosInfo) {
+    const item = criar('div', 'master-dossier-attribute');
+    item.append(
+      criar('span', '', sigla),
+      criar('strong', '', ficha.atributos?.[chave] ?? '—')
+    );
+    item.title = nome;
+    valores.append(item);
+  }
+  atributos.append(valores);
+
+  const habilidades = criar('section', 'master-dossier-box');
+  habilidades.append(criar('h5', '', '✦ HABILIDADES'));
+  const listaHabilidades = Array.isArray(ficha.habilidades)
+    ? ficha.habilidades
+    : typeof ficha.habilidades === 'string'
+      ? ficha.habilidades.split(/\r?\n/)
+      : [];
+  const habilidadesValidas = listaHabilidades.map(item => String(item).trim()).filter(Boolean);
+  if (habilidadesValidas.length) {
+    const itens = criar('ul', 'master-dossier-mini-list');
+    habilidadesValidas.forEach(item => itens.append(criar('li', '', item)));
+    habilidades.append(itens);
+  } else {
+    habilidades.append(criar('p', 'master-dossier-muted', 'Nenhuma habilidade cadastrada.'));
+  }
+
+  const inventario = criar('section', 'master-dossier-box master-dossier-inventory');
+  inventario.append(criar('h5', '', '▤ INVENTÁRIO'));
+  const itensInventario = Array.isArray(ficha.inventario) ? ficha.inventario : [];
+  if (itensInventario.length) {
+    const itens = criar('ul', 'master-dossier-mini-list');
+    itensInventario.forEach(item => {
+      const nome = typeof item === 'string' ? item : item?.nome || item?.titulo || 'Item sem nome';
+      const quantidade = typeof item === 'object' && item !== null && Number(item.quantidade) > 1
+        ? ' ×' + item.quantidade : '';
+      itens.append(criar('li', '', String(nome) + quantidade));
+    });
+    inventario.append(itens);
+  } else {
+    inventario.append(criar('p', 'master-dossier-muted', 'Nenhum item no inventário.'));
+  }
+  conteudo.append(atributos, habilidades, inventario);
+  detalhe.append(conteudo);
+
+  if (ficha.historia && String(ficha.historia).trim()) {
+    const historia = criar('section', 'master-dossier-story');
+    historia.append(
+      criar('h5', '', 'HISTÓRIA DO PERSONAGEM'),
+      criar('p', '', ficha.historia)
+    );
+    detalhe.append(historia);
+  }
+
+  const rodape = criar('div', 'master-dossier-actions');
+  const abrir = criar('button', 'primary master-dossier-open', '▤ VER FICHA COMPLETA');
+  abrir.type = 'button';
+  abrir.onclick = () => abrirFicha(ficha.id);
+  rodape.append(abrir);
+  detalhe.append(rodape);
 }
 
 $('master-players-refresh').onclick = renderizarFichasJogadoresMestre;
+$('master-players-search').addEventListener('input', renderizarFichasJogadoresMestre);
 
 function atualizarPainelMestre() {
   if (!$('visao-mesa-personagens')) return;
