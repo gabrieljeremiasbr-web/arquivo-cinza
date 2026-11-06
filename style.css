@@ -4531,3 +4531,9 @@ footer {
 #tela-mestre .master-management-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;width:100%;max-width:none}
 #tela-mestre .master-management-links>.eyebrow{grid-column:1/-1}
 @media(max-width:600px){#tela-mestre .master-management-links{grid-template-columns:1fr}}
+
+/* Solicitação do mestre: ocultar todo o gerenciamento administrativo da Área do Mestre, mantendo os elementos no DOM para não quebrar salvamento e compartilhamento. */
+#tela-mestre .master-management-layout,
+#tela-mestre .master-management-intro,
+#tela-mestre #mestre-configuracao,
+#tela-mestre #mestre-objetivos { display:none !important; }
