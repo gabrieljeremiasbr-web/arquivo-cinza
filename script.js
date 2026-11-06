@@ -1801,6 +1801,32 @@ function mostrarAtaques(personagem) {
   });
 }
 
+const armasSolicitadas = {
+  bengala: {
+    nome: 'Bengala-florete',
+    dano: '1d6',
+    critico: '18',
+    nota: 'Adaptação do florete do livro: arma ágil, corte, categoria I, 1 espaço. O disfarce de bengala é narrativo.'
+  },
+  garras: {
+    nome: 'Luva com Garras',
+    dano: '1d6',
+    critico: '20',
+    nota: 'Regra da casa sugerida: corpo a corpo, corte, 1 espaço. Não é uma arma da tabela oficial; mestre pode alterar.'
+  }
+};
+$('arma-modelo').addEventListener('change', () => {
+  const arma = armasSolicitadas[$('arma-modelo').value];
+  if (!arma) {
+    $('arma-modelo-regra').textContent = 'Selecione uma arma para preencher o ataque ou cadastre um ataque personalizado.';
+    return;
+  }
+  $('ataque-nome').value = arma.nome;
+  $('ataque-dano').value = arma.dano;
+  $('ataque-critico').value = arma.critico;
+  $('arma-modelo-regra').textContent = arma.nota;
+});
+
 $('form-ataque').onsubmit = e => {
   e.preventDefault();
 
@@ -1823,6 +1849,8 @@ $('form-ataque').onsubmit = e => {
   });
 
   $('form-ataque').reset();
+  $('arma-modelo').value = '';
+  $('arma-modelo-regra').textContent = 'Selecione uma arma para preencher o ataque ou cadastre um ataque personalizado.';
   abrirFicha(personagemAberto);
 };
 
