@@ -638,23 +638,16 @@ function atributosForm() {
 }
 
 
-// Regras iniciais personalizadas do Código Sombrio (ajustáveis pelo mestre).
-const recursosPorClasse = {
-  'Perito Criminal': [18, 4, 22],
-  'Médico Legista': [20, 4, 22],
-  'Policial Tático': [26, 3, 18],
-  'Investigador Disfarçado': [20, 5, 20],
-  'Interrogador': [20, 5, 20],
-  'Analista Criminal': [18, 5, 24]
-};
+// Recursos automáticos do Código Sombrio; os campos continuam editáveis.
 function calcularRecursosPersonagem() {
-  const base = recursosPorClasse[$('personagem-classe').value] || [20, 3, 20];
   const forca = Number($('atributo-for').value) || 1;
-  const inteligencia = Number($('atributo-int').value) || 1;
   const carisma = Number($('atributo-car').value) || 1;
-  $('personagem-pv').value = base[0] + 5 * (forca - 1);
-  $('personagem-pe').value = base[1] + 2 * (inteligencia - 1);
-  $('personagem-san').value = base[2] + 2 * (carisma - 1);
+  const inteligencia = Number($('atributo-int').value) || 1;
+  const agilidade = Number($('atributo-agl').value) || 1;
+  $('personagem-pv').value = 20 + 5 * forca;
+  $('personagem-pe').value = 3 + carisma;
+  $('personagem-san').value = 20 + inteligencia;
+  $('personagem-defesa').value = 10 + agilidade;
 }
 
 function atualizarTotal(chaveAlterada) {
@@ -708,7 +701,7 @@ function atualizarTotal(chaveAlterada) {
   const pontosExtras = total - atributosInfo.length;
   indicador.textContent = `Pontos extras: ${pontosExtras} / 5`;
   indicador.classList.toggle('is-over-limit', pontosExtras > 5);
-  if (!personagemEditandoId) calcularRecursosPersonagem();
+  if (chaveAlterada || !personagemEditandoId) calcularRecursosPersonagem();
 }
 
 atributosInfo.forEach(([chave]) => {
