@@ -1841,6 +1841,51 @@ function renderizarOrdemIniciativa() {
   });
 }
 
+function renderizarFichasJogadoresMestre() {
+  const area = $('master-players-list');
+  if (!area) return;
+  area.replaceChildren();
+  const fichas = fichasDaMesa().filter(ficha => ficha.tipo !== 'npc');
+  if (!fichas.length) {
+    const vazio = document.createElement('p');
+    vazio.className = 'master-players-empty';
+    vazio.textContent = 'Nenhuma ficha de jogador encontrada. As fichas criadas nesta conta ou compartilhadas com a campanha aparecerão aqui.';
+    area.append(vazio);
+    return;
+  }
+  fichas.forEach(ficha => {
+    const cartao = document.createElement('article');
+    cartao.className = 'master-player-card';
+    cartao.append(criarRetratoMestre(ficha, 'master-player-portrait'));
+    const conteudo = document.createElement('div');
+    conteudo.className = 'master-player-info';
+    const nome = document.createElement('h4');
+    nome.textContent = ficha.titulo || 'Investigador';
+    const classe = document.createElement('p');
+    classe.textContent = ficha.classe || 'Investigador';
+    const atributos = document.createElement('div');
+    atributos.className = 'master-player-stats';
+    for (const [rotulo, atual, maximo] of [
+      ['VIDA', ficha.pvAtual ?? ficha.pv ?? '—', ficha.pv ?? '—'],
+      ['SANIDADE', ficha.sanAtual ?? ficha.san ?? '—', ficha.san ?? '—'],
+      ['PE', ficha.peAtual ?? ficha.pe ?? '—', ficha.pe ?? '—']
+    ]) {
+      const dado = document.createElement('span');
+      dado.textContent = rotulo + ' ' + atual + '/' + maximo;
+      atributos.append(dado);
+    }
+    const defesa = document.createElement('p');
+    defesa.className = 'master-player-defense';
+    defesa.textContent = 'DEFESA  ' + (ficha.defesa ?? '—');
+    const abrir = botao('VER FICHA COMPLETA', () => abrirFicha(ficha.id), 'outline');
+    conteudo.append(nome, classe, atributos, defesa, abrir);
+    cartao.append(conteudo);
+    area.append(cartao);
+  });
+}
+
+$('master-players-refresh').onclick = renderizarFichasJogadoresMestre;
+
 function atualizarPainelMestre() {
   if (!$('visao-mesa-personagens')) return;
   const fichasUnicas = [...new Map([...carregar('personagens'), ...campanhaCompartilhada.fichas].map(f => [f.id, f])).values()];
@@ -1853,6 +1898,7 @@ function atualizarPainelMestre() {
   };
   Object.entries(contadores).forEach(([id, n]) => { if ($(id)) $(id).textContent = String(n); });
   renderizarVisaoMesa();
+  renderizarFichasJogadoresMestre();
   renderizarPainelNpcs();
   renderizarAnotacoesMestra();
   renderizarSeletorSessao();
