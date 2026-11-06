@@ -1834,56 +1834,65 @@ function mostrarInventario(personagem) {
   const area = $('lista-inventario');
   area.replaceChildren();
 
-  const itens = Array.isArray(personagem.inventario)
-    ? personagem.inventario
-    : [];
+  const itens = Array.isArray(personagem.inventario) ? personagem.inventario : [];
+  const total = itens.reduce((soma, item) => soma + Math.max(0, Number(item.quantidade) || 0), 0);
+  $('inventario-contador').textContent = itens.length === 1
+    ? '1 tipo de item · ' + total + ' unidade' + (total === 1 ? '' : 's')
+    : itens.length + ' tipos de itens · ' + total + ' unidades';
 
   if (!itens.length) {
-    const mensagem = document.createElement('p');
-    mensagem.className = 'muted';
-    mensagem.textContent = 'Nenhum item no inventário.';
-    area.append(mensagem);
+    const vazio = document.createElement('div');
+    vazio.className = 'cs-inventory-empty';
+    const simbolo = document.createElement('span');
+    simbolo.className = 'cs-inventory-empty-icon';
+    simbolo.textContent = '▤';
+    const titulo = document.createElement('strong');
+    titulo.textContent = 'Inventário vazio';
+    const descricao = document.createElement('p');
+    descricao.textContent = 'Os equipamentos deste investigador aparecerão aqui quando forem adicionados.';
+    vazio.append(simbolo, titulo, descricao);
+    area.append(vazio);
     return;
   }
+
+  const podeEditar = !campanhaCompartilhada.fichas.some(f => f.id === personagemAberto)
+    || campanhaCompartilhada.papel === 'mestre';
 
   itens.forEach((item, indice) => {
     const cartao = document.createElement('article');
     cartao.className = 'inventory-item';
+    const icone = document.createElement('span');
+    icone.className = 'cs-inventory-item-icon';
+    icone.textContent = '▤';
 
     const detalhes = document.createElement('div');
+    detalhes.className = 'cs-inventory-item-info';
     const nome = document.createElement('strong');
-    nome.textContent = item.nome;
-
+    nome.textContent = item.nome || 'Item sem nome';
     const quantidade = document.createElement('span');
     quantidade.className = 'inventory-quantity';
-    quantidade.textContent = `Quantidade: ${item.quantidade}`;
+    quantidade.textContent = 'QUANTIDADE · ' + (item.quantidade ?? 1);
     detalhes.append(nome, quantidade);
-
     if (item.observacoes) {
       const observacoes = document.createElement('p');
       observacoes.textContent = item.observacoes;
       detalhes.append(observacoes);
     }
+    cartao.append(icone, detalhes);
 
-    cartao.append(detalhes);
-    if (
-      !campanhaCompartilhada.fichas.some(item => item.id === personagemAberto) ||
-      campanhaCompartilhada.papel === 'mestre'
-    ) {
-      cartao.append(botao('REMOVER', () => {
+    if (podeEditar) {
+      const remover = botao('REMOVER', () => {
         atualizarPersonagem(personagemAtual => {
-          if (!Array.isArray(personagemAtual.inventario)) {
-            personagemAtual.inventario = [];
-          }
-
+          if (!Array.isArray(personagemAtual.inventario)) personagemAtual.inventario = [];
           personagemAtual.inventario.splice(indice, 1);
         });
-
         abrirFicha(personagemAberto);
         selecionarAba('inventario');
-      }));
+      });
+      remover.classList.add('cs-inventory-remove');
+      remover.setAttribute('aria-label', 'Remover ' + (item.nome || 'item') + ' do inventário');
+      cartao.append(remover);
     }
-
     area.append(cartao);
   });
 }
