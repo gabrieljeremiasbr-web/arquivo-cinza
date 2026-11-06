@@ -438,9 +438,12 @@ document.querySelectorAll('.voltar-painel').forEach(botao => {
 });
 
 $('voltar-personagens').onclick = () => {
-  abrirTela('tela-personagens');
-  mostrarRegistros('personagens', 'lista-personagens');
-  mostrarAreaPersonagens('fichas');
+  const destino = $(telaAnteriorFicha) ? telaAnteriorFicha : 'tela-personagens';
+  abrirTela(destino);
+  if (destino === 'tela-personagens') {
+    mostrarRegistros('personagens', 'lista-personagens');
+    mostrarAreaPersonagens('fichas');
+  }
 };
 
 /* ==========================================
@@ -1072,7 +1075,16 @@ function desenharAtributos3D(atributos = {}) {
    ABRIR FICHA RPG
 ========================================== */
 
+let telaAnteriorFicha = 'tela-personagens';
+
 function abrirFicha(idFicha) {
+  const telaAnterior = document.querySelector('.app-pagina:not([hidden])');
+  if (telaAnterior && telaAnterior.id !== 'tela-ficha') telaAnteriorFicha = telaAnterior.id;
+  $('voltar-personagens').textContent = telaAnteriorFicha === 'tela-mestre'
+    ? '← VOLTAR AO DOSSIÊ DOS JOGADORES'
+    : telaAnteriorFicha === 'tela-sessao'
+      ? '← VOLTAR À MESA'
+      : '← VOLTAR AOS PERSONAGENS';
   personagemAberto = idFicha;
 
   const personagem = carregar('personagens').find(
