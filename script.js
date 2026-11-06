@@ -624,85 +624,140 @@ function botao(texto, funcao, classe = 'outline') {
    REGISTROS
 ========================================== */
 
-function renderizarGaleriaFichas() {
-  const area = $('lista-personagens');
-  if (!area) return;
-  area.replaceChildren();
+let csDossieSelecionadoId = null;
+let csDossieAba = 'resumo';
+
+function csElemento(tag, classe, texto) {
+  const el = document.createElement(tag);
+  if (classe) el.className = classe;
+  if (texto !== undefined) el.textContent = String(texto);
+  return el;
+}
+
+function csFichasVisiveis() {
   const busca = $('jogadores-busca').value.trim().toLocaleLowerCase('pt-BR');
   const filtro = $('jogadores-filtro').value;
-  const fichas = fichasDaMesa().filter(ficha => {
+  return fichasDaMesa().filter(ficha => {
     if (filtro !== 'todos' && (ficha.tipo === 'npc' ? 'npc' : 'pj') !== filtro) return false;
     return [ficha.titulo, ficha.classe, ficha.classeBase, ficha.origem]
       .filter(Boolean).join(' ').toLocaleLowerCase('pt-BR').includes(busca);
-  }).sort((a,b)=>String(a.titulo || '').localeCompare(String(b.titulo || ''),'pt-BR'));
-  $('jogadores-contador').textContent = fichas.length + (fichas.length === 1 ? ' ficha encontrada' : ' fichas encontradas');
-  if (!fichas.length) {
-    const vazio=document.createElement('p');
-    vazio.className='player-archive-empty';
-    vazio.textContent = busca ? 'Nenhuma ficha corresponde à pesquisa.' :
-      'Ainda não há personagens nesta lista. Crie uma ficha ou acesse uma campanha compartilhada.';
-    area.append(vazio);
+  }).sort((a,b) => String(a.titulo || '').localeCompare(String(b.titulo || ''), 'pt-BR'));
+}
+
+function renderizarGaleriaFichas() {
+  const area = $('lista-personagens');
+  if (!area) return;
+  const fichas = csFichasVisiveis();
+  area.replaceChildren();
+  $('jogadores-contador').textContent = fichas.length + (fichas.length === 1 ? ' ficha' : ' fichas');
+  if (!fichas.some(ficha => ficha.id === csDossieSelecionadoId)) {
+    csDossieSelecionadoId = fichas[0]?.id || null;
+  }
+  fichas.forEach(ficha => {
+    const selecionada = ficha.id === csDossieSelecionadoId;
+    const linha = csElemento('button','cs-dossier-person' + (selecionada ? ' is-selected' : ''));
+    linha.type = 'button';
+    linha.setAttribute('aria-pressed',String(selecionada));
+    linha.append(criarRetratoMestre(ficha,'cs-dossier-person-photo'));
+    const rotulos = csElemento('span','cs-dossier-person-info');
+    rotulos.append(
+      csElemento('strong','',ficha.titulo || 'Investigador'),
+      csElemento('small','',ficha.classe || 'Investigador'),
+      csElemento('small','cs-dossier-person-life','♥ ' + String(ficha.pvAtual ?? ficha.pv ?? '—') + '/' + String(ficha.pv ?? '—') + ' PV')
+    );
+    linha.append(rotulos,csElemento('span','cs-dossier-person-arrow','›'));
+    linha.addEventListener('click',()=>{
+      csDossieSelecionadoId=ficha.id;
+      csDossieAba='resumo';
+      renderizarGaleriaFichas();
+    });
+    area.append(linha);
+  });
+  const atual = fichas.find(ficha => ficha.id === csDossieSelecionadoId);
+  $('cs-dossier-breadcrumb').textContent = atual?.titulo || 'SEM PERSONAGENS';
+  $('cs-dossier-access').textContent = campanhaCompartilhada.codigo
+    ? '◈ CAMPANHA CONECTADA' : '◈ ARQUIVO LOCAL';
+  const completo = $('cs-dossier-open-full');
+  completo.disabled = !atual;
+  completo.onclick = () => { if (atual) abrirFicha(atual.id); };
+  document.querySelectorAll('#painel-fichas-personagem [data-cs-tab]').forEach(botao=>{
+    const ativo=botao.dataset.csTab===csDossieAba;
+    botao.classList.toggle('is-active',ativo);
+    botao.setAttribute('aria-pressed',String(ativo));
+    botao.disabled=!atual;
+  });
+  const hero=$('cs-dossier-hero');
+  const recursos=$('cs-dossier-resources');
+  const conteudo=$('cs-dossier-content');
+  hero.replaceChildren();
+  recursos.replaceChildren();
+  conteudo.replaceChildren();
+  if (!atual) {
+    hero.append(csElemento('p','cs-dossier-empty','Nenhuma ficha encontrada. Crie um personagem ou conecte uma campanha para visualizar os dossiês.'));
     return;
   }
-  const criar=(tag,cls,txt)=>{
-    const el=document.createElement(tag);
-    if(cls)el.className=cls;
-    if(txt!==undefined)el.textContent=String(txt);
-    return el;
-  };
-  fichas.forEach(ficha=>{
-    const compartilhada=campanhaCompartilhada.fichas.some(f=>f.id===ficha.id);
-    const local=carregar('personagens').some(f=>f.id===ficha.id);
-    const podeEditar=compartilhada ? campanhaCompartilhada.papel==='mestre' : local;
-    const card=criar('article','player-archive-card');
-    const cab=criar('div','player-archive-card-header');
-    cab.append(criarRetratoMestre(ficha,'player-archive-portrait'));
-    const info=criar('div','player-archive-card-info');
-    info.append(
-      criar('span','player-archive-source',compartilhada?'◈ CAMPANHA':'◈ FICHA LOCAL'),
-      criar('h4','',ficha.titulo || 'Investigador'),
-      criar('p','',ficha.classe || 'Investigador')
-    );
-    cab.append(info);
-    card.append(cab);
-    const subtitulo=criar('p','player-archive-subtitle',
-      fichaUsaRegrasAntigas(ficha) ? 'Regras originais do Código Sombrio' :
-      (ficha.classeBase || 'Especialista') + ' · ' +
-      (ficha.classeBase==='sobrevivente'?'Estágio '+(ficha.estagio||1):'NEX '+nexFicha(ficha)+'%')
-    );
-    card.append(subtitulo);
-    const stats=criar('div','player-archive-stats');
-    for(const [rotulo,atual,max] of [
-      ['♥ VIDA',ficha.pvAtual ?? ficha.pv,ficha.pv],
-      ['◈ SAN',ficha.sanAtual ?? ficha.san,ficha.san],
-      ['✦ PE',ficha.peAtual ?? ficha.pe,ficha.pe],
-      ['⬡ DEF',ficha.defesa,ficha.defesa]
-    ]){
-      const item=criar('div','player-archive-stat');
-      item.append(criar('small','',rotulo),
-        criar('strong','',rotulo==='⬡ DEF' ? (max??'—') : (atual??'—')+'/'+(max??'—')));
-      stats.append(item);
+  const compartilhada=campanhaCompartilhada.fichas.some(f=>f.id===atual.id);
+  const podeEditar=!compartilhada || campanhaCompartilhada.papel==='mestre';
+  const foto=criarRetratoMestre(atual,'cs-dossier-portrait');
+  const identidade=csElemento('div','cs-dossier-identity');
+  identidade.append(
+    csElemento('span','cs-dossier-kicker','— DOSSIÊ DO INVESTIGADOR'),
+    csElemento('h2','',atual.titulo || 'Investigador'),
+    csElemento('p','',atual.classe || 'Especialidade não informada')
+  );
+  const marcadores=csElemento('div','cs-dossier-tags');
+  marcadores.append(
+    csElemento('span','',fichaUsaRegrasAntigas(atual)?'Ficha antiga':(atual.classeBase || 'Especialista')),
+    csElemento('span','',atual.classeBase==='sobrevivente'?'Estágio '+(atual.estagio||1):'NEX '+nexFicha(atual)+'%')
+  );
+  if(atual.origem) marcadores.append(csElemento('span','', 'Origem: '+atual.origem));
+  identidade.append(marcadores);
+  const defesa=csElemento('div','cs-dossier-defense');
+  defesa.append(csElemento('span','','⬡ DEFESA'),csElemento('strong','',atual.defesa ?? '—'));
+  const opcoes=csElemento('div','cs-dossier-actions');
+  opcoes.append(botao('▤ VER FICHA COMPLETA',()=>abrirFicha(atual.id),'outline'));
+  if(podeEditar) opcoes.append(botao('✎ EDITAR FICHA',()=>editarFichaCompartilhada(atual),'outline'));
+  identidade.append(opcoes);
+  hero.append(foto,identidade,defesa);
+  for(const [chave,rotulo] of [['pv','♥ VIDA'],['san','◈ SANIDADE'],['pe','✦ ESFORÇO']]){
+    const maximo=Math.max(0,Number(atual[chave])||0);
+    const atualValor=Math.max(0,Math.min(maximo,Number(atual[chave+'Atual'] ?? maximo)||0));
+    const bloco=csElemento('section','cs-dossier-resource');
+    const titulo=csElemento('div','cs-dossier-resource-head');
+    titulo.append(csElemento('strong','',rotulo));
+    const botoes=csElemento('div','cs-dossier-resource-buttons');
+    for(const variacao of [-1,1]){
+      const botaoRecurso=csElemento('button','',variacao<0?'−':'+');
+      botaoRecurso.type='button';
+      botaoRecurso.disabled=!podeEditar || (variacao<0?atualValor<=0:atualValor>=maximo);
+      botaoRecurso.title=(!podeEditar?'Somente leitura':variacao<0?'Diminuir 1':'Aumentar 1')+' ponto';
+      botaoRecurso.setAttribute('aria-label',(variacao<0?'Diminuir':'Aumentar')+' '+rotulo);
+      botaoRecurso.onclick=()=>csAlterarRecurso(atual,chave,atualValor+variacao);
+      botoes.append(botaoRecurso);
     }
-    card.append(stats);
-    const acoes=criar('div','player-archive-actions');
-    acoes.append(botao('VER FICHA COMPLETA',()=>abrirFicha(ficha.id),'primary'));
-    if(podeEditar){
-      acoes.append(botao('EDITAR',()=>editarFichaCompartilhada(ficha),'outline'));
-    }
-    if(local && !compartilhada){
-      acoes.append(botao('EXCLUIR',()=>{
-        if(!confirm('Excluir a ficha local de '+(ficha.titulo||'este personagem')+'?'))return;
-        const novas=carregar('personagens').filter(item=>item.id!==ficha.id);
-        if(salvar('personagens',novas)) {
-          renderizarGaleriaFichas();
-          atualizarPainelMestre();
-        }
-      },'outline player-archive-delete'));
-    }
-    card.append(acoes);
-    area.append(card);
-  });
+    titulo.append(botoes);
+    const numeracao=csElemento('p','cs-dossier-resource-number');
+    numeracao.append(csElemento('strong','',atualValor),csElemento('span','',' / '+maximo));
+    const trilha=csElemento('div','cs-dossier-resource-track');
+    const preenchimento=csElemento('span','');
+    preenchimento.style.width=(maximo?atualValor/maximo*100:0)+'%';
+    trilha.append(preenchimento);
+    bloco.append(titulo,numeracao,trilha);
+    recursos.append(bloco);
+  }
+  renderizarConteudoDossie(atual);
 }
+$('jogadores-novo').addEventListener('click',()=>{
+  mostrarAreaPersonagens('criar');
+  $('personagem-nome').focus({preventScroll:true});
+  $('painel-criacao-personagem').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.querySelectorAll('#painel-fichas-personagem [data-cs-tab]').forEach(botao=>{
+  botao.addEventListener('click',()=>{
+    csDossieAba=botao.dataset.csTab;
+    renderizarGaleriaFichas();
+  });
+});
 $('jogadores-busca').addEventListener('input',renderizarGaleriaFichas);
 $('jogadores-filtro').addEventListener('change',renderizarGaleriaFichas);
 $('jogadores-atualizar').addEventListener('click',renderizarGaleriaFichas);
