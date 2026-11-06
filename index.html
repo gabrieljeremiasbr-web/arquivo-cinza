@@ -478,8 +478,6 @@
 
         <div class="sheet-tabs" role="tablist" aria-label="Seções da ficha">
           <button class="sheet-tab active" id="aba-tab-resumo" data-aba="resumo" aria-controls="aba-resumo" aria-selected="true" type="button" role="tab">◈ RESUMO</button>
-          <button class="sheet-tab" id="aba-tab-atributos" data-aba="atributos" aria-controls="aba-atributos" aria-selected="false" type="button" role="tab">⬡ ATRIBUTOS</button>
-          <button class="sheet-tab" id="aba-tab-pericias" data-aba="pericias" aria-controls="aba-pericias" aria-selected="false" type="button" role="tab">◎ PERÍCIAS</button>
           <button class="sheet-tab" id="aba-tab-combate" data-aba="combate" aria-controls="aba-combate" aria-selected="false" type="button" role="tab">⚔ COMBATE</button>
           <button class="sheet-tab" id="aba-tab-inventario" data-aba="inventario" aria-controls="aba-inventario" aria-selected="false" type="button" role="tab">▤ INVENTÁRIO</button>
           <button class="sheet-tab" id="aba-tab-perfil" data-aba="perfil" aria-controls="aba-perfil" aria-selected="false" type="button" role="tab">▣ HISTÓRIA</button>
@@ -490,7 +488,7 @@
           <div class="sheet-overview-intro">
             <span class="eyebrow">VISÃO GERAL DO INVESTIGADOR</span>
             <h3>Resumo do personagem</h3>
-            <p>Consulte atributos, recursos e os principais registros desta ficha.</p>
+            <p>Consulte seus recursos, role atributos e perícias e veja habilidades sem sair do Resumo.</p>
           </div>
           <div class="sheet-overview-stats">
             <article><span>♥ VIDA</span><strong id="ficha-resumo-pv">—</strong><small>Pontos de Vida</small></article>
@@ -502,7 +500,7 @@
             <section class="sheet-overview-card" aria-labelledby="ficha-resumo-attrs-titulo">
               <h4 id="ficha-resumo-attrs-titulo">◈ ATRIBUTOS</h4>
               <div id="ficha-resumo-atributos" class="sheet-overview-attributes"></div>
-              <button type="button" data-ficha-atalho="atributos" class="sheet-overview-link">VER ATRIBUTOS E PERÍCIAS →</button>
+              <button type="button" data-ficha-ancora="ficha-resumo-roda" class="sheet-overview-link">VER RODA DE ATRIBUTOS →</button>
             </section>
             <section class="sheet-overview-card" aria-labelledby="ficha-resumo-reg-titulo">
               <h4 id="ficha-resumo-reg-titulo">▤ REGISTROS</h4>
@@ -512,6 +510,7 @@
                 <span>Ataques <strong id="ficha-resumo-ataques">0</strong></span>
               </div>
               <div class="sheet-overview-links">
+                <button type="button" data-ficha-ancora="ficha-resumo-pericias-detalhes">◎ PERÍCIAS E HABILIDADES</button>
                 <button type="button" data-ficha-atalho="combate">⚔ COMBATE</button>
                 <button type="button" data-ficha-atalho="inventario">▤ INVENTÁRIO</button>
                 <button type="button" data-ficha-atalho="perfil">▣ HISTÓRIA</button>
@@ -519,6 +518,62 @@
             </section>
           </div>
           <p class="sheet-overview-note">Os pontos atuais podem ser alterados no cabeçalho quando a conta tem permissão de edição.</p>
+          <div class="cs-summary-expanded">
+            <section id="ficha-resumo-roda" class="cs-summary-section cs-fullsheet-attributes" aria-labelledby="ficha-attr-interno-titulo">
+              <header class="cs-fullsheet-section-intro"><span class="eyebrow">◈ DOSSIÊ / ATRIBUTOS</span><h3 id="ficha-attr-interno-titulo">Roda de atributos</h3><p>Clique nos dados vermelhos para fazer seus testes.</p></header>
+          <div class="cs-fullsheet-attribute-layout">
+              <section class="sheet-dice-calculator panel" aria-labelledby="ficha-calculadora-titulo">
+                <header class="sheet-section-heading">
+                  <span aria-hidden="true">◈</span>
+                  <div>
+                    <h3 id="ficha-calculadora-titulo">Resultado do teste</h3>
+                    <p>Clique em um atributo ou perícia para rolar.</p>
+                  </div>
+                </header>
+                <div id="ficha-resultado-dados" class="sheet-dice-result"
+                     role="status" aria-live="polite">
+                  O cálculo e o resultado aparecerão aqui.
+                </div>
+              </section>
+
+              <div class="attribute-stage">
+                <div class="arcane-ring"></div>
+                <div class="attribute-center">
+                  <span>◈</span>
+                  ATRIBUTOS
+                  <small>CLIQUE EM UM DADO PARA ROLAR</small>
+                </div>
+                <div id="ficha-atributos" class="dice-wheel"></div>
+              </div>
+
+          </div>
+            </section>
+            <section id="ficha-resumo-pericias-detalhes" class="cs-summary-section cs-fullsheet-skills" aria-labelledby="ficha-pericias-interno-titulo">
+              <header class="cs-fullsheet-section-intro"><span class="eyebrow">◈ DOSSIÊ / PERÍCIAS</span><h3 id="ficha-pericias-interno-titulo">Perícias e habilidades</h3><p>Consulte seus treinamentos, faça testes e veja suas habilidades especiais.</p></header>
+            <section class="character-subsection panel ability-skills" aria-labelledby="ficha-pericias-titulo">
+              <header class="sheet-section-heading">
+                <span aria-hidden="true">◎</span>
+                <div>
+                  <h3 id="ficha-pericias-titulo">Perícias</h3>
+                  <p>NEX <span id="ficha-nex-atual">0%</span> · Treinado +5 · Veterano +10 (35%) · Expert +15 (70%)</p>
+                </div>
+              </header>
+              <div id="ficha-pericias" class="skills-display"></div>
+            </section>
+
+          <section class="character-subsection panel special-abilities-section"
+                   aria-labelledby="ficha-habilidades-titulo">
+            <header class="sheet-section-heading">
+              <span aria-hidden="true">✦</span>
+              <div>
+                <h3 id="ficha-habilidades-titulo">Habilidades especiais</h3>
+                <p>Talentos, poderes e capacidades deste personagem.</p>
+              </div>
+            </header>
+            <div id="ficha-habilidades" class="special-abilities-list"></div>
+          </section>
+            </section>
+          </div>
         </div>
 
         <div id="aba-combate" class="sheet-page" role="tabpanel"
@@ -550,62 +605,6 @@
               </button>
             </form>
           </div>
-        </div>
-
-        <div id="aba-atributos" class="sheet-page cs-fullsheet-attributes" role="tabpanel" aria-labelledby="aba-tab-atributos" hidden>
-          <header class="cs-fullsheet-section-intro"><span class="eyebrow">◈ DOSSIÊ / ATRIBUTOS</span><h3>Roda de atributos</h3><p>Clique nos dados vermelhos para fazer seus testes.</p></header>
-          <div class="cs-fullsheet-attribute-layout">
-              <section class="sheet-dice-calculator panel" aria-labelledby="ficha-calculadora-titulo">
-                <header class="sheet-section-heading">
-                  <span aria-hidden="true">◈</span>
-                  <div>
-                    <h3 id="ficha-calculadora-titulo">Resultado do teste</h3>
-                    <p>Clique em um atributo ou perícia para rolar.</p>
-                  </div>
-                </header>
-                <div id="ficha-resultado-dados" class="sheet-dice-result"
-                     role="status" aria-live="polite">
-                  O cálculo e o resultado aparecerão aqui.
-                </div>
-              </section>
-
-              <div class="attribute-stage">
-                <div class="arcane-ring"></div>
-                <div class="attribute-center">
-                  <span>◈</span>
-                  ATRIBUTOS
-                  <small>CLIQUE EM UM DADO PARA ROLAR</small>
-                </div>
-                <div id="ficha-atributos" class="dice-wheel"></div>
-              </div>
-
-          </div>
-        </div>
-        <div id="aba-pericias" class="sheet-page cs-fullsheet-skills" role="tabpanel" aria-labelledby="aba-tab-pericias" hidden>
-          <header class="cs-fullsheet-section-intro"><span class="eyebrow">◈ DOSSIÊ / PERÍCIAS</span><h3>Perícias e habilidades</h3><p>Consulte seus treinamentos, faça testes e veja suas habilidades especiais.</p></header>
-            <section class="character-subsection panel ability-skills" aria-labelledby="ficha-pericias-titulo">
-              <header class="sheet-section-heading">
-                <span aria-hidden="true">◎</span>
-                <div>
-                  <h3 id="ficha-pericias-titulo">Perícias</h3>
-                  <p>NEX <span id="ficha-nex-atual">0%</span> · Treinado +5 · Veterano +10 (35%) · Expert +15 (70%)</p>
-                </div>
-              </header>
-              <div id="ficha-pericias" class="skills-display"></div>
-            </section>
-
-          <section class="character-subsection panel special-abilities-section"
-                   aria-labelledby="ficha-habilidades-titulo">
-            <header class="sheet-section-heading">
-              <span aria-hidden="true">✦</span>
-              <div>
-                <h3 id="ficha-habilidades-titulo">Habilidades especiais</h3>
-                <p>Talentos, poderes e capacidades deste personagem.</p>
-              </div>
-            </header>
-            <div id="ficha-habilidades" class="special-abilities-list"></div>
-          </section>
-
         </div>
 
         <div id="aba-inventario" class="sheet-page" role="tabpanel"
