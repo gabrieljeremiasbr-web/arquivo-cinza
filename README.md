@@ -27,4 +27,13 @@ Os sete arquivos enviados estão em `imagem/`, preservados no formato original.
 
 Firebase Auth e Firestore, biblioteca Three.js via CDN e áudio do YouTube. Login e sincronização dependem da configuração do projeto Firebase, dos domínios autorizados e das regras publicadas.
 
-Este envio organiza o código no GitHub. A hospedagem do site deve ser configurada separadamente.
+## Publicação com GitHub Pages
+
+Este site é estático e pode ser publicado pelo GitHub Pages diretamente da branch `main`, pasta `/ (root)`.
+
+1. Abra **Settings → Pages** neste repositório.
+2. Em **Build and deployment**, escolha **Deploy from a branch**.
+3. Selecione **main** e **/ (root)** e clique em **Save**.
+4. O endereço será: https://gabrieljeremiasbr-web.github.io/arquivo-cinza/
+
+A URL do Lovable não será necessária para acessar o site. Para o login do Firebase funcionar na nova URL, adicione `gabrieljeremiasbr-web.github.io` em **Firebase Console → Authentication → Settings → Authorized domains**. Confira também as regras do Firestore. O GitHub Pages não publica automaticamente essas regras.
