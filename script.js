@@ -801,11 +801,12 @@ $('form-personagem').onsubmit = async e => {
   const pv = Number($('personagem-pv').value);
   const pe = Number($('personagem-pe').value);
   const san = Number($('personagem-san').value);
+  const defesa = Number($('personagem-defesa').value);
 
   if (
     !Number.isInteger(pv) ||
     pv < 1 ||
-    ![pe, san].every(valor => Number.isInteger(valor) && valor >= 0)
+    ![pe, san, defesa].every(valor => Number.isInteger(valor) && valor >= 0)
   ) {
     alert('Verifique os pontos de vida, esforço e sanidade.');
     return;
@@ -835,6 +836,7 @@ $('form-personagem').onsubmit = async e => {
     pv,
     pe,
     san,
+    defesa,
     pvAtual: Math.min(Number(fichaExistente?.pvAtual ?? pv), pv),
     peAtual: Math.min(Number(fichaExistente?.peAtual ?? pe), pe),
     sanAtual: Math.min(Number(fichaExistente?.sanAtual ?? san), san),
@@ -1058,6 +1060,7 @@ function abrirFicha(idFicha) {
   );
 
   $('ficha-nome').textContent = personagem.titulo;
+  $('ficha-defesa').textContent = String(personagem.defesa ?? 15);
   $('ficha-classe').textContent =
     personagem.classe || 'Investigador';
 
@@ -1900,6 +1903,7 @@ function editarFichaCompartilhada(ficha) {
   $('personagem-pv').value = ficha.pv ?? 20;
   $('personagem-pe').value = ficha.pe ?? 3;
   $('personagem-san').value = ficha.san ?? 20;
+  $('personagem-defesa').value = ficha.defesa ?? 15;
   $('personagem-tipo').value = ficha.tipo === 'npc' ? 'npc' : 'pj';
   $('personagem-historia').value = ficha.historia || '';
   $('personagem-habilidades').value = Array.isArray(ficha.habilidades)
