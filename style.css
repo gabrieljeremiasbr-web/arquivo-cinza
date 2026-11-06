@@ -4892,3 +4892,87 @@ footer {
 @media(max-width:680px){
   #form-personagem .character-identity-fields{grid-template-columns:1fr}
 }
+
+
+/* Galeria de fichas dos jogadores — Código Sombrio */
+#painel-fichas-personagem {max-width:1280px;margin:0 auto}
+#painel-fichas-personagem .player-archive-heading {
+  padding:22px 24px;
+  margin-bottom:16px;
+  border:1px solid #772b39;
+  border-radius:13px;
+  background:linear-gradient(115deg,#30111b,#100a0c);
+  box-shadow:0 12px 32px #0006;
+}
+#painel-fichas-personagem .player-archive-heading h3 {
+  margin:7px 0 8px;color:#f5e2d8;
+  font:normal clamp(23px,2.9vw,32px)/1.15 Georgia,serif;
+}
+#painel-fichas-personagem .player-archive-heading p{margin:0;color:#c9b0b0;line-height:1.5}
+#painel-fichas-personagem .player-archive-tools {
+  display:flex;align-items:end;flex-wrap:wrap;gap:12px;
+  padding:16px;margin-bottom:16px;border:1px solid #632430;
+  border-radius:12px;background:#160d11;
+}
+#painel-fichas-personagem .player-archive-search {
+  display:flex;align-items:center;gap:10px;flex:1 1 300px;min-width:0;
+  border:1px solid #69303b;border-radius:8px;background:#0c080a;padding:0 12px;color:#ef8792;
+}
+#painel-fichas-personagem .player-archive-search span{font-size:24px}
+#painel-fichas-personagem .player-archive-search input {
+  width:100%;min-width:0;min-height:46px;padding:8px 0;border:0;
+  background:transparent;color:#ffefea;outline:0;
+}
+#painel-fichas-personagem .player-archive-search:focus-within {border-color:#f3435a;box-shadow:0 0 0 2px #c72b4033}
+#painel-fichas-personagem .player-archive-filter{display:grid;gap:6px;color:#cbaeb0;font-size:11px}
+#painel-fichas-personagem .player-archive-filter select {
+  min-height:46px;min-width:138px;padding:8px 12px;
+  border:1px solid #69303b;border-radius:8px;background:#160c10;color:#f4dfd9;
+}
+#painel-fichas-personagem #jogadores-contador{align-self:center;margin-left:auto;font-size:12px;color:#e5a7ae}
+#painel-fichas-personagem #jogadores-atualizar {min-height:46px}
+#painel-fichas-personagem .player-archive-grid {
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:15px;
+}
+#painel-fichas-personagem .player-archive-card {
+  display:flex;flex-direction:column;gap:15px;min-width:0;padding:19px;
+  background:linear-gradient(150deg,#251219,#10090d 83%);
+  border:1px solid #793142;border-radius:13px;
+  box-shadow:0 10px 25px #0005;transition:border-color .2s,transform .2s;
+}
+#painel-fichas-personagem .player-archive-card:hover{border-color:#c14958;transform:translateY(-2px)}
+#painel-fichas-personagem .player-archive-card-header{display:flex;align-items:center;gap:14px}
+#painel-fichas-personagem .player-archive-portrait {
+  width:77px;height:92px;flex:none;display:grid;place-items:center;overflow:hidden;
+  border:1px solid #ab3f50;border-radius:8px;
+  background:#3d1b26;color:#f6aab5;font-size:37px;
+}
+#painel-fichas-personagem .player-archive-portrait img{width:100%;height:100%;object-fit:cover}
+#painel-fichas-personagem .player-archive-card-info{min-width:0}
+#painel-fichas-personagem .player-archive-source{font-size:10px;color:#ef7584;letter-spacing:1.5px;font-weight:700}
+#painel-fichas-personagem .player-archive-card-info h4{
+  margin:7px 0;font:normal 23px/1.1 Georgia,serif;color:#f6e6db;overflow-wrap:anywhere;
+}
+#painel-fichas-personagem .player-archive-card-info p{margin:0;color:#d1aeb4;font-size:12px}
+#painel-fichas-personagem .player-archive-subtitle{margin:0;color:#bfa5a9;font-size:11px}
+#painel-fichas-personagem .player-archive-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+#painel-fichas-personagem .player-archive-stat {
+  display:grid;gap:7px;text-align:center;min-width:0;
+  padding:10px 3px;border:1px solid #5e2430;border-radius:7px;background:#1b0d13;
+}
+#painel-fichas-personagem .player-archive-stat small{color:#dc919b;font-size:9px}
+#painel-fichas-personagem .player-archive-stat strong{font-size:13px;font-weight:700;color:#fff0e8;font-variant-numeric:tabular-nums}
+#painel-fichas-personagem .player-archive-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+#painel-fichas-personagem .player-archive-actions button{min-height:42px;flex:1 1 auto;padding:9px 10px;font-size:11px;letter-spacing:.4px}
+#painel-fichas-personagem .player-archive-actions .primary{flex:1 1 100%}
+#painel-fichas-personagem .player-archive-actions .player-archive-delete{background:#201216;border-color:#63313b;color:#bfa9a9}
+#painel-fichas-personagem .player-archive-actions .player-archive-delete:hover{border-color:#ef5368;color:#fff}
+#painel-fichas-personagem .player-archive-empty {
+  grid-column:1/-1;padding:42px 20px;text-align:center;line-height:1.6;
+  border:1px dashed #8a3946;border-radius:12px;color:#ddbcc1;background:#1c1016;
+}
+@media(max-width:590px) {
+  #painel-fichas-personagem .player-archive-tools{align-items:stretch}
+  #painel-fichas-personagem #jogadores-contador{margin-left:0}
+  #painel-fichas-personagem .player-archive-card{padding:16px}
+}
