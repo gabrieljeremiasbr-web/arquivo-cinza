@@ -586,6 +586,10 @@
                   <label class="cs-weapon-ability-label" for="ataque-habilidade">✦ Habilidade especial <small>OPCIONAL</small>
                     <textarea id="ataque-habilidade" rows="3" maxlength="800" placeholder="Descreva o efeito, o custo em PE e quando pode ser utilizado."></textarea>
                   </label>
+                  <label for="ataque-custo-pe">Custo da habilidade em PE
+                    <input id="ataque-custo-pe" type="number" min="0" max="99" step="1" value="0" required>
+                  </label>
+                  <p class="cs-combat-pe-help">O PE será descontado ao clicar em “Usar habilidade”, não ao cadastrar a arma.</p>
                   <button class="primary cs-combat-submit" type="submit">＋ CADASTRAR ATAQUE</button>
                 </form>
                 <p class="cs-combat-tip">◈ As habilidades personalizadas são regras da casa e podem ser ajustadas pelo mestre.</p>
