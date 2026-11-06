@@ -5703,3 +5703,63 @@ footer {
   #tela-ficha .cs-combat-heading,
   #tela-ficha .cs-inventory-heading{gap:10px}
 }
+
+/* Solução definitiva: cabeçalhos em grade, sem comprimir etiquetas */
+#tela-ficha .cs-combat-heading,
+#tela-ficha .cs-inventory-heading{
+  display:grid !important;
+  grid-template-columns:50px minmax(0,1fr) !important;
+  align-items:center;
+  column-gap:14px;
+  row-gap:12px;
+  width:100%;
+  min-width:0;
+  overflow:visible;
+}
+#tela-ficha .cs-combat-heading>div,
+#tela-ficha .cs-inventory-heading>div{
+  grid-column:2;
+  min-width:0;
+  width:100%;
+  overflow-wrap:normal;
+}
+#tela-ficha .cs-combat-heading>.cs-combat-mark,
+#tela-ficha .cs-inventory-heading>span:first-child{
+  grid-column:1;
+  grid-row:1;
+}
+#tela-ficha .cs-inventory-heading #inventario-contador{
+  grid-column:1 / -1;
+  grid-row:2;
+  justify-self:start;
+  width:auto;
+  max-width:100%;
+  min-width:135px;
+  display:inline-block;
+  padding:8px 12px;
+  white-space:nowrap !important;
+  overflow-wrap:normal !important;
+  word-break:normal !important;
+  line-height:1.4;
+  text-align:center;
+}
+#tela-ficha .cs-combat-column-title,
+#tela-ficha .cs-inventory-subheading{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:5px;
+}
+#tela-ficha .cs-combat-column-title>span,
+#tela-ficha .cs-inventory-subheading>span{
+  text-align:left;
+  overflow-wrap:normal;
+  word-break:normal;
+  white-space:normal;
+}
+@media(max-width:500px){
+  #tela-ficha .cs-combat-heading,
+  #tela-ficha .cs-inventory-heading{
+    grid-template-columns:42px minmax(0,1fr) !important;
+    column-gap:10px;
+  }
+}
