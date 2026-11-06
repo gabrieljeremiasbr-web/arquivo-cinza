@@ -2533,6 +2533,11 @@ function renderizarFichasJogadoresMestre() {
 }
 
 $('master-players-refresh').onclick = renderizarFichasJogadoresMestre;
+$('master-open-player-dossier').onclick = () => {
+  abrirTela('tela-personagens');
+  mostrarAreaPersonagens('fichas');
+  renderizarGaleriaFichas();
+};
 $('master-players-search').addEventListener('input', renderizarFichasJogadoresMestre);
 
 function atualizarPainelMestre() {
