@@ -5656,3 +5656,50 @@ footer {
 #tela-ficha .cs-combat-tip{margin:14px 0 0;color:#b99ca5;font-size:11px;line-height:1.6}
 @media(max-width:1050px){#tela-ficha .cs-combat-grid{grid-template-columns:1fr}}
 @media(max-width:560px){#tela-ficha .cs-combat-column{padding:12px}#tela-ficha .cs-combat-heading-badge{display:none}#tela-ficha .cs-combat-editor .attack-form .two-fields{grid-template-columns:1fr}}
+
+/* Corrige etiquetas cortadas nos cabeçalhos de Combate e Inventário */
+#tela-ficha .cs-combat-heading,
+#tela-ficha .cs-inventory-heading{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+  overflow:visible;
+}
+#tela-ficha .cs-combat-heading>div,
+#tela-ficha .cs-inventory-heading>div{
+  flex:1 1 240px;
+  min-width:0;
+  max-width:100%;
+}
+#tela-ficha .cs-combat-heading-badge,
+#tela-ficha .cs-inventory-counter{
+  flex:0 1 auto;
+  max-width:100%;
+  min-width:0;
+  margin-left:0;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-align:center;
+  line-height:1.4;
+  box-sizing:border-box;
+}
+#tela-ficha .cs-combat-column-title>span,
+#tela-ficha .cs-inventory-subheading>span{
+  max-width:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  text-align:right;
+}
+@media(max-width:760px){
+  #tela-ficha .cs-combat-heading-badge,
+  #tela-ficha .cs-inventory-counter{
+    flex-basis:auto;
+    margin-left:0;
+  }
+  #tela-ficha .cs-combat-heading,
+  #tela-ficha .cs-inventory-heading{gap:10px}
+}
