@@ -5441,3 +5441,294 @@ footer {
 #tela-mestre .master-dossier-head-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 #tela-mestre .master-dossier-head-actions button{min-height:43px;font-size:11px;letter-spacing:.4px}
 @media(max-width:600px){#tela-mestre .master-dossier-head-actions{width:100%}#tela-mestre .master-dossier-head-actions button{flex:1 1 150px}}
+
+
+/* Dossiê completo do jogador: mesma identidade do painel de fichas */
+#tela-ficha .cs-fullsheet-layout{
+  display:grid;grid-template-columns:252px minmax(0,1fr);
+  width:100%;max-width:1480px;margin:0 auto;min-height:700px;
+  overflow:hidden;border:1px solid #85313f;border-radius:13px;
+  background:#130a0e;box-shadow:0 20px 52px #0009;
+}
+#tela-ficha .cs-fullsheet-sidebar{
+  display:flex;flex-direction:column;min-width:0;
+  border-right:1px solid #642432;
+  background:linear-gradient(165deg,#1f0d14,#0c080a 70%);
+}
+#tela-ficha .cs-fullsheet-brand{
+  display:grid;gap:7px;padding:23px 18px 20px;
+  border-bottom:1px solid #55212c;
+}
+#tela-ficha .cs-fullsheet-brand .eyebrow{color:#f26f84;font-size:11px;letter-spacing:2.3px}
+#tela-ficha .cs-fullsheet-brand strong{
+  color:#f3ded6;font:normal 20px/1.14 Georgia,serif;letter-spacing:.4px;
+}
+#tela-ficha .cs-fullsheet-sidebar-heading{padding:24px 15px 12px}
+#tela-ficha .cs-fullsheet-sidebar-heading .eyebrow{
+  color:#e97d8a;font-size:10px;font-weight:800;letter-spacing:1.7px;
+}
+#tela-ficha .cs-fullsheet-sidebar-heading h3{
+  margin:7px 0 0;color:#f8e6dc;
+  font:normal 22px/1.2 Georgia,serif;
+}
+#tela-ficha .cs-fullsheet-search{
+  display:flex;align-items:center;gap:8px;
+  margin:0 12px;padding:0 12px;
+  border:1px solid #893343;border-radius:8px;
+  background:#0e090c;color:#e77085;
+}
+#tela-ficha .cs-fullsheet-search>span{font-size:22px}
+#tela-ficha .cs-fullsheet-search input{
+  height:43px;width:100%;min-width:0;padding:5px 0;
+  background:transparent;border:0;outline:0;color:#fbe8e1;font-size:12px;
+}
+#tela-ficha .cs-fullsheet-search:focus-within{
+  border-color:#fb526a;box-shadow:0 0 0 2px #e3374c33;
+}
+#tela-ficha .cs-fullsheet-sidebar-counter{
+  padding:17px 16px 10px;color:#d9a7af;
+  font-size:10px;text-transform:uppercase;letter-spacing:1.3px;
+}
+#tela-ficha .cs-fullsheet-roster{
+  display:flex;flex-direction:column;gap:6px;
+  min-height:100px;padding:2px 10px 18px;
+  max-height:610px;overflow-y:auto;
+}
+#tela-ficha .cs-fullsheet-player{
+  display:flex;align-items:center;gap:10px;min-width:0;
+  padding:10px 8px;border:1px solid transparent;border-radius:8px;
+  background:transparent;color:#f5e5df;text-align:left;
+  transition:background .16s,border-color .16s;
+}
+#tela-ficha .cs-fullsheet-player:hover{background:#351520;border-color:#813b48}
+#tela-ficha .cs-fullsheet-player.is-selected{
+  border-color:#d23b53;background:linear-gradient(105deg,#5e1628,#2a0c16);
+  box-shadow:inset 4px 0 #f25a71;
+}
+#tela-ficha .cs-fullsheet-player-photo{
+  flex:none;display:grid;place-items:center;
+  width:53px;height:65px;overflow:hidden;
+  border:1px solid #a93a50;border-radius:6px;
+  background:#341721;color:#ff9cab;font-size:29px;
+}
+#tela-ficha .cs-fullsheet-player-photo img{
+  display:block;width:100%;height:100%;object-fit:cover;
+}
+#tela-ficha .cs-fullsheet-player-info{
+  display:flex;flex:1;flex-direction:column;gap:4px;min-width:0;
+}
+#tela-ficha .cs-fullsheet-player-info strong{
+  font-size:13px;line-height:1.2;overflow-wrap:anywhere;color:#fff0e7;
+}
+#tela-ficha .cs-fullsheet-player-info small{
+  color:#cfabb1;font-size:10px;overflow-wrap:anywhere;
+}
+#tela-ficha .cs-fullsheet-player-info .cs-fullsheet-player-life{color:#f58a9c}
+#tela-ficha .cs-fullsheet-player-arrow{font-size:20px;color:#f47589}
+#tela-ficha .cs-fullsheet-empty{color:#bfa5a7;line-height:1.6;font-size:12px;padding:10px}
+#tela-ficha .cs-fullsheet-sidebar-footer{
+  margin-top:auto;padding:17px 12px;border-top:1px solid #50202d;
+  color:#c58c97;font-size:9px;letter-spacing:1.3px;text-align:center;
+}
+#tela-ficha .cs-fullsheet-body{
+  min-width:0;overflow:hidden;
+  background:radial-gradient(ellipse at 75% 0,#50132125,transparent 56%),#180e13;
+}
+#tela-ficha .cs-fullsheet-topbar{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;
+  padding:15px 23px;min-height:50px;
+  background:#140b10;border-bottom:1px solid #612637;
+  color:#ddaeb8;font-size:10px;letter-spacing:1.35px;
+}
+#tela-ficha .cs-fullsheet-topbar strong{color:#ffccd4}
+#tela-ficha .cs-fullsheet-topbar>span:last-child{color:#eb8e9c;text-align:right}
+#tela-ficha .cs-fullsheet-body>.back{
+  margin:14px 21px 0;min-height:33px;padding:8px 0;
+  color:#e99aa6;font:700 11px Arial,sans-serif;letter-spacing:1px;
+}
+#tela-ficha .cs-fullsheet-body>.back:hover{color:#fff0e8}
+#tela-ficha .sheet{
+  max-width:none;width:100%;margin:0;border:0;border-radius:0;
+  background:transparent;box-shadow:none;
+}
+#tela-ficha .sheet-header{
+  display:flex;flex-direction:column;gap:18px;padding:19px 23px 24px;
+  border-bottom:1px solid #682a3a;
+  background:radial-gradient(ellipse at top right,#62152d28,transparent 65%);
+}
+#tela-ficha .sheet-header-identity{
+  display:flex;align-items:flex-start;gap:18px;width:100%;min-width:0;
+}
+#tela-ficha .sheet-header .portrait{
+  width:106px;height:132px;flex:0 0 106px;
+  border:2px solid #ba4557;border-radius:9px;
+  box-shadow:0 10px 22px #0008;transform:none;
+}
+#tela-ficha .sheet-header .identity{flex:1;min-width:0}
+#tela-ficha .sheet-header .identity .eyebrow{
+  color:#ef8192;font-size:10px;letter-spacing:1.8px;font-weight:800;
+}
+#tela-ficha .sheet-header .identity h2{
+  margin:8px 0 4px;color:#fff0e6;
+  font:normal clamp(29px,3vw,42px)/1.1 Georgia,serif;
+  letter-spacing:.3px;
+}
+#tela-ficha .sheet-header .identity>p{color:#e2c1c1;font-size:13px;letter-spacing:.4px}
+#tela-ficha .sheet-header .sheet-identity-tag{
+  border-color:#874052;background:#32141f;color:#eccbd0;
+}
+#tela-ficha .sheet-header .identity .character-defense{
+  display:inline-flex;gap:9px;align-items:center;
+  margin:5px 0 2px!important;padding:9px 13px;
+  border:1px solid #c53d54;border-radius:8px;
+  background:#431626;color:#ffe8e2!important;font-size:14px;
+}
+#tela-ficha .sheet-header .resources{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  width:100%;margin:0;gap:11px;align-items:stretch;
+}
+#tela-ficha .sheet-header .resource{
+  min-width:0;display:flex;flex-direction:column;gap:10px;
+  padding:15px 16px;border:1px solid #823a4b;border-radius:9px;
+  background:linear-gradient(145deg,#301621,#1d0e17);
+}
+#tela-ficha .sheet-header .resource-top{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:9px;flex-wrap:wrap;color:#f4acb7;font-size:11px;letter-spacing:.6px;
+}
+#tela-ficha .cs-fullsheet-resource-controls{
+  display:flex;align-items:center;gap:6px;flex-wrap:nowrap;color:#d6b8bc;
+}
+#tela-ficha .cs-fullsheet-resource-controls input{
+  width:53px;min-width:0;height:36px;min-height:36px;
+  padding:4px 3px;border:1px solid #7e3a4b;border-radius:6px;
+  background:#11080e;color:#fff3eb;font-size:16px;font-weight:800;
+  text-align:center;font-variant-numeric:tabular-nums;
+}
+#tela-ficha .cs-fullsheet-resource-controls button{
+  flex:0 0 29px;width:29px;height:30px;padding:0;
+  border:1px solid #984051;border-radius:6px;background:#431d2b;
+  color:#ffb0c0;font-size:17px;
+}
+#tela-ficha .cs-fullsheet-resource-controls button:hover:not(:disabled){
+  border-color:#f34c64;background:#7b2940;color:#fff0e7;
+}
+#tela-ficha .cs-fullsheet-resource-controls button:disabled{
+  opacity:.35;cursor:not-allowed;
+}
+#tela-ficha .cs-fullsheet-resource-max{white-space:nowrap;font-size:12px}
+#tela-ficha .sheet-header .resource:not(.relationship-resource) .track{
+  margin-top:auto;height:7px;overflow:hidden;
+  background:#49212e;border-radius:20px;
+}
+#tela-ficha .sheet-header .resource .fill{
+  height:100%;background:linear-gradient(90deg,#b91c40,#fc748d);
+}
+#tela-ficha .sheet-header .resource .fill.san{background:linear-gradient(90deg,#a9253e,#f28a9c)}
+#tela-ficha .sheet-header .resource .fill.pe{background:linear-gradient(90deg,#a92c52,#e26083)}
+#tela-ficha .sheet-header .resources .relationship-resource{
+  grid-column:1/-1;min-height:0;padding:12px 15px;gap:5px;
+  border-color:#5b2936;background:#1d1016;
+}
+#tela-ficha .sheet-tabs{
+  display:grid;grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:5px;padding:12px 15px;
+  border-bottom:1px solid #703246;background:#11090d;
+}
+#tela-ficha .sheet-tab{
+  min-width:0;min-height:48px;
+  border:1px solid transparent;border-bottom:3px solid transparent;
+  border-radius:5px 5px 0 0;padding:10px 5px;
+  background:transparent;color:#d6acb5;font:700 11px/1.3 Arial,sans-serif;
+  letter-spacing:.3px;
+}
+#tela-ficha .sheet-tab:hover:not(.active){
+  border-color:#79384a;background:#321722;color:#ffe9e4;
+}
+#tela-ficha .sheet-tab.active{
+  background:linear-gradient(#801b32,#521323);
+  border:1px solid #b43c53;border-bottom:3px solid #ff657c;
+  color:#fff0e8;box-shadow:none;
+}
+#tela-ficha .sheet-page{min-width:0;padding:clamp(15px,2vw,25px)}
+#tela-ficha .cs-fullsheet-section-intro{margin:0 0 19px}
+#tela-ficha .cs-fullsheet-section-intro h3{
+  margin:8px 0 5px;font:normal 28px Georgia,serif;color:#f7e4dd;
+}
+#tela-ficha .cs-fullsheet-section-intro p{
+  margin:0;color:#d5b6ba;font-size:12px;line-height:1.5;
+}
+#tela-ficha .cs-fullsheet-attribute-layout{display:grid;justify-items:stretch;gap:18px}
+#tela-ficha .cs-fullsheet-attributes .sheet-dice-calculator{max-width:none;width:100%;margin:0}
+#tela-ficha .cs-fullsheet-attributes .sheet-dice-result{min-height:60px}
+#tela-ficha .cs-fullsheet-attributes .attribute-stage{
+  width:100%;max-width:720px;min-height:565px;
+  margin:0 auto;border-color:#8e3042;
+}
+#tela-ficha .cs-fullsheet-attributes .dice-wheel{max-width:560px}
+#tela-ficha .cs-fullsheet-skills .ability-skills,
+#tela-ficha .cs-fullsheet-skills .special-abilities-section{
+  width:100%;margin:0 0 15px;min-width:0;
+}
+#tela-ficha .cs-fullsheet-skills .skills-display{width:100%}
+#tela-ficha .sheet-overview-page{background:transparent}
+#tela-ficha .sheet-overview-stats article,
+#tela-ficha .sheet-overview-card{
+  border-color:#803347;background:linear-gradient(145deg,#2d1420,#180e14);
+}
+#tela-ficha .sheet-overview-stats article strong{color:#fff0e6}
+#tela-ficha .sheet-overview-attribute{background:#491b2d;border-color:#9a4054}
+#tela-ficha .sheet-overview-link,
+#tela-ficha .sheet-overview-links button{background:#3b1525;border-color:#a83b50}
+#tela-ficha .sheet-overview-link:hover,
+#tela-ficha .sheet-overview-links button:hover{background:#711d38}
+@media(max-width:1110px){
+  #tela-ficha .cs-fullsheet-layout{grid-template-columns:212px minmax(0,1fr)}
+  #tela-ficha .cs-fullsheet-brand{padding:18px 13px}
+  #tela-ficha .cs-fullsheet-sidebar-heading{padding:17px 12px 10px}
+  #tela-ficha .cs-fullsheet-resource-controls{gap:4px}
+  #tela-ficha .sheet-header .resource{padding:12px}
+  #tela-ficha .sheet-tabs{display:flex;overflow-x:auto;scroll-snap-type:x mandatory}
+  #tela-ficha .sheet-tab{flex:0 0 122px;scroll-snap-align:start}
+}
+@media(max-width:790px){
+  #tela-ficha .cs-fullsheet-layout{grid-template-columns:1fr}
+  #tela-ficha .cs-fullsheet-sidebar{
+    border-right:0;border-bottom:1px solid #642432;
+  }
+  #tela-ficha .cs-fullsheet-brand{display:none}
+  #tela-ficha .cs-fullsheet-sidebar-heading{padding:14px 15px 8px}
+  #tela-ficha .cs-fullsheet-sidebar-heading h3{font-size:21px}
+  #tela-ficha .cs-fullsheet-search{margin:0 15px}
+  #tela-ficha .cs-fullsheet-sidebar-counter{padding:9px 15px}
+  #tela-ficha .cs-fullsheet-roster{
+    flex-direction:row;gap:7px;
+    min-height:0;max-height:none;overflow-x:auto;padding:5px 13px 12px;
+  }
+  #tela-ficha .cs-fullsheet-player{flex:0 0 188px}
+  #tela-ficha .cs-fullsheet-sidebar-footer{display:none}
+  #tela-ficha .cs-fullsheet-body>.back{margin-top:8px}
+}
+@media(max-width:600px){
+  #tela-ficha .cs-fullsheet-topbar{padding:12px 15px;font-size:9px}
+  #tela-ficha .cs-fullsheet-topbar>span:last-child{font-size:8px}
+  #tela-ficha .sheet-header{gap:13px;padding:14px 15px 18px}
+  #tela-ficha .sheet-header-identity{gap:12px}
+  #tela-ficha .sheet-header .portrait{flex:0 0 76px;width:76px;height:98px}
+  #tela-ficha .sheet-header .identity h2{font-size:28px}
+  #tela-ficha .sheet-header .resources{grid-template-columns:1fr;gap:8px}
+  #tela-ficha .sheet-header .resource{min-height:85px}
+  #tela-ficha .sheet-header .resources .relationship-resource{grid-column:1}
+  #tela-ficha .sheet-header .resource-top{flex-wrap:nowrap}
+  #tela-ficha .sheet-tabs{padding:9px;gap:4px}
+  #tela-ficha .sheet-tab{flex:0 0 115px;font-size:10px}
+  #tela-ficha .cs-fullsheet-section-intro h3{font-size:23px}
+  #tela-ficha .cs-fullsheet-attributes .attribute-stage{min-height:480px}
+  #tela-ficha .cs-fullsheet-attributes .dice-wheel{height:470px}
+  #tela-ficha .cs-fullsheet-attributes .arcane-ring{width:98%}
+}
+@media(max-width:390px){
+  #tela-ficha .cs-fullsheet-topbar>span:last-child{display:none}
+  #tela-ficha .cs-fullsheet-attributes .attribute-stage{min-height:390px}
+  #tela-ficha .cs-fullsheet-attributes .dice-wheel{height:390px}
+}
