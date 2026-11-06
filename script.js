@@ -397,8 +397,7 @@ function atualizarNex(valor) {
   const nex = Math.max(0, Math.min(100, Math.round(valor / 5) * 5));
   $('nex-valor').value = `${nex}%`;
   $('nex-ajuste').value = String(nex);
-  if ($('ficha-nex-atual')) $('ficha-nex-atual').textContent = `${nex}%`;
-  atualizarLimitesTreinamento(nex);
+  atualizarLimitesTreinamento();
 
   try {
     localStorage.setItem(chave('nex'), String(nex));
@@ -1114,20 +1113,16 @@ async function rolarTesteFicha(atributo, bonusTreinamento = 0, pericia = '') {
   rolagemFichaAtiva = false;
 }
 
-function desenharAtributos3D(atributos = {}) {
+function desenharAtributos3D(atributos = {}, fichaLegada = false) {
   const area = document.getElementById('ficha-atributos');
 
   if (!area) return;
 
   area.replaceChildren();
 
-  const lista = [
-    { nome: 'Agilidade', sigla: 'AGL', chave: 'agl' },
-    { nome: 'Força', sigla: 'FOR', chave: 'for' },
-    { nome: 'Carisma', sigla: 'CAR', chave: 'car' },
-    { nome: 'Percepção', sigla: 'PEC', chave: 'pec' },
-    { nome: 'Inteligência', sigla: 'INT', chave: 'int' }
-  ];
+  const lista = (fichaLegada ? atributosInfoLegado : atributosInfo).map(([chave, nome, sigla]) => ({
+    nome, sigla, chave
+  }));
 
   lista.forEach(atributo => {
     const dado = document.createElement('button');
@@ -1187,7 +1182,9 @@ function abrirFicha(idFicha) {
     campanhaCompartilhada.fichas.some(item => item.id === idFicha) &&
     campanhaCompartilhada.papel !== 'mestre';
   if ($('ficha-nex-atual')) {
-    $('ficha-nex-atual').textContent = `${nexAtualDaMesa()}%`;
+    $('ficha-nex-atual').textContent = personagem.classeBase === 'sobrevivente'
+      ? `0% · estágio ${personagem.estagio || 1}`
+      : `${nexFicha(personagem)}%`;
   }
 
   $('form-ataque').hidden = somenteLeitura;
@@ -1251,12 +1248,12 @@ function abrirFicha(idFicha) {
   });
 
   // AQUI OS DADOS 3D SÃO CRIADOS
-  desenharAtributos3D(personagem.atributos || {});
+  desenharAtributos3D(personagem.atributos || {}, fichaUsaRegrasAntigas(personagem));
 
   const areaPericias = $('ficha-pericias');
   areaPericias.replaceChildren();
 
-  periciasRPG.forEach(([nome, atributo]) => {
+  (fichaUsaRegrasAntigas(personagem) ? periciasRPGLegado : periciasRPG).forEach(([nome, atributo]) => {
     const linha = document.createElement('div');
     linha.className = 'skill-row';
 
@@ -1314,7 +1311,7 @@ function abrirFicha(idFicha) {
     const ajustarTreinamento = variacao => {
       const novoValor = Math.max(
         0,
-        Math.min(bonusMaximoTreinamento(), valorTreinamento + variacao)
+        Math.min(bonusMaximoTreinamento(nexFicha(personagem)), valorTreinamento + variacao)
       );
       if (somenteLeitura || novoValor === valorTreinamento) return;
 
@@ -1330,7 +1327,7 @@ function abrirFicha(idFicha) {
       nivel.textContent = nomeTreinamento(valorTreinamento);
       aumentar.dataset.trainingBonus = String(valorTreinamento);
       diminuir.disabled = valorTreinamento <= 0;
-      atualizarLimitesTreinamento();
+      atualizarLimitesTreinamento(nexFicha(personagem));
     };
 
     diminuir.addEventListener('click', () => ajustarTreinamento(-5));
@@ -1345,7 +1342,7 @@ function abrirFicha(idFicha) {
     }, valorTreinamento, nome));
     areaPericias.append(linha);
   });
-  atualizarLimitesTreinamento();
+  atualizarLimitesTreinamento(nexFicha(personagem));
 
   mostrarInventario(personagem);
 
@@ -2222,7 +2219,17 @@ function mostrarFichasCompartilhadas(fichas) {
 }
 
 function editarFichaCompartilhada(ficha) {
+  if (fichaUsaRegrasAntigas(ficha)) {
+    alert('Esta ficha usa as regras antigas do Código Sombrio (CAR/PEC). Ela foi preservada para não alterar seus dados. Para usar as novas regras, crie uma ficha nova com PRE/VIG e classe-base; a ficha antiga continuará disponível.');
+    abrirFicha(ficha.id);
+    return;
+  }
   personagemEditandoId = ficha.id;
+  $('personagem-classe-base').value = ficha.classeBase || 'especialista';
+  $('personagem-nex').value = String(ficha.nex ?? 5);
+  $('personagem-estagio').value = String(ficha.estagio ?? 1);
+  $('personagem-origem').value = ficha.origem || '';
+  prepararCamposProgressao();
   $('personagem-nome').value = ficha.titulo || '';
   const classeSalva = ficha.classe || '';
   const classeExiste = [...$('personagem-classe').options]
@@ -2244,7 +2251,7 @@ function editarFichaCompartilhada(ficha) {
   atributosInfo.forEach(([chave]) => {
     const valorSalvo = Number(ficha.atributos?.[chave]);
     $('atributo-' + chave).value = String(
-      Number.isFinite(valorSalvo) ? Math.max(1, Math.min(3, valorSalvo)) : 1
+      Number.isFinite(valorSalvo) ? Math.max(0, Math.min(3, valorSalvo)) : 1
     );
   });
   periciasRPG.forEach(([nome], indice) => {
@@ -2253,6 +2260,8 @@ function editarFichaCompartilhada(ficha) {
 
   $('form-personagem').querySelector('[type="submit"]').textContent =
     'ATUALIZAR FICHA';
+  atualizarLimitesTreinamento();
+  atualizarResumoPericias();
   $('cancelar-edicao-personagem').hidden = false;
   atualizarTotal();
   abrirTela('tela-personagens');
