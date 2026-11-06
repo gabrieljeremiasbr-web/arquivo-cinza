@@ -1305,6 +1305,48 @@ function desenharAtributos3D(atributos = {}, fichaLegada = false) {
 
 let telaAnteriorFicha = 'tela-personagens';
 
+function preencherResumoFicha(ficha, somenteLeitura) {
+  $('ficha-progressao').textContent = fichaUsaRegrasAntigas(ficha)
+    ? 'REGRAS ANTIGAS'
+    : ficha.classeBase === 'sobrevivente'
+      ? 'ESTÁGIO ' + (ficha.estagio || 1)
+      : 'NEX ' + nexFicha(ficha) + '%';
+  $('ficha-origem').textContent = ficha.origem ? 'ORIGEM · ' + ficha.origem : 'ORIGEM NÃO REGISTRADA';
+  $('ficha-edicao').textContent = somenteLeitura ? 'SOMENTE LEITURA' : 'EDIÇÃO PERMITIDA';
+  $('ficha-edicao').classList.toggle('is-readonly', somenteLeitura);
+  ['pv','pe','san'].forEach(chave => {
+    const max = Number(ficha[chave]);
+    const atual = Number(ficha[chave+'Atual'] ?? ficha[chave]);
+    $('ficha-resumo-'+chave).textContent =
+      Number.isFinite(max) && Number.isFinite(atual) ? atual + ' / ' + max : '—';
+  });
+  $('ficha-resumo-defesa').textContent = String(ficha.defesa ?? '—');
+  const area = $('ficha-resumo-atributos');
+  area.replaceChildren();
+  (fichaUsaRegrasAntigas(ficha) ? atributosInfoLegado : atributosInfo).forEach(([chave,nome,sigla])=>{
+    const chip=document.createElement('span');
+    chip.className='sheet-overview-attribute';
+    chip.title=nome;
+    const rotulo=document.createElement('small');
+    rotulo.textContent=sigla;
+    const valor=document.createElement('strong');
+    valor.textContent=String(ficha.atributos?.[chave] ?? '—');
+    chip.append(rotulo,valor);
+    area.append(chip);
+  });
+  const habilidades=Array.isArray(ficha.habilidades) ? ficha.habilidades :
+    typeof ficha.habilidades==='string' ? ficha.habilidades.split(/\r?\n/).filter(Boolean) : [];
+  $('ficha-resumo-habilidades').textContent=String(habilidades.length);
+  $('ficha-resumo-itens').textContent=String(Array.isArray(ficha.inventario) ? ficha.inventario.length : 0);
+  $('ficha-resumo-ataques').textContent=String(Array.isArray(ficha.ataques) ? ficha.ataques.length : 0);
+}
+document.querySelectorAll('[data-ficha-atalho]').forEach(botao => {
+  botao.addEventListener('click',()=>{
+    selecionarAba(botao.dataset.fichaAtalho);
+    document.querySelector('#tela-ficha .sheet-tabs')?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
 function abrirFicha(idFicha) {
   const telaAnterior = document.querySelector('.app-pagina:not([hidden])');
   if (telaAnterior && telaAnterior.id !== 'tela-ficha') telaAnteriorFicha = telaAnterior.id;
@@ -1504,7 +1546,8 @@ function abrirFicha(idFicha) {
   renderizarHabilidades(personagem.habilidades);
 
   mostrarAtaques(personagem);
-  selecionarAba('combate');
+  preencherResumoFicha(personagem,somenteLeitura);
+  selecionarAba('resumo');
   abrirTela('tela-ficha');
 }
 
@@ -1592,6 +1635,7 @@ function atualizarPersonagem(funcao) {
     );
 
     input.value = numero;
+    if ($('ficha-resumo-' + chave)) $('ficha-resumo-' + chave).textContent = numero + ' / ' + maximo;
 
     $(chave + '-bar').style.width =
       (maximo ? numero / maximo * 100 : 0) + '%';
