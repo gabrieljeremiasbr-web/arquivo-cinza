@@ -358,7 +358,18 @@
       <section id="painel-fichas-personagem" class="character-area-panel"
                role="tabpanel" aria-labelledby="aba-fichas-personagem" hidden>
         <header class="player-archive-heading"><span class="eyebrow">ARQUIVO DOS INVESTIGADORES</span><h3>FICHAS DOS JOGADORES</h3><p>Consulte as fichas locais e os personagens compartilhados com a campanha.</p></header>
-        <div id="lista-personagens" class="records"></div>
+        <div class="player-archive-tools">
+          <label class="player-archive-search" for="jogadores-busca">
+            <span aria-hidden="true">⌕</span>
+            <input id="jogadores-busca" type="search" placeholder="Buscar nome ou especialidade..." autocomplete="off">
+          </label>
+          <label class="player-archive-filter" for="jogadores-filtro">Exibir
+            <select id="jogadores-filtro"><option value="todos">Todos</option><option value="pj">Jogadores</option><option value="npc">NPCs</option></select>
+          </label>
+          <span id="jogadores-contador" aria-live="polite">0 fichas</span>
+          <button id="jogadores-atualizar" type="button" class="outline">↻ ATUALIZAR</button>
+        </div>
+        <div id="lista-personagens" class="player-archive-grid" aria-live="polite"></div>
       </section>
     </section>
 
