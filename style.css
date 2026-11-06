@@ -5437,3 +5437,7 @@ footer {
   #painel-fichas-personagem .cs-dossier-stat-attrs{gap:3px}
   #painel-fichas-personagem .cs-dossier-stat-attr{padding:9px 1px}
 }
+
+#tela-mestre .master-dossier-head-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#tela-mestre .master-dossier-head-actions button{min-height:43px;font-size:11px;letter-spacing:.4px}
+@media(max-width:600px){#tela-mestre .master-dossier-head-actions{width:100%}#tela-mestre .master-dossier-head-actions button{flex:1 1 150px}}
