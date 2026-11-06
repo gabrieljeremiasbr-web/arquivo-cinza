@@ -792,15 +792,8 @@
       </nav>
 
       <div class="master-overview" aria-label="Resumo da campanha"><div class="master-overview-stat"><span>INVESTIGADORES</span><strong id="mestre-total-pjs">0</strong></div><div class="master-overview-stat"><span>NPCs</span><strong id="mestre-total-npcs">0</strong></div><div class="master-overview-stat"><span>CASOS</span><strong id="mestre-total-casos">0</strong></div><div class="master-overview-stat"><span>OBJETIVOS</span><strong id="mestre-total-objetivos">0</strong></div></div>
-      <div class="master-management-layout" style="display:none!important" aria-hidden="true">
-        
-        <nav class="master-management-links" aria-label="Opções de gerenciamento da campanha">
-          <span class="eyebrow">GERENCIAMENTO</span>
-          <button type="button" data-master-section="mestre-configuracao">◈ <span>Configuração e compartilhamento</span></button>
-          <button type="button" data-master-section="mestre-objetivos">✦ <span>Objetivos da campanha</span></button>
-        </nav>
-      </div>
-      <div class="master-section-intro master-management-intro" style="display:none!important" aria-hidden="true"><span class="eyebrow">ADMINISTRAÇÃO</span><h3>GERENCIAMENTO DA CAMPANHA</h3><p>Organize sua campanha e compartilhe as fichas com os jogadores.</p></div>
+      <!-- Controles internos preservados para compatibilidade, fora da interface do mestre. -->
+      <div id="mestre-controles-internos" hidden aria-hidden="true" style="display:none!important">
       <details id="mestre-configuracao" class="master-disclosure">
         <summary>◈ &nbsp; CONFIGURAÇÃO E COMPARTILHAMENTO DA CAMPANHA</summary>
         <div class="master-setup">
@@ -859,6 +852,7 @@
           <div id="lista-objetivos" class="records"></div>
         </div>
       </details>
+      </div>
     </section>
   </main>
 
