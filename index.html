@@ -653,7 +653,7 @@
                     type="button">▷ &nbsp; INICIAR SESSÃO</button><button id="concluir-sessao-atual" class="outline master-start-session" type="button">✓ CONCLUIR SESSÃO</button>
             <p id="sessao-atual-status" class="master-inline-status"
                role="status" aria-live="polite"></p>
-            <button id="abrir-criacao-sessao" class="master-text-action" type="button">
+            <button id="abrir-criacao-sessao" class="master-text-action" hidden style="display:none" type="button">
               + Planejar uma nova sessão
             </button>
           </section>
@@ -849,9 +849,9 @@
       </details>
 
       <details id="mestre-sessoes" class="master-disclosure">
-        <summary>▷ &nbsp; PLANEJAR SESSÃO E VER CRONOLOGIA</summary>
+        <summary>▷ &nbsp; CRONOLOGIA DAS SESSÕES</summary>
         <div class="master-disclosure-content">
-          <form id="form-sessao" class="panel form-interno session-builder">
+          <form id="form-sessao" class="panel form-interno session-builder" hidden style="display:none">
             <header class="session-builder-heading">
               <span class="session-builder-icon" aria-hidden="true">▣</span>
               <div>
