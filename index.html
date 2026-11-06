@@ -623,35 +623,8 @@
       <div id="lista-anotacoes" class="records"></div>
     </section>
 
-    <!-- ÁREA DO MESTRE -->
-    <section id="tela-mestre" class="app-pagina" hidden>
-      <button class="back voltar-painel">← VOLTAR AO PAINEL</button>
-      <header class="master-hero">
-        <div>
-          <span class="eyebrow">♛ &nbsp; CONTROLE DA CAMPANHA</span>
-          <h2>PAINEL DO MESTRE</h2>
-          <p>CÓDIGO SOMBRIO &nbsp; · &nbsp; CENTRAL DE INVESTIGAÇÃO</p>
-        </div>
-      </header>
-
-      <nav class="master-nav" aria-label="Navegação do painel do mestre">
-        <button type="button" class="master-nav-link active" data-tela="tela-mestre">
-          ♛ &nbsp; MESTRE
-        </button>
-        <button type="button" class="master-nav-link" data-tela="tela-personagens">
-          ♙ &nbsp; PERSONAGENS
-        </button>
-        <button type="button" class="master-nav-link" data-tela="tela-casos">
-          ▱ &nbsp; CASOS
-        </button>
-        <button type="button" class="master-nav-link" data-tela="tela-anotacoes">
-          ▤ &nbsp; ANOTAÇÕES
-        </button>
-        <button type="button" class="master-nav-link" data-tela="tela-dados">
-          ⚄ &nbsp; DADOS
-        </button>
-      </nav>
-
+    <!-- MESA DA SESSÃO -->
+    <section id="tela-sessao" class="app-pagina session-workspace" hidden><button type="button" id="voltar-area-mestre" class="back">← VOLTAR À ÁREA DO MESTRE</button><header class="session-workspace-heading"><span class="eyebrow">CÓDIGO SOMBRIO · SALA DE INVESTIGAÇÃO</span><h2 id="titulo-mesa-sessao">MESA DA SESSÃO</h2><p id="detalhes-mesa-sessao">Gerencie os acontecimentos da investigação em um só lugar.</p></header>
       <div class="master-dashboard">
         <aside class="master-rail">
           <section class="master-card current-session-card">
@@ -793,6 +766,39 @@
           </section>
         </div>
       </div>
+
+    </section>
+
+    <!-- ÁREA DO MESTRE -->
+    <section id="tela-mestre" class="app-pagina" hidden>
+      <button class="back voltar-painel">← VOLTAR AO PAINEL</button>
+      <header class="master-hero">
+        <div>
+          <span class="eyebrow">♛ &nbsp; CONTROLE DA CAMPANHA</span>
+          <h2>PAINEL DO MESTRE</h2>
+          <p>CÓDIGO SOMBRIO &nbsp; · &nbsp; CENTRAL DE INVESTIGAÇÃO</p>
+        </div>
+      </header>
+
+      <nav class="master-nav" aria-label="Navegação do painel do mestre">
+        <button type="button" class="master-nav-link active" data-tela="tela-mestre">
+          ♛ &nbsp; MESTRE
+        </button>
+        <button type="button" class="master-nav-link" data-tela="tela-personagens">
+          ♙ &nbsp; PERSONAGENS
+        </button>
+        <button type="button" class="master-nav-link" data-tela="tela-casos">
+          ▱ &nbsp; CASOS
+        </button>
+        <button type="button" class="master-nav-link" data-tela="tela-anotacoes">
+          ▤ &nbsp; ANOTAÇÕES
+        </button>
+        <button type="button" class="master-nav-link" data-tela="tela-dados">
+          ⚄ &nbsp; DADOS
+        </button>
+      </nav>
+
+      <div class="session-entry-card"><span class="eyebrow">CENTRAL DE SESSÕES</span><h3>Prepare sua próxima investigação</h3><p>Crie uma sessão e abra uma área exclusiva com a mesa, os NPCs, a iniciativa, as anotações e os dados.</p><button type="button" id="abrir-mesa-sessao" class="primary">▷ ABRIR MESA DA SESSÃO</button><p id="aviso-mesa-sessao" class="muted" role="status"></p></div>
 
       <div class="master-section-intro master-management-intro"><span class="eyebrow">03 / ADMINISTRAÇÃO</span><h3>GERENCIAMENTO DA CAMPANHA</h3><p>Configure a campanha, planeje sessões e acompanhe os objetivos.</p></div>
       <details id="mestre-configuracao" class="master-disclosure">
