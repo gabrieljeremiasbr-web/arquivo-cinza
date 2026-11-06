@@ -232,7 +232,6 @@ function abrirTela(id) {
   $(id).hidden = false;
   if (id === 'tela-personagens') mostrarAreaPersonagens('criar');
   if (id === 'tela-mestre') {
-    atualizarFormularioSessao();
     atualizarPainelMestre();
   }
   window.scrollTo(0, 0);
@@ -243,8 +242,6 @@ function abrirMesaSessao(sessaoId) {
   const sessao = sessoes.find(item => item.id === (sessaoId || $('sessao-atual-seletor').value));
   if (!sessao) {
     $('aviso-mesa-sessao').textContent = 'Crie uma sessão antes de abrir a mesa.';
-    $('mestre-sessoes').open = true;
-    $('mestre-sessoes').scrollIntoView({ behavior: 'smooth', block: 'start' });
     return;
   }
   abrirTela('tela-sessao');
@@ -306,12 +303,6 @@ document.querySelectorAll('[data-master-action]').forEach(botao => {
       npc: 'tela-personagens'
     };
 
-    if (acao === 'sessions') {
-      $('mestre-sessoes').open = true;
-      $('mestre-sessoes').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      return;
-    }
-
     abrirTela(destinos[acao]);
     if (acao === 'pj' || acao === 'npc') {
       mostrarAreaPersonagens('criar');
@@ -341,14 +332,8 @@ $('concluir-sessao-atual').onclick = () => {
   if (salvar('sessoes', sessoes)) {
     atualizarPainelMestre();
     $('sessao-atual-seletor').value = selecionada;
-    mostrarRegistros('sessoes','lista-sessoes');
     $('sessao-atual-status').textContent = 'Sessão concluída.';
   }
-};
-$('abrir-criacao-sessao').onclick = () => {
-  $('mestre-sessoes').open = true;
-  $('form-sessao').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  $('sessao-nome').focus({ preventScroll: true });
 };
 
 function atualizarNex(valor) {
@@ -423,7 +408,6 @@ $('iniciar-sessao-atual').onclick = () => {
 
   sessao.status = 'andamento';
   if (salvar('sessoes', sessoes)) {
-    mostrarRegistros('sessoes', 'lista-sessoes');
     atualizarPainelMestre();
     $('sessao-atual-seletor').value = sessaoId;
     $('sessao-atual-status').textContent = `Sessão iniciada: ${sessao.titulo}.`;
@@ -2062,7 +2046,6 @@ async function ativarCampanhaCompartilhada(codigo) {
         id: item.id
       }));
       mostrarFichasCompartilhadas(campanhaCompartilhada.fichas);
-      atualizarFormularioSessao();
 
       if (personagemAberto) {
         const atualizado = campanhaCompartilhada.fichas.find(
@@ -2192,134 +2175,11 @@ $('form-campanha').onsubmit = e => {
   }
 };
 
-$('form-sessao').onsubmit = e => {
-  e.preventDefault();
-
-  const titulo = $('sessao-nome').value.trim();
-  const data = $('sessao-data').value;
-  const resumo = $('sessao-descricao').value.trim();
-  const casoId = $('sessao-caso').value;
-  const caso = carregar('casos').find(item => item.id === casoId);
-  const duracao = $('sessao-duracao').value;
-  const status = document.querySelector(
-    'input[name="sessao-status"]:checked'
-  )?.value || 'planejada';
-  const participantes = Array.from(
-    document.querySelectorAll('input[name="sessao-participante"]:checked')
-  ).map(input => ({
-    id: input.value,
-    nome: input.dataset.nome
-  }));
-
-  if (!titulo) return;
-
-  const registros = carregar('sessoes');
-  let codigoSessao = $('sessao-codigo').value;
-  if (
-    !codigoSessao ||
-    registros.some(sessaoExistente => sessaoExistente.codigo === codigoSessao)
-  ) {
-    codigoSessao = gerarCodigoSessao(registros);
-    $('sessao-codigo').value = codigoSessao;
-  }
-
-  const sessao = {
-    id: id(),
-    codigo: codigoSessao,
-    titulo,
-    descricao: resumo,
-    casoId,
-    casoTitulo: caso?.titulo || '',
-    data,
-    duracao,
-    status,
-    participantes
-  };
-  registros.push(sessao);
-
-  if (salvar('sessoes', registros)) {
-    $('form-sessao').reset();
-    $('sessao-codigo').value = gerarCodigoSessao(registros);
-    $('sessao-data').value = dataLocalHoje();
-    atualizarFormularioSessao();
-    mostrarRegistros('sessoes', 'lista-sessoes');
-    atualizarPainelMestre();
-    $('sessao-atual-seletor').value = sessao.id;
-    renderizarSeletorSessao();
-    abrirMesaSessao(sessao.id);
-
-    $('sessao-status-mensagem').textContent =
-      `Sessão criada · Código ${sessao.codigo}. O formulário está pronto para a próxima.`;
-  }
-};
-
-$('form-sessao').addEventListener('reset', () => {
-  window.setTimeout(() => {
-    if (auth.currentUser) {
-      $('sessao-codigo').value = gerarCodigoSessao(carregar('sessoes'));
-    }
-  }, 0);
-});
-
 function dataLocalHoje() {
   const hoje = new Date();
   const mes = String(hoje.getMonth() + 1).padStart(2, '0');
   const dia = String(hoje.getDate()).padStart(2, '0');
   return `${hoje.getFullYear()}-${mes}-${dia}`;
-}
-
-function atualizarFormularioSessao() {
-  const campoCodigo = $('sessao-codigo');
-  if (!campoCodigo.value) {
-    campoCodigo.value = gerarCodigoSessao(carregar('sessoes'));
-  }
-
-  const seletorCaso = $('sessao-caso');
-  const casoSelecionado = seletorCaso.value;
-  seletorCaso.replaceChildren(new Option('Selecione um caso', ''));
-
-  carregar('casos').forEach(caso => {
-    seletorCaso.append(new Option(caso.titulo || 'Caso sem título', caso.id));
-  });
-  seletorCaso.value = casoSelecionado;
-
-  const areaParticipantes = $('sessao-participantes');
-  areaParticipantes.replaceChildren();
-
-  const personagens = new Map();
-  carregar('personagens')
-    .filter(personagem => personagem.tipo !== 'npc')
-    .forEach(personagem => personagens.set(personagem.id, personagem));
-  campanhaCompartilhada.fichas
-    .filter(personagem => personagem.tipo !== 'npc')
-    .forEach(personagem => personagens.set(personagem.id, personagem));
-
-  if (!personagens.size) {
-    const vazio = document.createElement('p');
-    vazio.className = 'muted';
-    vazio.textContent = 'Crie ou compartilhe fichas de PJs para selecionar participantes.';
-    areaParticipantes.append(vazio);
-  } else {
-    personagens.forEach(personagem => {
-      const label = document.createElement('label');
-      label.className = 'session-participant';
-
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.name = 'sessao-participante';
-      checkbox.value = personagem.id;
-      checkbox.dataset.nome = personagem.titulo || 'Investigador';
-
-      const nome = document.createElement('span');
-      nome.textContent = personagem.titulo || 'Investigador';
-      label.append(checkbox, nome);
-      areaParticipantes.append(label);
-    });
-  }
-
-  if (!$('sessao-data').value) {
-    $('sessao-data').value = dataLocalHoje();
-  }
 }
 
 $('form-objetivo').onsubmit = e => {
@@ -3798,7 +3658,6 @@ onAuthStateChanged(auth, async usuario => {
     mostrarRegistros('casos', 'lista-casos');
     mostrarRegistros('anotacoes', 'lista-anotacoes');
     mostrarCampanha();
-    mostrarRegistros('sessoes', 'lista-sessoes');
     mostrarRegistros('objetivos', 'lista-objetivos');
     await restaurarCampanhaCompartilhada();
     atualizarPainelMestre();
