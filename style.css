@@ -4838,3 +4838,55 @@ footer {
   #tela-mestre .master-dossier-inventory {grid-column:auto}
   #tela-mestre .master-dossier-open {width:100%}
 }
+
+
+/* Criação de personagem — regras do livro, mantendo vermelho e preto */
+#form-personagem .character-rule-field {
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  gap:8px;
+  min-width:0;
+  padding:13px 14px;
+  border:1px solid #672632;
+  border-radius:9px;
+  background:linear-gradient(145deg,#271319,#150d11);
+  color:#f1d8d5;
+  font-weight:700;
+  font-size:12px;
+}
+#form-personagem .character-rule-field select,
+#form-personagem .character-rule-field input {
+  width:100%;
+  min-width:0;
+  min-height:44px;
+  border:1px solid #82404b;
+  border-radius:6px;
+  padding:10px 12px;
+  background:#100a0d;
+  color:#f8e8df;
+  font-weight:500;
+}
+#form-personagem .character-rule-field select:focus-visible,
+#form-personagem .character-rule-field input:focus-visible {
+  outline:2px solid #f5556b;
+  outline-offset:2px;
+}
+#form-personagem .character-rule-field small {
+  font-size:11px;
+  line-height:1.5;
+  color:#c7a7a7;
+  font-weight:400;
+}
+#form-personagem #pericias-limite-info {
+  margin:0 0 12px;
+  padding:10px 14px;
+  border-left:3px solid #dc3850;
+  background:#221116;
+  color:#edc6c8;
+  font-size:12px;
+  line-height:1.55;
+}
+@media(max-width:680px){
+  #form-personagem .character-identity-fields{grid-template-columns:1fr}
+}
