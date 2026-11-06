@@ -5567,3 +5567,40 @@ footer {
     transform:scale(.82);
   }
 }
+
+/* Inventário do investigador — cartões e formulário lateral */
+#tela-ficha .inventory-section{padding:clamp(16px,2.2vw,25px);border-color:#813448;background:linear-gradient(145deg,#26131c,#150c11)}
+#tela-ficha .cs-inventory-heading{display:flex;align-items:center;gap:13px;flex-wrap:wrap;padding-bottom:17px;border-bottom:1px solid #783044}
+#tela-ficha .cs-inventory-heading>div{flex:1 1 210px;min-width:0}
+#tela-ficha .cs-inventory-heading .eyebrow{display:block;margin-bottom:7px;color:#e38a99;font-size:10px;letter-spacing:1.5px}
+#tela-ficha .cs-inventory-heading h3{margin:0 0 5px;font:normal clamp(20px,2.3vw,27px) Georgia,serif;color:#fff0e7}
+#tela-ficha .cs-inventory-heading p{margin:0;color:#c9aab0;font-size:12px}
+#tela-ficha .cs-inventory-counter{margin-left:auto;padding:8px 11px;border:1px solid #9c4054;border-radius:7px;background:#451927;color:#ffd6da;font-size:11px;white-space:nowrap}
+#tela-ficha .cs-inventory-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(270px,.85fr);gap:16px;align-items:start;margin-top:20px}
+#tela-ficha .cs-inventory-list-column,#tela-ficha .cs-inventory-form-column{min-width:0;padding:17px;border:1px solid #703044;border-radius:10px;background:linear-gradient(150deg,#25131c,#180e14)}
+#tela-ficha .cs-inventory-subheading{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px;padding-bottom:13px;border-bottom:1px solid #64303c}
+#tela-ficha .cs-inventory-subheading h4{margin:0;color:#f4b3bf;font-size:11px;letter-spacing:1px}
+#tela-ficha .cs-inventory-subheading>span{color:#ad8a91;font-size:9px;letter-spacing:1px}
+#tela-ficha .inventory-section .inventory-form{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;max-width:none;margin:17px 0 0}
+#tela-ficha .inventory-section .inventory-form>label{min-width:0}
+#tela-ficha .inventory-section .inventory-fields{display:grid;grid-column:auto;grid-template-columns:minmax(85px,.45fr) minmax(0,1fr);gap:10px}
+#tela-ficha .inventory-section .inventory-fields label{min-width:0}
+#tela-ficha .inventory-section .inventory-form input{width:100%;min-width:0;min-height:43px;border-radius:7px;border:1px solid #854051;background:#130b10;color:#fff0e9;outline:none}
+#tela-ficha .inventory-section .inventory-form input:focus{border-color:#fa647a;box-shadow:0 0 0 2px #fa647a25}
+#tela-ficha .inventory-section .inventory-form>button{width:100%;min-height:45px;border-radius:7px}
+#tela-ficha .cs-inventory-tip{margin:15px 0 0;font-size:11px;line-height:1.6;color:#b99ca3}
+#tela-ficha .inventory-section .inventory-list{margin-top:14px;gap:9px}
+#tela-ficha .inventory-section .inventory-item{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #713044;border-radius:8px;background:#301620}
+#tela-ficha .cs-inventory-item-icon{flex:none;display:grid;place-items:center;width:41px;height:44px;border:1px solid #a23e55;border-radius:8px;background:#4a1a2b;color:#ff91a4;font-size:20px}
+#tela-ficha .cs-inventory-item-info{flex:1;min-width:0}
+#tela-ficha .cs-inventory-item-info strong{display:block;color:#ffede5;font-size:14px;overflow-wrap:anywhere}
+#tela-ficha .cs-inventory-item-info .inventory-quantity{margin-top:6px;color:#f29baa;font-size:10px;letter-spacing:.8px}
+#tela-ficha .cs-inventory-item-info p{margin:7px 0 0;color:#cdb0b5;font-size:12px;overflow-wrap:anywhere}
+#tela-ficha .inventory-item .cs-inventory-remove{flex:none;padding:9px 11px;border:1px solid #9a4053;border-radius:6px;background:#431927;color:#f7c4cb;font-size:10px}
+#tela-ficha .inventory-item .cs-inventory-remove:hover{background:#762339;border-color:#f06077}
+#tela-ficha .cs-inventory-empty{display:grid;justify-items:center;gap:11px;padding:36px 16px;text-align:center;border:1px dashed #773749;border-radius:9px;background:#211019}
+#tela-ficha .cs-inventory-empty-icon{display:grid;place-items:center;width:53px;height:53px;border:1px solid #964052;border-radius:12px;background:#3c1726;color:#f69bab;font-size:27px}
+#tela-ficha .cs-inventory-empty strong{font:normal 19px Georgia,serif;color:#f6e4df}
+#tela-ficha .cs-inventory-empty p{max-width:300px;margin:0;color:#c6a4ad;font-size:12px;line-height:1.6}
+@media(max-width:1050px){#tela-ficha .cs-inventory-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:500px){#tela-ficha .cs-inventory-list-column,#tela-ficha .cs-inventory-form-column{padding:12px}#tela-ficha .inventory-section .inventory-fields{grid-template-columns:1fr}#tela-ficha .cs-inventory-counter{margin-left:0}#tela-ficha .inventory-section .inventory-item{flex-wrap:wrap}#tela-ficha .inventory-item .cs-inventory-remove{margin-left:auto}}
