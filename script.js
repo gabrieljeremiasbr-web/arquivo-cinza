@@ -2549,8 +2549,29 @@ function csCmRender() {
   else {
     const f=csCmSheet(chosen);
     const head=csCmEl('div','cs-cm-person');
-    head.append(csCmEl('h4','',chosen.name),csCmEl('span','', 'DEFESA '+(f?.defesa??chosen.defense)));
+    const avatar=csCmEl('span','cs-cm-avatar',f?.tipo==='npc'?'♟':'♙');
+    const identity=csCmEl('div','cs-cm-identity');
+    identity.append(csCmEl('small','','DOSSIÊ DO COMBATENTE'),csCmEl('h4','',chosen.name),csCmEl('p','',f ? [f.classe,f.trilha,f.nex ? 'NEX '+f.nex+'%' : ''].filter(Boolean).join(' · ') : 'Combatente avulso'));
+    head.append(avatar,identity,csCmEl('span','cs-cm-defense','DEFESA '+(f?.defesa??chosen.defense)));
     detail.append(head);
+    const stats=csCmEl('div','cs-cm-stats-grid');
+    const stat=(label,current,max,type)=>{
+      const card=csCmEl('div','cs-cm-stat cs-cm-stat-'+type);
+      card.append(csCmEl('small','',label),csCmEl('strong','',current+' / '+max));
+      const track=csCmEl('div','cs-cm-track');const fill=csCmEl('span','');
+      fill.style.width=(max>0?Math.min(100,current/max*100):0)+'%';track.append(fill);card.append(track);stats.append(card);
+    };
+    stat('VIDA',csCmCurrent(chosen,'pv'),Number(f?.pv??chosen.maxHp)||0,'pv');
+    if(f){stat('SANIDADE',csCmCurrent(chosen,'san'),Number(f.san)||0,'san');stat('PE',csCmCurrent(chosen,'pe'),Number(f.pe)||0,'pe');}
+    detail.append(stats);
+    if(f){
+      const attributes=csCmEl('div','cs-cm-attributes');attributes.append(csCmEl('h5','','◆ ATRIBUTOS'));
+      const cells=csCmEl('div','cs-cm-attr-cells');
+      for(const [label,key] of [['AGL','agl'],['FOR','for'],['INT','int'],['PRE','pre'],['VIG','vig']]){
+        const cell=csCmEl('div');cell.append(csCmEl('small','',label),csCmEl('strong','',Number(f[key])||0));cells.append(cell);
+      }
+      attributes.append(cells);detail.append(attributes);
+    }
     const resource=(type,label,max)=>{
       const current=csCmCurrent(chosen,type);
       const row=csCmEl('div','cs-cm-resource');
@@ -2610,6 +2631,36 @@ $('cs-cm-next').onclick=()=>{
   csCm.selected=csCm.items[csCm.turn].id;csCmNote('Rodada '+csCm.round+' · Turno de '+csCm.items[csCm.turn].name);csCmRender();
 };
 $('cs-cm-reset').onclick=()=>{if(!confirm('Encerrar combate? Os recursos das fichas não serão restaurados.'))return;csCm={items:[],round:1,turn:0,selected:null,log:[]};csCmSave();csCmRender();};
+function csCmSelected(){return csCm.items.find(x=>x.id===csCm.selected)||csCm.items[csCm.turn];}
+document.querySelectorAll('[data-cm-action]').forEach(btn=>btn.onclick=()=>{
+  const item=csCmSelected();
+  if(!item){alert('Adicione ou selecione um combatente primeiro.');return;}
+  const action=btn.dataset.cmAction;
+  if(action==='condition'){
+    const name=prompt('Qual condição deseja adicionar?');
+    if(!name?.trim())return;
+    item.conditions??=[];item.conditions.push(name.trim().slice(0,60));
+    csCmNote(item.name+': condição '+name.trim().slice(0,60));csCmRender();return;
+  }
+  if(action==='remove-condition'){
+    if(!item.conditions?.length){alert('Nenhuma condição cadastrada.');return;}
+    const name=prompt('Digite o nome da condição a remover:\\n'+item.conditions.join(', '));
+    if(!name)return;
+    const ix=item.conditions.findIndex(x=>x.toLowerCase()===name.trim().toLowerCase());
+    if(ix<0){alert('Condição não encontrada.');return;}
+    csCmNote(item.name+': removeu '+item.conditions.splice(ix,1)[0]);csCmRender();return;
+  }
+  const type=action==='damage'||action==='heal'?'pv':action;
+  if(type!=='pv'&&!csCmSheet(item)){alert('Sanidade e PE exigem uma ficha vinculada.');return;}
+  const raw=prompt('Quantidade de '+(type==='pv'?'Vida':type.toUpperCase())+' a alterar:', '1');
+  if(raw===null)return;
+  const qty=Number(raw);
+  if(!Number.isInteger(qty)||qty<=0||qty>9999){alert('Informe um número inteiro entre 1 e 9999.');return;}
+  const delta=action==='damage'?-qty:action==='heal'?qty:(confirm('OK para recuperar; Cancelar para gastar/reduzir.')?qty:-qty);
+  csCmChange(item,type,delta);
+});
+$('cs-cm-open-sheet').onclick=()=>{const item=csCmSelected(),f=item&&csCmSheet(item);if(!f){alert('Selecione um combatente com ficha vinculada.');return;}abrirFicha(f.id);};
+$('cs-cm-open-dice').onclick=()=>{const target=document.querySelector('[data-aba="dados"],[data-tela="dados"],[data-screen="dados"]');if(target)target.click();else alert('Use a área Rolagem de Dados do menu principal.');};
 $('cs-cm-clear-log').onclick=()=>{if(!confirm('Limpar registro do combate?'))return;csCm.log=[];csCmSave();csCmRender();};
 
 function atualizarPainelMestre() {
