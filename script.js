@@ -123,6 +123,17 @@ function nexFormulario() {
     ? 0
     : Number($('personagem-nex').value || 5);
 }
+function aumentosAtributosDisponiveis() {
+  const classe = $('personagem-classe-base').value;
+  if (classe === 'sobrevivente') return Number($('personagem-estagio').value || 1) >= 3 ? 1 : 0;
+  const nex = nexFormulario();
+  return [20, 50, 80, 95].filter(marco => nex >= marco).length;
+}
+function maximoAtributoPersonagem() {
+  return $('personagem-classe-base').value === 'sobrevivente'
+    ? 3 : Math.min(5, 3 + aumentosAtributosDisponiveis());
+}
+
 function nexFicha(ficha) {
   return fichaUsaRegrasAntigas(ficha) ? nexAtualDaMesa() : Number(ficha?.nex ?? 5);
 }
@@ -153,8 +164,9 @@ function limitePericiasDisponiveis(classe, int, origem) {
   // devem ser conferidos com a origem escolhida pelo mestre.
   return limitePericiasClasse(classe, int) + (String(origem || '').trim() ? 2 : 0);
 }
-function limitesGrausTreinamento(nex, int) {
-  const porMarco = 2 + Math.max(0, Number(int) || 0);
+function limitesGrausTreinamento(nex, int, classeBase = 'combatente') {
+  if (classeBase === 'sobrevivente') return { veteranas:0, experts:0 };
+  const porMarco = (classeBase === 'especialista' ? 5 : classeBase === 'ocultista' ? 3 : 2) + Math.max(0, Number(int) || 0);
   return {
     veteranas: Number(nex) >= 70 ? 2 * porMarco : Number(nex) >= 35 ? porMarco : 0,
     experts: Number(nex) >= 70 ? porMarco : 0
@@ -757,7 +769,8 @@ function calcularRecursosPersonagem() {
 
 function pontosExtrasDisponiveis(valores = atributosForm()) {
   const foiReduzido = Object.values(valores).some(valor => valor === 0);
-  return ($('personagem-classe-base').value === 'sobrevivente' ? 3 : 4) + (foiReduzido ? 1 : 0);
+  return ($('personagem-classe-base').value === 'sobrevivente' ? 3 : 4) +
+    aumentosAtributosDisponiveis() + (foiReduzido ? 1 : 0);
 }
 
 function atualizarTotal(chaveAlterada) {
@@ -766,7 +779,7 @@ function atualizarTotal(chaveAlterada) {
     const campo = $('atributo-' + chaveAlterada);
     const bruto = Number(campo.value);
     if (!Number.isInteger(bruto)) campo.value = '1';
-    else campo.value = String(Math.max(0, Math.min(3, bruto)));
+    else campo.value = String(Math.max(0, Math.min(maximoAtributoPersonagem(), bruto)));
     valores[chaveAlterada] = Number(campo.value);
     if (Object.values(valores).filter(valor => valor === 0).length > 1) {
       campo.value = '1';
@@ -781,6 +794,9 @@ function atualizarTotal(chaveAlterada) {
   }
   const gastos = Object.values(valores).reduce((a,b)=>a+b,0) - 5;
   const limite = pontosExtrasDisponiveis(valores);
+  atributosInfo.forEach(([chave]) => {
+    $('atributo-' + chave).max = String(maximoAtributoPersonagem());
+  });
   $('total-atributos').textContent =
     'Pontos distribuídos: ' + Math.max(0,gastos) + ' / ' + limite +
     (Object.values(valores).some(valor => valor === 0) ? ' (um atributo reduzido a 0)' : '');
@@ -816,10 +832,14 @@ function prepararCamposProgressao() {
 
 $('personagem-classe-base').addEventListener('change', prepararCamposProgressao);
 $('personagem-nex').addEventListener('change', () => {
+  atualizarTotal();
   atualizarLimitesTreinamento();
   calcularRecursosPersonagem();
 });
-$('personagem-estagio').addEventListener('change', calcularRecursosPersonagem);
+$('personagem-estagio').addEventListener('change', () => {
+  atualizarTotal();
+  calcularRecursosPersonagem();
+});
 $('personagem-origem').addEventListener('input', atualizarResumoPericias);
 
 atualizarTotal();
@@ -891,10 +911,10 @@ $('form-personagem').onsubmit = async e => {
 
   const somaAtributos = Object.values(atributos).reduce((soma, valor) => soma + valor, 0);
   const zeros = Object.values(atributos).filter(valor => valor === 0).length;
-  const limiteAtributos = ($('personagem-classe-base').value === 'sobrevivente' ? 3 : 4) + (zeros === 1 ? 1 : 0);
-  if (Object.values(atributos).some(valor => !Number.isInteger(valor) || valor < 0 || valor > 3) ||
+  const limiteAtributos = pontosExtrasDisponiveis(atributos);
+  if (Object.values(atributos).some(valor => !Number.isInteger(valor) || valor < 0 || valor > maximoAtributoPersonagem()) ||
       zeros > 1 || somaAtributos - 5 > limiteAtributos) {
-    alert('Atributos inválidos: 4 pontos extras para agentes (3 para Sobrevivente), um único atributo pode ser reduzido a 0, máximo inicial 3.');
+    alert('Atributos fora do limite do livro. Verifique os pontos iniciais, aumentos por evolução e o máximo permitido de cada atributo.');
     return;
   }
   const classeBase = $('personagem-classe-base').value;
@@ -946,7 +966,7 @@ $('form-personagem').onsubmit = async e => {
     return;
   }
 
-  const graus = limitesGrausTreinamento(nex, atributos.int);
+  const graus = limitesGrausTreinamento(nex, atributos.int, classeBase);
   const veteranas = Object.values(pericias).filter(valor => Number(valor) >= 10).length;
   const experts = Object.values(pericias).filter(valor => Number(valor) >= 15).length;
   if (veteranas > graus.veteranas || experts > graus.experts) {
@@ -2297,7 +2317,7 @@ function editarFichaCompartilhada(ficha) {
   atributosInfo.forEach(([chave]) => {
     const valorSalvo = Number(ficha.atributos?.[chave]);
     $('atributo-' + chave).value = String(
-      Number.isFinite(valorSalvo) ? Math.max(0, Math.min(3, valorSalvo)) : 1
+      Number.isFinite(valorSalvo) ? Math.max(0, Math.min(maximoAtributoPersonagem(), valorSalvo)) : 1
     );
   });
   periciasRPG.forEach(([nome], indice) => {
