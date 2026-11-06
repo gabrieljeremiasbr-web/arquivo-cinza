@@ -14,14 +14,14 @@ Site de RPG de investigação, com fichas, campanhas, dados e área do mestre.
 
 Sirva a pasta com um servidor HTTP, como Live Server no VS Code. O JavaScript principal usa módulos.
 
-## Imagens pendentes
+## Imagens
 
-O código referencia arquivos ainda não incluídos neste repositório:
+Os sete arquivos enviados estão em `imagem/`, preservados no formato original.
 
-- `imagem/logo.png`
-- `imagem/investigacao.jpg`
-- `imagem/fundo.jpg`
-- `favicon.png`
+- `logo.png`: logo da entrada e ícone da aba.
+- `investigacao.jpg`: fundo da interface e do login.
+- `fundo.jpg`: fundo da entrada.
+- `inicio.png`, `investigacao.png`, `mestre.png` e `dados.png`: imagens de referência disponíveis no projeto. As telas desenhadas nessas imagens não substituem os controles interativos do site.
 
 ## Serviços externos
 
