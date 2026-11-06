@@ -828,6 +828,7 @@ function prepararCamposProgressao() {
   $('personagem-estagio-wrap').hidden = !sobrevivente;
   atualizarTotal();
   atualizarLimitesTreinamento();
+  calcularRecursosPersonagem();
 }
 
 $('personagem-classe-base').addEventListener('change', prepararCamposProgressao);
