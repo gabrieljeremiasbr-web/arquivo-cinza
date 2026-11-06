@@ -2485,7 +2485,122 @@ $('master-open-player-dossier').onclick = () => {
 };
 $('master-players-search').addEventListener('input', renderizarFichasJogadoresMestre);
 
+
+/* Gerenciador de combate: estado local, fichas originais preservadas */
+const csCmKey = () => chave('gerenciador-combate');
+let csCm = (() => { try { const v = JSON.parse(localStorage.getItem(csCmKey()) || 'null'); return v && Array.isArray(v.items) ? v : {items:[],round:1,turn:0,selected:null,log:[]}; } catch { return {items:[],round:1,turn:0,selected:null,log:[]}; } })();
+function csCmSave() { try { localStorage.setItem(csCmKey(), JSON.stringify(csCm)); } catch(e) { console.warn('Combate não salvo',e); } }
+function csCmNote(msg) { csCm.log.unshift({at:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),msg}); csCm.log=csCm.log.slice(0,70); csCmSave(); }
+function csCmEl(tag, cls, value) { const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=String(value);return e; }
+function csCmSheet(item) { return item.sheetId ? fichasDaMesa().find(f=>f.id===item.sheetId) : null; }
+function csCmCurrent(item, type) {
+  const f=csCmSheet(item);
+  if(type==='pv') return f ? Math.max(0,Number(f.pvAtual ?? f.pv)||0) : item.hp;
+  if(type==='san') return f ? Math.max(0,Number(f.sanAtual ?? f.san)||0) : 0;
+  if(type==='pe') return f ? Math.max(0,Number(f.peAtual ?? f.pe)||0) : 0;
+  return 0;
+}
+function csCmChange(item, type, delta) {
+  const f=csCmSheet(item);
+  if(f) {
+    if(campanhaCompartilhada.fichas.some(x=>x.id===f.id) && campanhaCompartilhada.papel!=='mestre') {alert('Apenas o mestre da campanha pode alterar esta ficha.');return;}
+    const key={pv:'pvAtual',san:'sanAtual',pe:'peAtual'}[type],maxKey={pv:'pv',san:'san',pe:'pe'}[type];
+    const value=Math.max(0,Math.min(Number(f[maxKey])||0,csCmCurrent(item,type)+delta));
+    personagemAberto=f.id;
+    atualizarPersonagem(x=>{x[key]=value;});
+    csCmNote(f.titulo+': '+(delta<0?'−':'+')+Math.abs(delta)+' '+type.toUpperCase()+' → '+value);
+  } else if(type==='pv') {
+    item.hp=Math.max(0,Math.min(item.maxHp,item.hp+delta));
+    csCmNote(item.name+': '+(delta<0?'−':'+')+Math.abs(delta)+' PV → '+item.hp);
+  }
+  csCmSave();csCmRender();
+}
+function csCmRender() {
+  const list=$('cs-cm-list'), detail=$('cs-cm-detail'), log=$('cs-cm-log');
+  if(!list || !detail || !log)return;
+  list.replaceChildren();detail.replaceChildren();log.replaceChildren();
+  $('cs-cm-round').textContent='RODADA '+csCm.round;
+  $('cs-cm-count').textContent=csCm.items.length+' COMBATENTES';
+  const active=csCm.items[csCm.turn];
+  $('cs-cm-turn').textContent=active?'TURNO: '+active.name:'AGUARDANDO COMBATENTES';
+  $('cs-cm-next').disabled=!csCm.items.length;
+  $('cs-cm-roll').disabled=!csCm.items.length;
+  if(!csCm.items.length) list.append(csCmEl('p','cs-cm-empty','Adicione fichas ou inimigos para começar o combate.'));
+  csCm.items.forEach((item,index)=>{
+    const btn=csCmEl('button','cs-cm-entry'+(index===csCm.turn?' current':'')+(item.id===csCm.selected?' selected':''));btn.type='button';
+    btn.append(csCmEl('strong','cs-cm-init',item.init),csCmEl('span','cs-cm-entry-name',item.name),csCmEl('small','',item.sheetId?'FICHA':'AVULSO'));
+    btn.onclick=()=>{csCm.selected=item.id;csCmSave();csCmRender();};list.append(btn);
+  });
+  const chosen=csCm.items.find(x=>x.id===csCm.selected)||active;
+  if(!chosen)detail.append(csCmEl('p','cs-cm-empty','Selecione um combatente para ver seus recursos.'));
+  else {
+    const f=csCmSheet(chosen);
+    const head=csCmEl('div','cs-cm-person');
+    head.append(csCmEl('h4','',chosen.name),csCmEl('span','', 'DEFESA '+(f?.defesa??chosen.defense)));
+    detail.append(head);
+    const resource=(type,label,max)=>{
+      const current=csCmCurrent(chosen,type);
+      const row=csCmEl('div','cs-cm-resource');
+      const info=csCmEl('div','cs-cm-resource-label');info.append(csCmEl('strong','',label),csCmEl('span','',current+' / '+max));row.append(info);
+      const bar=csCmEl('div','cs-cm-track');const fill=csCmEl('span','');fill.style.width=(max>0?Math.min(100,current/max*100):0)+'%';bar.append(fill);row.append(bar);
+      const controls=csCmEl('div','cs-cm-resource-actions');
+      const input=csCmEl('input');input.type='number';input.min='1';input.max='9999';input.value='1';input.setAttribute('aria-label','Quantidade de '+label);
+      const minus=csCmEl('button','outline','− '+(type==='pv'?'DANO':'GASTAR'));minus.type='button';
+      const plus=csCmEl('button','outline','＋ '+(type==='pv'?'CURA':'RECUPERAR'));plus.type='button';
+      minus.onclick=()=>csCmChange(chosen,type,-Math.max(1,Math.min(9999,Math.trunc(Number(input.value)||1))));
+      plus.onclick=()=>csCmChange(chosen,type,Math.max(1,Math.min(9999,Math.trunc(Number(input.value)||1))));
+      controls.append(input,minus,plus);row.append(controls);detail.append(row);
+    };
+    resource('pv','VIDA',Number(f?.pv??chosen.maxHp)||0);
+    if(f){resource('san','SANIDADE',Number(f.san)||0);resource('pe','PE',Number(f.pe)||0);}
+    const cond=csCmEl('div','cs-cm-conditions');
+    cond.append(csCmEl('strong','','CONDIÇÕES / EFEITOS'));
+    const chips=csCmEl('div','cs-cm-chips');
+    (chosen.conditions||[]).forEach((value,i)=>{const b=csCmEl('button','','× '+value);b.type='button';b.onclick=()=>{chosen.conditions.splice(i,1);csCmNote(chosen.name+': removeu '+value);csCmSave();csCmRender();};chips.append(b);});
+    cond.append(chips);
+    const add=csCmEl('button','outline','＋ ADICIONAR CONDIÇÃO');add.type='button';add.onclick=()=>{const v=prompt('Nome da condição (ex.: Caído, Sangrando):');if(!v?.trim())return;chosen.conditions??=[];chosen.conditions.push(v.trim().slice(0,60));csCmNote(chosen.name+': '+v.trim().slice(0,60));csCmSave();csCmRender();};cond.append(add);detail.append(cond);
+    const actions=csCmEl('div','cs-cm-detail-actions');
+    if(f){const open=csCmEl('button','outline','ABRIR FICHA →');open.type='button';open.onclick=()=>abrirFicha(f.id);actions.append(open);}
+    const remove=csCmEl('button','outline','REMOVER DO COMBATE');remove.type='button';remove.onclick=()=>{if(!confirm('Remover '+chosen.name+' deste combate?'))return;const ix=csCm.items.findIndex(x=>x.id===chosen.id);csCm.items.splice(ix,1);if(ix<csCm.turn)csCm.turn--;csCm.turn=Math.max(0,Math.min(csCm.turn,csCm.items.length-1));csCm.selected=csCm.items[csCm.turn]?.id||null;csCmNote(chosen.name+' saiu do combate.');csCmSave();csCmRender();};actions.append(remove);detail.append(actions);
+  }
+  if(!csCm.log.length)log.append(csCmEl('p','cs-cm-empty','Nenhum acontecimento registrado.'));
+  csCm.log.forEach(x=>{const p=csCmEl('p','');p.append(csCmEl('time','',x.at+'  '),csCmEl('span','',x.msg));log.append(p);});
+}
+$('cs-cm-add').onclick=()=>{
+  const sel=$('cs-cm-sheet');sel.replaceChildren();const blank=document.createElement('option');blank.value='';blank.textContent='Combatente avulso (sem ficha)';sel.append(blank);
+  fichasDaMesa().forEach(f=>{const o=document.createElement('option');o.value=f.id;o.textContent=(f.tipo==='npc'?'NPC · ':'PJ · ')+(f.titulo||'Sem nome');sel.append(o);});
+  $('cs-cm-form').reset();$('cs-cm-dialog').showModal();
+};
+$('cs-cm-sheet').onchange=()=>{
+  const f=fichasDaMesa().find(x=>x.id===$('cs-cm-sheet').value);
+  if(!f)return;
+  $('cs-cm-name').value=f.titulo||'Investigador';$('cs-cm-hp').value=Math.max(1,Number(f.pv)||1);$('cs-cm-defense').value=Number(f.defesa)||10;
+};
+$('cs-cm-cancel').onclick=()=>$('cs-cm-dialog').close();
+$('cs-cm-form').onsubmit=e=>{
+  e.preventDefault();const sheetId=$('cs-cm-sheet').value;
+  if(sheetId && csCm.items.some(x=>x.sheetId===sheetId)){alert('Esta ficha já está no combate.');return;}
+  const name=$('cs-cm-name').value.trim();if(!name)return;
+  const maxHp=Math.max(1,Math.min(9999,Number($('cs-cm-hp').value)||1));
+  const item={id:id(),sheetId:sheetId||null,name,maxHp,hp:maxHp,defense:Number($('cs-cm-defense').value)||0,init:Number($('cs-cm-initiative').value)||0,conditions:[]};
+  csCm.items.push(item);if(!csCm.selected)csCm.selected=item.id;
+  csCmNote(name+' entrou no combate.');$('cs-cm-dialog').close();csCmRender();
+};
+$('cs-cm-roll').onclick=()=>{
+  csCm.items.forEach(x=>{x.init=Math.floor(Math.random()*20)+1+Number(csCmSheet(x)?.agl||0);});
+  csCm.items.sort((a,b)=>b.init-a.init);csCm.turn=0;csCm.round=1;csCm.selected=csCm.items[0]?.id||null;
+  csCmNote('Iniciativa rolada (1d20 + AGL, simplificação da mesa).');csCmRender();
+};
+$('cs-cm-next').onclick=()=>{
+  if(!csCm.items.length)return;
+  csCm.turn++;if(csCm.turn>=csCm.items.length){csCm.turn=0;csCm.round++;}
+  csCm.selected=csCm.items[csCm.turn].id;csCmNote('Rodada '+csCm.round+' · Turno de '+csCm.items[csCm.turn].name);csCmRender();
+};
+$('cs-cm-reset').onclick=()=>{if(!confirm('Encerrar combate? Os recursos das fichas não serão restaurados.'))return;csCm={items:[],round:1,turn:0,selected:null,log:[]};csCmSave();csCmRender();};
+$('cs-cm-clear-log').onclick=()=>{if(!confirm('Limpar registro do combate?'))return;csCm.log=[];csCmSave();csCmRender();};
+
 function atualizarPainelMestre() {
+  csCmRender();
   if (!$('visao-mesa-personagens')) return;
   if (!$('painel-fichas-personagem').hidden) renderizarGaleriaFichas();
   const fichasUnicas = [...new Map([...carregar('personagens'), ...campanhaCompartilhada.fichas].map(f => [f.id, f])).values()];
