@@ -240,15 +240,13 @@ function abrirTela(id) {
 function abrirMesaSessao(sessaoId) {
   const sessoes = carregar('sessoes');
   const sessao = sessoes.find(item => item.id === (sessaoId || $('sessao-atual-seletor').value));
-  if (!sessao) {
-    $('aviso-mesa-sessao').textContent = 'Crie uma sessão antes de abrir a mesa.';
-    return;
-  }
   abrirTela('tela-sessao');
-  $('sessao-atual-seletor').value = sessao.id;
   renderizarSeletorSessao();
-  $('titulo-mesa-sessao').textContent = sessao.titulo || 'MESA DA SESSÃO';
-  $('detalhes-mesa-sessao').textContent = [sessao.codigo, sessao.casoTitulo, sessao.data].filter(Boolean).join(' · ');
+  $('sessao-atual-seletor').value = sessao?.id || '';
+  $('titulo-mesa-sessao').textContent = sessao?.titulo || 'MESA DE INVESTIGAÇÃO';
+  $('detalhes-mesa-sessao').textContent = sessao
+    ? [sessao.codigo, sessao.casoTitulo, sessao.data].filter(Boolean).join(' · ')
+    : 'Mesa livre · fichas, NPCs, pistas, anotações e dados em um só lugar.';
 }
 
 $('abrir-mesa-sessao').onclick = () => abrirMesaSessao();
@@ -402,7 +400,8 @@ $('iniciar-sessao-atual').onclick = () => {
 
   if (!sessao) {
     $('sessao-atual-status').textContent =
-      'Crie ou selecione uma sessão antes de iniciá-la.';
+      'Mesa livre iniciada. Boa investigação!';
+    abrirMesaSessao();
     return;
   }
 
@@ -1760,7 +1759,7 @@ function renderizarSeletorSessao() {
   const seletor = $('sessao-atual-seletor');
   const selecionada = seletor.value;
   const sessoes = carregar('sessoes');
-  seletor.replaceChildren(new Option('Selecione uma sessão', ''));
+  seletor.replaceChildren(new Option('Mesa livre · sem sessão cadastrada', ''));
 
   sessoes.forEach(sessao => {
     const status = sessao.status === 'andamento'
@@ -1784,7 +1783,7 @@ function renderizarSeletorSessao() {
   codigoAtual.textContent = sessaoAtual
     ? `CÓDIGO DA SESSÃO · ${sessaoAtual.codigo || 'INDISPONÍVEL'}`
     : '';
-  $('iniciar-sessao-atual').disabled = !proximaSelecionada;
+  $('iniciar-sessao-atual').disabled = false;
 }
 
 function renderizarOrdemIniciativa() {
