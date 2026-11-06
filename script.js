@@ -725,73 +725,78 @@ function atributosForm() {
 
 // Recursos automáticos do Código Sombrio; os campos continuam editáveis.
 function calcularRecursosPersonagem() {
-  const forca = Number($('atributo-for').value) || 1;
-  const carisma = Number($('atributo-car').value) || 1;
-  const inteligencia = Number($('atributo-int').value) || 1;
-  const agilidade = Number($('atributo-agl').value) || 1;
-  $('personagem-pv').value = 20 + 5 * forca;
-  $('personagem-pe').value = 3 + carisma;
-  $('personagem-san').value = 20 + inteligencia;
-  $('personagem-defesa').value = 10 + agilidade;
+  const atributos = atributosForm();
+  const classe = $('personagem-classe-base').value || 'especialista';
+  const valores = calcularValoresLivro(classe, atributos, nexFormulario(), $('personagem-estagio').value);
+  $('personagem-pv').value = String(valores.pv);
+  $('personagem-pe').value = String(valores.pe);
+  $('personagem-san').value = String(valores.san);
+  $('personagem-defesa').value = String(valores.defesa);
+}
+
+function pontosExtrasDisponiveis(valores = atributosForm()) {
+  const foiReduzido = Object.values(valores).some(valor => valor === 0);
+  return ($('personagem-classe-base').value === 'sobrevivente' ? 3 : 4) + (foiReduzido ? 1 : 0);
 }
 
 function atualizarTotal(chaveAlterada) {
-  const atributos = Object.fromEntries(
-    atributosInfo.map(([chave]) => [
-      chave,
-      $('atributo-' + chave).value === ''
-        ? 1
-        : Number($('atributo-' + chave).value)
-    ])
-  );
+  const valores = atributosForm();
   if (chaveAlterada) {
-    const campoAlterado = $('atributo-' + chaveAlterada);
-    const totalOutros = Object.entries(atributos)
-      .filter(([chave]) => chave !== chaveAlterada)
-      .reduce((soma, [, valor]) => soma + (Number.isFinite(valor) ? valor : 0), 0);
-    const pontosExtrasUsados = Math.max(0, totalOutros - (atributosInfo.length - 1));
-    const maximoDisponivel = Math.max(1, Math.min(3, 1 + 5 - pontosExtrasUsados));
-    const valorAlterado = atributos[chaveAlterada];
-    if (campoAlterado.value !== '' && Number.isFinite(valorAlterado) && valorAlterado > maximoDisponivel) {
-      campoAlterado.value = String(maximoDisponivel);
-    } else if (campoAlterado.value !== '' && Number.isFinite(valorAlterado) && valorAlterado < 1) {
-      campoAlterado.value = '1';
+    const campo = $('atributo-' + chaveAlterada);
+    const bruto = Number(campo.value);
+    if (!Number.isInteger(bruto)) campo.value = '1';
+    else campo.value = String(Math.max(0, Math.min(3, bruto)));
+    valores[chaveAlterada] = Number(campo.value);
+    if (Object.values(valores).filter(valor => valor === 0).length > 1) {
+      campo.value = '1';
+      valores[chaveAlterada] = 1;
+    }
+    const gastos = Object.values(valores).reduce((a,b)=>a+b,0) - 5;
+    const limite = pontosExtrasDisponiveis(valores);
+    if (gastos > limite) {
+      campo.value = String(Math.max(0, valores[chaveAlterada] - (gastos - limite)));
+      valores[chaveAlterada] = Number(campo.value);
     }
   }
-
-  const valores = Object.fromEntries(
-    atributosInfo.map(([chave]) => [
-      chave,
-      $('atributo-' + chave).value === ''
-        ? 1
-        : Number($('atributo-' + chave).value)
-    ])
-  );
-  const total = Object.values(valores).reduce(
-    (soma, valor) => soma + (Number.isFinite(valor) ? valor : 0),
-    0
-  );
-
-  atributosInfo.forEach(([chave]) => {
-    const outros = Object.entries(valores)
-      .filter(([outraChave]) => outraChave !== chave)
-      .reduce((soma, [, valor]) => soma + (Number.isFinite(valor) ? valor : 0), 0);
-    const pontosExtrasDosOutros = Math.max(0, outros - (atributosInfo.length - 1));
-    $('atributo-' + chave).max = String(
-      Math.max(1, Math.min(3, 1 + 5 - pontosExtrasDosOutros))
-    );
-  });
-
-  const indicador = $('total-atributos');
-  const pontosExtras = total - atributosInfo.length;
-  indicador.textContent = `Pontos extras: ${pontosExtras} / 5`;
-  indicador.classList.toggle('is-over-limit', pontosExtras > 5);
+  const gastos = Object.values(valores).reduce((a,b)=>a+b,0) - 5;
+  const limite = pontosExtrasDisponiveis(valores);
+  $('total-atributos').textContent =
+    'Pontos distribuídos: ' + Math.max(0,gastos) + ' / ' + limite +
+    (Object.values(valores).some(valor => valor === 0) ? ' (um atributo reduzido a 0)' : '');
+  $('total-atributos').classList.toggle('is-over-limit', gastos > limite);
+  atualizarResumoPericias();
   if (chaveAlterada || !personagemEditandoId) calcularRecursosPersonagem();
 }
 
 atributosInfo.forEach(([chave]) => {
   $('atributo-' + chave).addEventListener('input', () => atualizarTotal(chave));
 });
+
+function atualizarResumoPericias() {
+  const classe = $('personagem-classe-base').value;
+  const inteligencia = Number($('atributo-int').value) || 0;
+  const maximo = limitePericiasClasse(classe, inteligencia);
+  const selecionadas = [...document.querySelectorAll('#lista-pericias select')]
+    .filter(select => Number(select.value) >= 5).length;
+  const local = $('pericias-limite-info');
+  if (local) local.textContent = 'Perícias treinadas pela classe: ' + selecionadas + ' / ' + maximo +
+    ' (as perícias da origem, quando aplicáveis, devem ser adicionadas pelo mestre).';
+}
+
+function prepararCamposProgressao() {
+  const sobrevivente = $('personagem-classe-base').value === 'sobrevivente';
+  $('personagem-nex-wrap').hidden = sobrevivente;
+  $('personagem-estagio-wrap').hidden = !sobrevivente;
+  atualizarTotal();
+  atualizarLimitesTreinamento();
+}
+
+$('personagem-classe-base').addEventListener('change', prepararCamposProgressao);
+$('personagem-nex').addEventListener('change', () => {
+  atualizarLimitesTreinamento();
+  calcularRecursosPersonagem();
+});
+$('personagem-estagio').addEventListener('change', calcularRecursosPersonagem);
 
 atualizarTotal();
 
@@ -800,7 +805,7 @@ function nexAtualDaMesa() {
   return Number.isInteger(valor) ? Math.max(0, Math.min(100, valor)) : 0;
 }
 
-function bonusMaximoTreinamento(nex = nexAtualDaMesa()) {
+function bonusMaximoTreinamento(nex = nexFormulario()) {
   if (nex >= 70) return 15;
   if (nex >= 35) return 10;
   return 5;
@@ -835,12 +840,13 @@ function nomeTreinamento(valor) {
   return 'Destreinado';
 }
 
-function atualizarLimitesTreinamento(nex = nexAtualDaMesa()) {
+function atualizarLimitesTreinamento(nex = nexFormulario()) {
   const bonusMaximo = bonusMaximoTreinamento(nex);
   document.querySelectorAll('#lista-pericias select').forEach(seletor => {
     [...seletor.options].forEach(opcao => {
       opcao.disabled = Number(opcao.value) > bonusMaximo;
     });
+    seletor.title = 'Treinamento liberado conforme NEX individual da ficha.';
   });
 
   document.querySelectorAll('.skill-point-button[data-training-bonus]').forEach(botao => {
