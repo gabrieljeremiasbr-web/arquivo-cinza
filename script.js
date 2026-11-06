@@ -238,6 +238,25 @@ function abrirTela(id) {
   window.scrollTo(0, 0);
 }
 
+function abrirMesaSessao(sessaoId) {
+  const sessoes = carregar('sessoes');
+  const sessao = sessoes.find(item => item.id === (sessaoId || $('sessao-atual-seletor').value));
+  if (!sessao) {
+    $('aviso-mesa-sessao').textContent = 'Crie uma sessão antes de abrir a mesa.';
+    $('mestre-sessoes').open = true;
+    $('mestre-sessoes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  abrirTela('tela-sessao');
+  $('sessao-atual-seletor').value = sessao.id;
+  renderizarSeletorSessao();
+  $('titulo-mesa-sessao').textContent = sessao.titulo || 'MESA DA SESSÃO';
+  $('detalhes-mesa-sessao').textContent = [sessao.codigo, sessao.casoTitulo, sessao.data].filter(Boolean).join(' · ');
+}
+
+$('abrir-mesa-sessao').onclick = () => abrirMesaSessao();
+$('voltar-area-mestre').onclick = () => abrirTela('tela-mestre');
+
 function voltarPainel() {
   $('painel-principal').hidden = false;
 
@@ -408,6 +427,7 @@ $('iniciar-sessao-atual').onclick = () => {
     atualizarPainelMestre();
     $('sessao-atual-seletor').value = sessaoId;
     $('sessao-atual-status').textContent = `Sessão iniciada: ${sessao.titulo}.`;
+    abrirMesaSessao(sessaoId);
   }
 };
 
@@ -2226,6 +2246,7 @@ $('form-sessao').onsubmit = e => {
     atualizarPainelMestre();
     $('sessao-atual-seletor').value = sessao.id;
     renderizarSeletorSessao();
+    abrirMesaSessao(sessao.id);
 
     $('sessao-status-mensagem').textContent =
       `Sessão criada · Código ${sessao.codigo}. O formulário está pronto para a próxima.`;
