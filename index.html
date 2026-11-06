@@ -545,45 +545,53 @@
 
         <div id="aba-combate" class="sheet-page" role="tabpanel"
              aria-labelledby="aba-tab-combate" hidden>
-          <div class="attack-panel panel">
-            <header class="sheet-section-heading">
-              <span aria-hidden="true">⚔</span>
+          <section class="attack-panel panel cs-combat-panel" aria-labelledby="cs-combat-title">
+            <header class="sheet-section-heading cs-combat-heading">
+              <span class="cs-combat-mark" aria-hidden="true">⚔</span>
               <div>
-                <h3>Combate</h3>
-                <p>Gerencie os ataques deste investigador.</p>
+                <span class="cs-combat-eyebrow">◈ DOSSIÊ / ARSENAL</span>
+                <h3 id="cs-combat-title">Arsenal do investigador</h3>
+                <p>Registre armas, ataques e técnicas especiais para os confrontos.</p>
               </div>
+              <span class="cs-combat-heading-badge">REGISTRO DE COMBATE</span>
             </header>
-            <div id="lista-ataques"></div>
-
-            <div class="cs-weapon-presets">
-              <label for="arma-modelo">Armas solicitadas pelos jogadores</label>
-              <select id="arma-modelo">
-                <option value="">Escolha uma arma para preencher o ataque...</option>
-                <option value="bengala">Bengala-florete (adaptação do florete)</option>
-                <option value="garras">Luva com Garras (arma personalizada)</option>
-              </select>
-              <p id="arma-modelo-regra">O florete segue a tabela do livro. A luva com garras usa uma proposta de regra da casa, ajustável pelo mestre.</p>
+            <div class="cs-combat-grid">
+              <section class="cs-combat-column cs-combat-registered" aria-label="Ataques cadastrados">
+                <div class="cs-combat-column-title"><h4>⚔ ATAQUES REGISTRADOS</h4><span>FICHA DO PERSONAGEM</span></div>
+                <div id="lista-ataques" class="cs-combat-attack-list"></div>
+              </section>
+              <section class="cs-combat-column cs-combat-editor" aria-label="Cadastrar ataque">
+                <div class="cs-combat-column-title"><h4>✦ PREPARAR ARMA</h4><span>NOVO ATAQUE</span></div>
+                <div class="cs-weapon-presets">
+                  <label for="arma-modelo">Selecionar equipamento</label>
+                  <select id="arma-modelo">
+                    <option value="">Escolha uma arma ou crie a sua...</option>
+                    <option value="bengala">Bengala-florete (adaptação do florete)</option>
+                    <option value="garras">Luva com Garras (arma personalizada)</option>
+                  </select>
+                  <p id="arma-modelo-regra">Selecione uma arma para preencher os dados ou cadastre um ataque personalizado.</p>
+                </div>
+                <form id="form-ataque" class="attack-form">
+                  <label for="ataque-nome">Nome da arma
+                    <input id="ataque-nome" placeholder="Ex.: Bengala-florete" required maxlength="120">
+                  </label>
+                  <div class="two-fields">
+                    <label for="ataque-dano">Dano
+                      <input id="ataque-dano" placeholder="Ex.: 1d6" required maxlength="60">
+                    </label>
+                    <label for="ataque-critico">Crítico
+                      <input id="ataque-critico" placeholder="Ex.: 18" required maxlength="60">
+                    </label>
+                  </div>
+                  <label class="cs-weapon-ability-label" for="ataque-habilidade">✦ Habilidade especial <small>OPCIONAL</small>
+                    <textarea id="ataque-habilidade" rows="3" maxlength="800" placeholder="Descreva o efeito, o custo em PE e quando pode ser utilizado."></textarea>
+                  </label>
+                  <button class="primary cs-combat-submit" type="submit">＋ CADASTRAR ATAQUE</button>
+                </form>
+                <p class="cs-combat-tip">◈ As habilidades personalizadas são regras da casa e podem ser ajustadas pelo mestre.</p>
+              </section>
             </div>
-            <form id="form-ataque" class="attack-form">
-              <label>Nome
-                <input id="ataque-nome" placeholder="Ex.: Florete" required>
-              </label>
-              <div class="two-fields">
-                <label>Dano
-                  <input id="ataque-dano" placeholder="1d6" required>
-                </label>
-                <label>Crítico
-                  <input id="ataque-critico" placeholder="20" required>
-                </label>
-              </div>
-              <label class="cs-weapon-ability-label" for="ataque-habilidade">Habilidade especial (opcional)
-                <textarea id="ataque-habilidade" rows="3" maxlength="800" placeholder="Ex.: 1 vez por cena, gaste 1 PE para receber +2 no teste de ataque."></textarea>
-              </label>
-              <button class="outline" type="submit">
-                + ADICIONAR ATAQUE
-              </button>
-            </form>
-          </div>
+          </section>
         </div>
 
         <div id="aba-inventario" class="sheet-page" role="tabpanel"
