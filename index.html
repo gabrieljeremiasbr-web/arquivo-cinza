@@ -629,14 +629,14 @@
       <header class="master-hero">
         <div>
           <span class="eyebrow">♛ &nbsp; CONTROLE DA CAMPANHA</span>
-          <h2>PAINEL DA MESTRA</h2>
+          <h2>PAINEL DA MESTRE</h2>
           <p>CÓDIGO SOMBRIO &nbsp; · &nbsp; CENTRAL DE INVESTIGAÇÃO</p>
         </div>
       </header>
 
-      <nav class="master-nav" aria-label="Navegação do painel da mestra">
+      <nav class="master-nav" aria-label="Navegação do painel da mestre">
         <button type="button" class="master-nav-link active" data-tela="tela-mestre">
-          ♛ &nbsp; MESTRA
+          ♛ &nbsp; MESTRE
         </button>
         <button type="button" class="master-nav-link" data-tela="tela-personagens">
           ♙ &nbsp; PERSONAGENS
@@ -652,6 +652,18 @@
         </button>
       </nav>
 
+      <section class="master-overview" aria-label="Resumo da campanha">
+      <div><small>INVESTIGADORES</small><strong id="mestre-total-pjs">0</strong></div>
+      <div><small>NPCs</small><strong id="mestre-total-npcs">0</strong></div>
+      <div><small>SESSÕES</small><strong id="mestre-total-sessoes">0</strong></div>
+      <div><small>CASOS</small><strong id="mestre-total-casos">0</strong></div>
+      <div><small>OBJETIVOS</small><strong id="mestre-total-objetivos">0</strong></div>
+      </section>
+      <nav class="master-shortcuts" aria-label="Atalhos do mestre">
+      <button type="button" data-master-section="mestre-configuracao">⚙ CONFIGURAR CAMPANHA</button>
+      <button type="button" data-master-section="mestre-sessoes">▣ PLANEJAR SESSÃO</button>
+      <button type="button" data-master-section="mestre-objetivos">✦ OBJETIVOS</button>
+      </nav>
       <div class="master-dashboard">
         <aside class="master-rail">
           <section class="master-card current-session-card">
@@ -677,7 +689,7 @@
               </div>
             </div>
             <button id="iniciar-sessao-atual" class="primary master-start-session"
-                    type="button">▷ &nbsp; INICIAR SESSÃO</button>
+                    type="button">▷ &nbsp; INICIAR SESSÃO</button><button id="concluir-sessao-atual" class="outline master-start-session" type="button">✓ CONCLUIR SESSÃO</button>
             <p id="sessao-atual-status" class="master-inline-status"
                role="status" aria-live="polite"></p>
             <button id="abrir-criacao-sessao" class="master-text-action" type="button">
@@ -688,7 +700,7 @@
           <section class="master-card master-tools-card">
             <header class="master-card-heading">
               <span aria-hidden="true">⚒</span>
-              <h3>FERRAMENTAS DA MESTRA</h3>
+              <h3>FERRAMENTAS DA MESTRE</h3>
             </header>
             <button type="button" class="master-tool" data-master-action="npc">
               ♟ &nbsp; Gerenciar NPCs
@@ -735,7 +747,7 @@
             <section class="master-card master-notes-card">
               <header class="master-card-heading">
                 <span aria-hidden="true">▤</span>
-                <h3>ANOTAÇÕES DA MESTRA</h3>
+                <h3>ANOTAÇÕES DA MESTRE</h3>
                 <button type="button" class="master-add-link" data-master-action="notes">
                   VER TODAS
                 </button>
