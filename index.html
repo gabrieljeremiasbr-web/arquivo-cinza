@@ -652,16 +652,7 @@
         </button>
       </nav>
 
-      <nav class="master-workspace-nav" aria-label="Acesso rápido às seções da Área do Mestre">
-        <a href="#mestre-resumo"><span aria-hidden="true">▦</span> Visão geral</a>
-        <a href="#mestre-sessao-atual"><span aria-hidden="true">▷</span> Sessão</a>
-        <a href="#mestre-mesa"><span aria-hidden="true">♟</span> Personagens</a>
-        <a href="#mestre-npcs"><span aria-hidden="true">♙</span> NPCs</a>
-        <a href="#mestre-iniciativa"><span aria-hidden="true">⚔</span> Iniciativa</a>
-        <a href="#mestre-rolagem"><span aria-hidden="true">⚄</span> Dados</a>
-        <a href="#mestre-administracao"><span aria-hidden="true">⚙</span> Gestão</a>
-      </nav>
-      <div id="mestre-resumo" class="master-section-intro"><span class="eyebrow">01 / VISÃO GERAL</span><h3>RESUMO DA CAMPANHA</h3><p>Informações essenciais da sua mesa em um só lugar.</p></div>
+      <div class="master-section-intro"><span class="eyebrow">01 / VISÃO GERAL</span><h3>RESUMO DA CAMPANHA</h3><p>Informações essenciais da sua mesa em um só lugar.</p></div>
       <section class="master-overview" aria-label="Resumo da campanha">
       <div><small>INVESTIGADORES</small><strong id="mestre-total-pjs">0</strong></div>
       <div><small>NPCs</small><strong id="mestre-total-npcs">0</strong></div>
@@ -677,7 +668,7 @@
       <div class="master-section-intro"><span class="eyebrow">02 / CENTRAL DE OPERAÇÕES</span><h3>CONTROLE DA SESSÃO</h3><p>Personagens, NPCs, anotações, iniciativa e dados para a investigação.</p></div>
       <div class="master-dashboard">
         <aside class="master-rail">
-          <section id="mestre-sessao-atual" class="master-card current-session-card">
+          <section class="master-card current-session-card">
             <header class="master-card-heading">
               <span aria-hidden="true">▷</span>
               <h3>SESSÃO ATUAL</h3>
@@ -699,8 +690,8 @@
                 <button id="nex-aumentar" type="button" aria-label="Aumentar NEX">+</button>
               </div>
             </div>
-            <div class="master-session-actions"><button id="iniciar-sessao-atual" class="primary master-start-session"
-                    type="button">▷ &nbsp; INICIAR SESSÃO</button><button id="concluir-sessao-atual" class="outline master-start-session" type="button">✓ CONCLUIR SESSÃO</button></div>
+            <button id="iniciar-sessao-atual" class="primary master-start-session"
+                    type="button">▷ &nbsp; INICIAR SESSÃO</button><button id="concluir-sessao-atual" class="outline master-start-session" type="button">✓ CONCLUIR SESSÃO</button>
             <p id="sessao-atual-status" class="master-inline-status"
                role="status" aria-live="polite"></p>
             <button id="abrir-criacao-sessao" class="master-text-action" type="button">
@@ -711,7 +702,7 @@
           <section class="master-card master-tools-card">
             <header class="master-card-heading">
               <span aria-hidden="true">⚒</span>
-              <h3>FERRAMENTAS DO MESTRE</h3>
+              <h3>FERRAMENTAS DA MESTRE</h3>
             </header>
             <button type="button" class="master-tool" data-master-action="npc">
               ♟ &nbsp; Gerenciar NPCs
@@ -732,7 +723,7 @@
         </aside>
 
         <div class="master-main-column">
-          <section id="mestre-mesa" class="master-card table-view-card">
+          <section class="master-card table-view-card">
             <header class="master-card-heading">
               <span aria-hidden="true">♟</span>
               <h3>VISÃO DA MESA</h3>
@@ -744,7 +735,7 @@
           </section>
 
           <div class="master-secondary-grid">
-            <section id="mestre-npcs" class="master-card master-npc-card">
+            <section class="master-card master-npc-card">
               <header class="master-card-heading">
                 <span aria-hidden="true">🎭</span>
                 <h3>CONTROLE DE NPCs</h3>
@@ -755,10 +746,10 @@
               <div id="painel-npcs" class="master-npc-list"></div>
             </section>
 
-            <section id="mestre-notas" class="master-card master-notes-card">
+            <section class="master-card master-notes-card">
               <header class="master-card-heading">
                 <span aria-hidden="true">▤</span>
-                <h3>ANOTAÇÕES DO MESTRE</h3>
+                <h3>ANOTAÇÕES DA MESTRE</h3>
                 <button type="button" class="master-add-link" data-master-action="notes">
                   VER TODAS
                 </button>
@@ -773,7 +764,7 @@
             </section>
           </div>
 
-          <section id="mestre-iniciativa" class="master-card master-initiative-card">
+          <section class="master-card master-initiative-card">
             <header class="master-card-heading">
               <span aria-hidden="true">⚔</span>
               <h3>ORDEM DE INICIATIVA</h3>
@@ -789,7 +780,7 @@
             </ol>
           </section>
 
-          <section id="mestre-rolagem" class="master-card master-dice-card dice-roller">
+          <section class="master-card master-dice-card dice-roller">
             <header class="master-card-heading">
               <span aria-hidden="true">⚄</span>
               <h3>ROLAGEM RÁPIDA</h3>
@@ -817,7 +808,7 @@
         </div>
       </div>
 
-      <div id="mestre-administracao" class="master-section-intro master-management-intro"><span class="eyebrow">03 / ADMINISTRAÇÃO</span><h3>GERENCIAMENTO DA CAMPANHA</h3><p>Configure a campanha, planeje sessões e acompanhe os objetivos.</p></div>
+      <div class="master-section-intro master-management-intro"><span class="eyebrow">03 / ADMINISTRAÇÃO</span><h3>GERENCIAMENTO DA CAMPANHA</h3><p>Configure a campanha, planeje sessões e acompanhe os objetivos.</p></div>
       <details id="mestre-configuracao" class="master-disclosure">
         <summary>◈ &nbsp; CONFIGURAÇÃO E COMPARTILHAMENTO DA CAMPANHA</summary>
         <div class="master-setup">
