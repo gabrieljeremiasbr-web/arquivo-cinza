@@ -4400,162 +4400,55 @@ footer {
 @media(max-width:480px){#tela-mestre .master-hero{padding:20px}#tela-mestre .master-overview{gap:9px}#tela-mestre .master-overview>div{min-height:85px;padding:12px}#tela-mestre .master-overview strong{font-size:26px}#tela-mestre .master-section-intro{margin-top:24px}}
 
 
-/* ======================================================
-   CÓDIGO SOMBRIO — Área do Mestre • layout unificado
-   Overrides isolados: preservam formulários e lógica.
-   ====================================================== */
-#tela-mestre {
-  --master-bg: #111319;
-  --master-surface: #191d25;
-  --master-elevated: #212631;
-  --master-border: rgba(177, 188, 208, .17);
-  --master-accent: #db626e;
-  --master-gold: #d4b98a;
-  --master-text: #f0eced;
-  --master-muted: #b5b5bc;
-  color: var(--master-text);
-}
-#tela-mestre :is(.master-workspace-nav,.master-card,.master-overview>div,.master-disclosure) { min-width:0; }
+/* Refinamento visual do painel original — sem alterar sua estrutura */
+#tela-mestre {--master-gold:#d7b57a;--master-line:rgba(215,181,122,.25)}
 #tela-mestre .master-hero {
-  min-height: 165px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  text-align:left;
-  border:1px solid var(--master-border);
-  border-left:4px solid var(--master-accent);
-  border-radius:16px;
-  padding:clamp(22px,4vw,38px);
-  background: radial-gradient(circle at 95% 20%,rgba(180,60,75,.15),transparent 40%),
-              linear-gradient(125deg,#252630,#12151c);
-  box-shadow:0 12px 32px #0004;
+  min-height:170px;border-radius:15px;padding:clamp(24px,4vw,40px);
+  background:radial-gradient(ellipse at 50% 0%,#8f29352a,transparent 62%),linear-gradient(135deg,#251719,#100e12);
+  border:1px solid #8d4149;box-shadow:inset 0 1px #ffffff12,0 14px 35px #0006;
 }
-#tela-mestre .master-hero::before,
-#tela-mestre .master-hero::after { display:none; }
-#tela-mestre .master-hero .eyebrow { color:#e79a9e; letter-spacing:.16em; }
-#tela-mestre .master-hero h2 {font-size:clamp(27px,4vw,44px);letter-spacing:.035em;margin:8px 0;}
-#tela-mestre .master-hero p {font-family:inherit;color:#c2bdc1;letter-spacing:.14em;line-height:1.6;}
-#tela-mestre .master-nav {
-  display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 12px;padding:8px;
-  background:#151820;border:1px solid var(--master-border);border-radius:12px;
-}
-#tela-mestre .master-nav-link {
-  flex:1 1 130px;min-height:45px;padding:10px 12px;border:1px solid transparent;
-  border-radius:8px;color:#d6d2d4;background:transparent;
-  font-family:inherit;font-size:12px;letter-spacing:.065em;
-  transition:background .2s,border-color .2s;
-}
-#tela-mestre .master-nav-link:hover,#tela-mestre .master-nav-link.active {
-  background:#392027;border-color:#8c3945;color:#fff;box-shadow:inset 0 -2px var(--master-accent);
-}
-#tela-mestre .master-workspace-nav {
-  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
-  margin:0 0 24px;padding:10px;border:1px solid var(--master-border);
-  border-radius:12px;background:#1b1e27;
-}
-#tela-mestre .master-workspace-nav a {
-  display:inline-flex;align-items:center;gap:8px;min-height:40px;
-  padding:9px 13px;text-decoration:none;font-size:12px;font-weight:700;
-  border-radius:9px;border:1px solid #ffffff0f;color:#ddd5d8;
-  background:#252a33;transition:background .2s,color .2s,border-color .2s;
-}
-#tela-mestre .master-workspace-nav a span {font-size:16px;color:#e88c95;}
-#tela-mestre .master-workspace-nav a:hover,
-#tela-mestre .master-workspace-nav a:focus-visible {
-  color:#fff;background:#45272f;border-color:#bd6f79;
-}
-#tela-mestre :is(.master-section-intro,.master-card,.master-overview,.master-disclosure) {scroll-margin-top:22px;}
-#tela-mestre .master-section-intro {
-  margin:30px 0 16px;padding-left:15px;border-left:3px solid var(--master-accent);
-}
-#tela-mestre .master-section-intro .eyebrow {color:#d79c9f;}
-#tela-mestre .master-section-intro h3 {color:#f2e9e9;letter-spacing:.025em;}
-#tela-mestre .master-section-intro p {color:var(--master-muted);line-height:1.55;}
-#tela-mestre .master-overview {grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:14px 0 16px;}
-#tela-mestre .master-overview>div {
-  min-height:110px;display:flex;flex-direction:column;justify-content:space-between;
-  gap:10px;padding:17px 16px;border-radius:14px;
-  border:1px solid var(--master-border);
-  border-top:2px solid #8f414d;
-  background:linear-gradient(145deg,#262b35,#1b1e27);
-  box-shadow:0 6px 20px #0003;
-}
-#tela-mestre .master-overview small {color:#c3b9bc;font-size:11px;line-height:1.4;}
-#tela-mestre .master-overview strong {color:#f5e6e7;font-size:clamp(26px,3vw,36px);line-height:1;font-variant-numeric:tabular-nums;}
-#tela-mestre .master-shortcuts {display:flex;flex-wrap:wrap;gap:9px;margin:17px 0 22px;}
-#tela-mestre .master-shortcuts button {
-  flex:1 1 190px;min-height:46px;padding:11px 15px;
-  border:1px solid #76434c;border-radius:10px;
-  background:#30232b;color:#f1e6e7;letter-spacing:.035em;
-}
-#tela-mestre .master-shortcuts button:hover {background:#4b2d37;border-color:#dc828e;transform:none;}
-#tela-mestre .master-dashboard {
-  grid-template-columns:minmax(245px, .84fr) minmax(0, 2fr);
-  gap:18px;align-items:start;
-}
-#tela-mestre .master-rail,#tela-mestre .master-main-column {gap:16px;}
-#tela-mestre .master-card {
-  border:1px solid var(--master-border);border-radius:14px;
-  background:linear-gradient(150deg,#22252e,#151820 90%);
-  box-shadow:0 8px 22px #0003;overflow:hidden;
-}
-#tela-mestre .master-card-heading {
-  min-height:54px;display:flex;flex-wrap:wrap;gap:9px;
-  padding:13px 16px;border-bottom:1px solid var(--master-border);
-  background:linear-gradient(95deg,#312129,#1e2028);
-}
-#tela-mestre .master-card-heading>span {color:#e58c96;font-size:19px;}
-#tela-mestre .master-card-heading h3 {
-  color:#f0e6e8;font-size:clamp(13px,1.3vw,16px);line-height:1.4;letter-spacing:.035em;
-}
-#tela-mestre .master-card-heading .master-add-link {
-  margin-left:auto;white-space:normal;text-align:right;
-}
-#tela-mestre .master-tool {
-  border-color:#ffffff12;color:#e6dfe2;background:#252730;
-  min-height:44px;transition:background .2s;
-}
-#tela-mestre .master-tool:hover {background:#3b2a33;transform:none;}
-#tela-mestre .master-session-actions {display:grid;gap:9px;margin:0 14px;}
-#tela-mestre .master-session-actions .master-start-session {width:100%;margin:0;}
-#tela-mestre .master-note-form {grid-template-columns:minmax(0,1fr) auto;}
-#tela-mestre .master-disclosure {
-  margin:13px 0;border:1px solid var(--master-border);
-  border-radius:12px;background:#1b1d25;overflow:hidden;
-}
-#tela-mestre .master-disclosure>summary {
-  padding:17px 18px;background:#27242d;color:#efe2e4;
-  font-family:inherit;line-height:1.55;letter-spacing:.025em;
-}
-#tela-mestre .master-disclosure[open]>summary {border-bottom:1px solid var(--master-border);background:#382630;}
-#tela-mestre :is(button,a,summary,input,select,textarea):focus-visible {
-  outline:2px solid #ec9da5;outline-offset:3px;
-}
-@media(max-width:1020px) {
-  #tela-mestre .master-overview {grid-template-columns:repeat(3,minmax(0,1fr));}
-  #tela-mestre .master-dashboard {grid-template-columns:minmax(210px,.8fr) minmax(0,1.5fr);}
+#tela-mestre .master-hero h2 {line-height:1.13;letter-spacing:.07em;text-wrap:balance}
+#tela-mestre .master-nav {gap:7px;padding:8px;border-radius:12px;background:#161317;border-color:#5c343b}
+#tela-mestre .master-nav-link {min-height:49px;border-radius:8px;border:1px solid transparent;transition:background .18s,border-color .18s}
+#tela-mestre .master-nav-link:hover,#tela-mestre .master-nav-link.active {border-color:#a94e59;background:#46232a;box-shadow:inset 0 -2px #e75d69}
+#tela-mestre .master-section-intro {margin:32px 0 16px;padding-left:16px;border-left:3px solid #d26a72}
+#tela-mestre .master-section-intro h3 {line-height:1.3;letter-spacing:.045em}
+#tela-mestre .master-section-intro p {line-height:1.6;max-width:65ch}
+#tela-mestre .master-overview {gap:12px;margin:16px 0 20px}
+#tela-mestre .master-overview>div {min-height:116px;padding:18px;border:1px solid #594149;border-top:2px solid #b75d68;border-radius:13px;background:linear-gradient(150deg,#29252a,#19191e);box-shadow:0 7px 20px #0003}
+#tela-mestre .master-overview small {line-height:1.4;color:#c8b9b5}
+#tela-mestre .master-overview strong {font-size:clamp(27px,3vw,35px);color:#f4d7d5}
+#tela-mestre .master-shortcuts {gap:10px;margin-bottom:24px}
+#tela-mestre .master-shortcuts button {flex:1 1 180px;min-height:46px;border-radius:9px;background:#2b2328;border-color:#72515a}
+#tela-mestre .master-shortcuts button:hover {background:#453039;border-color:#d58b90;transform:none}
+#tela-mestre .master-dashboard {gap:20px;grid-template-columns:minmax(240px,.82fr) minmax(0,2fr)}
+#tela-mestre .master-rail,#tela-mestre .master-main-column {gap:18px}
+#tela-mestre .master-card {border:1px solid #654049;border-radius:13px;background:linear-gradient(145deg,#241a20,#151116 85%);box-shadow:0 12px 28px #0004}
+#tela-mestre .master-card-heading {min-height:55px;gap:10px;padding:13px 16px;background:linear-gradient(90deg,#3a2029,#21171c);border-bottom:1px solid #67404b}
+#tela-mestre .master-card-heading h3 {font-size:clamp(13px,1.4vw,17px);line-height:1.4}
+#tela-mestre .master-card-heading .master-add-link {margin-left:auto;text-align:right;white-space:normal}
+#tela-mestre .master-tool {min-height:45px;transition:background .18s}
+#tela-mestre .master-tool:hover {background:#492a33;transform:none}
+#tela-mestre .master-disclosure {border-radius:12px;border-color:#65414b;background:#1a141a}
+#tela-mestre .master-disclosure>summary {padding:17px 18px;line-height:1.5}
+#tela-mestre .master-disclosure[open]>summary {background:#35222b;border-bottom:1px solid #65414b}
+#tela-mestre :is(button,input,select,textarea,summary):focus-visible {outline:2px solid #e8a4a8;outline-offset:3px}
+@media(max-width:1000px) {
+  #tela-mestre .master-dashboard {grid-template-columns:minmax(220px,.85fr) minmax(0,1.5fr)}
+  #tela-mestre .master-overview {grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media(max-width:750px) {
-  #tela-mestre .master-dashboard {display:grid;grid-template-columns:minmax(0,1fr);}
-  #tela-mestre .master-rail,#tela-mestre .master-main-column {width:100%;}
-  #tela-mestre .master-rail {grid-template-columns:repeat(2,minmax(0,1fr));}
-  #tela-mestre .master-nav-link {flex:1 1 calc(50% - 8px);}
+  #tela-mestre .master-dashboard {display:grid;grid-template-columns:1fr}
+  #tela-mestre .master-rail,#tela-mestre .master-main-column {width:100%}
+  #tela-mestre .master-rail {grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-@media(max-width:580px) {
-  #tela-mestre .master-hero {min-height:130px;padding:21px;}
-  #tela-mestre .master-hero p {font-size:10px;letter-spacing:.08em;}
-  #tela-mestre .master-workspace-nav {gap:6px;padding:8px;}
-  #tela-mestre .master-workspace-nav a {flex:1 1 calc(50% - 6px);justify-content:center;padding:9px 6px;font-size:11px;}
-  #tela-mestre .master-overview {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
-  #tela-mestre .master-overview>div {min-height:93px;padding:13px;}
-  #tela-mestre .master-rail {grid-template-columns:1fr;}
-  #tela-mestre .master-card-heading {padding:11px 12px;}
-  #tela-mestre .master-session-actions {margin:0 12px;}
-  #tela-mestre .master-note-form {grid-template-columns:1fr;}
-  #tela-mestre .master-secondary-grid {grid-template-columns:minmax(0,1fr);}
-  #tela-mestre .master-dice-content {grid-template-columns:1fr;}
-}
-@media(prefers-reduced-motion:reduce) {
-  #tela-mestre .master-nav-link,#tela-mestre .master-workspace-nav a,
-  #tela-mestre .master-tool {transition:none;}
+@media(max-width:550px) {
+  #tela-mestre .master-hero {padding:22px}
+  #tela-mestre .master-overview {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  #tela-mestre .master-overview>div {min-height:95px;padding:13px}
+  #tela-mestre .master-rail {grid-template-columns:1fr}
+  #tela-mestre .master-nav-link {flex:1 1 calc(50% - 8px)}
+  #tela-mestre .master-card-heading {padding:11px 12px}
+  #tela-mestre .master-secondary-grid {grid-template-columns:1fr}
+  #tela-mestre .master-dice-content {grid-template-columns:1fr}
 }
