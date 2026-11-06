@@ -249,7 +249,7 @@ function abrirMesaSessao(sessaoId) {
     : 'Mesa livre · fichas, NPCs, pistas, anotações e dados em um só lugar.';
 }
 
-$('abrir-mesa-sessao').onclick = () => abrirMesaSessao();
+
 $('voltar-area-mestre').onclick = () => abrirTela('tela-mestre');
 
 function voltarPainel() {
