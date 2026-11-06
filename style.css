@@ -4976,3 +4976,164 @@ footer {
   #painel-fichas-personagem #jogadores-contador{margin-left:0}
   #painel-fichas-personagem .player-archive-card{padding:16px}
 }
+
+
+/* Ficha completa — apresentação organizada sem alterar os dados do RPG */
+#tela-ficha .sheet {
+  max-width:1370px;margin:0 auto;border-radius:15px;
+  border:1px solid #852b39;
+  background:linear-gradient(140deg,#221017,#100a0c 70%);
+}
+#tela-ficha .sheet-header {
+  align-items:flex-start;gap:24px;
+  padding:clamp(18px,3vw,32px);
+  background:radial-gradient(ellipse at 0 0,#5b172439,transparent 62%),linear-gradient(120deg,#280e16,#100a0d);
+}
+#tela-ficha .portrait {
+  width:150px;height:183px;border:3px solid #9b3949;
+  border-radius:9px;transform:none;
+  background:linear-gradient(#351622,#160b10);box-shadow:0 12px 25px #0007;
+}
+#tela-ficha .identity h2 {
+  margin:7px 0 6px;font-size:clamp(26px,3.5vw,43px);
+  line-height:1.15;letter-spacing:.4px;overflow-wrap:anywhere;
+}
+#tela-ficha .identity>p{letter-spacing:.4px;line-height:1.5}
+#tela-ficha .sheet-identity-tags {
+  display:flex;flex-wrap:wrap;gap:7px;margin:12px 0;
+}
+#tela-ficha .sheet-identity-tag {
+  border:1px solid #7a2b3c;border-radius:6px;padding:7px 10px;
+  background:#2b111a;color:#e8b4b9;
+  font-size:10px;font-weight:700;letter-spacing:.4px;
+}
+#tela-ficha .sheet-identity-tag.is-readonly {
+  background:#201416;color:#d5c1ba;border-color:#59404a;
+}
+#tela-ficha .identity .character-defense {
+  display:inline-flex;align-items:center;gap:6px;margin:6px 0 14px!important;
+  padding:9px 12px;border:1px solid #b4404f;
+  background:#31131f;border-radius:7px;
+  color:#f9d8d3!important;font-size:13px;
+}
+#tela-ficha .resources {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+#tela-ficha .resource {
+  min-width:0;padding:14px;
+  border:1px solid #6e2a38;border-radius:9px;
+  background:linear-gradient(145deg,#2b151d,#170d12);
+}
+#tela-ficha .resource-top{
+  flex-wrap:wrap;gap:9px;color:#eac6ca;font-size:12px;
+}
+#tela-ficha .resource-top input {
+  min-height:37px;width:62px;max-width:100%;
+  border-radius:6px;border-color:#874351;
+  background:#12090d;color:#fff1e8;
+}
+#tela-ficha .resources .relationship-resource{
+  grid-column:1/-1;padding:12px 16px;
+}
+#tela-ficha .resources .relationship-resource .resource-top{flex-wrap:nowrap}
+#tela-ficha .sheet-tabs {
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:8px;padding:13px;
+  border-bottom:1px solid #60202e;
+  background:#100a0d;
+}
+#tela-ficha .sheet-tab {
+  min-height:53px;padding:11px 8px;
+  border:1px solid #65303d;border-radius:7px;
+  background:#231117;color:#dec2c2;
+  font:700 clamp(11px,1.2vw,14px)/1.2 Arial,sans-serif;
+  letter-spacing:.6px;white-space:nowrap;
+}
+#tela-ficha .sheet-tab:hover:not(.active) {border-color:#b64758;background:#341721;color:#fff0e6}
+#tela-ficha .sheet-tab.active {
+  border-color:#ee485c;background:linear-gradient(120deg,#781b2d,#3d111c);
+  box-shadow:inset 0 2px #fd7f8b,0 5px 18px #ae243040;
+}
+#tela-ficha .sheet-page {padding:clamp(15px,2.5vw,26px)}
+#tela-ficha .sheet-overview-page {
+  background:radial-gradient(ellipse at top right,#46132232,transparent 60%),#160d12;
+}
+#tela-ficha .sheet-overview-intro {margin:0 0 20px}
+#tela-ficha .sheet-overview-intro h3 {
+  margin:7px 0;font:normal clamp(22px,2.6vw,31px)/1.2 Georgia,serif;color:#f5dfd5;
+}
+#tela-ficha .sheet-overview-intro p{color:#cbb6b5;line-height:1.5}
+#tela-ficha .sheet-overview-stats {
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px;
+}
+#tela-ficha .sheet-overview-stats article {
+  display:flex;flex-direction:column;gap:10px;min-width:0;
+  padding:18px;border:1px solid #713040;border-radius:10px;
+  background:linear-gradient(150deg,#2e1520,#170d12);
+}
+#tela-ficha .sheet-overview-stats article span {
+  font-size:11px;font-weight:800;letter-spacing:1.2px;color:#eb8b99;
+}
+#tela-ficha .sheet-overview-stats article strong {
+  font-size:clamp(23px,2.5vw,32px);font-variant-numeric:tabular-nums;
+  color:#fff1e7;
+}
+#tela-ficha .sheet-overview-stats article small {color:#c8aeb2;font-size:11px}
+#tela-ficha .sheet-overview-lower {
+  display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:14px;
+}
+#tela-ficha .sheet-overview-card {
+  min-width:0;padding:21px;
+  border:1px solid #66303c;border-radius:10px;
+  background:linear-gradient(145deg,#27141b,#120c10);
+}
+#tela-ficha .sheet-overview-card h4 {
+  margin:0 0 18px;color:#f2bbc0;font-size:13px;letter-spacing:1.4px;
+}
+#tela-ficha .sheet-overview-attributes {
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;
+}
+#tela-ficha .sheet-overview-attribute {
+  min-width:0;padding:15px 5px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  border-radius:8px;border:1px solid #793242;background:#391723;
+}
+#tela-ficha .sheet-overview-attribute small{font-size:11px;color:#e0acb4}
+#tela-ficha .sheet-overview-attribute strong{font-size:23px;color:#ffede6}
+#tela-ficha .sheet-overview-link,
+#tela-ficha .sheet-overview-links button {
+  min-height:41px;padding:10px 12px;
+  border-radius:6px;border:1px solid #a63d4f;
+  background:#39141f;color:#f7e1db;
+  font-size:11px;letter-spacing:.5px;font-weight:800;
+}
+#tela-ficha .sheet-overview-link {width:100%;margin-top:17px}
+#tela-ficha .sheet-overview-link:hover,
+#tela-ficha .sheet-overview-links button:hover {background:#6b1d30;border-color:#ed5265}
+#tela-ficha .sheet-overview-counts {display:grid;gap:0;margin-bottom:18px}
+#tela-ficha .sheet-overview-counts span {
+  display:flex;justify-content:space-between;gap:10px;padding:11px 0;
+  border-bottom:1px solid #57232f;color:#dfc6c5;font-size:13px;
+}
+#tela-ficha .sheet-overview-counts strong{color:#f8e8dc;font-variant-numeric:tabular-nums}
+#tela-ficha .sheet-overview-links{display:flex;flex-wrap:wrap;gap:8px}
+#tela-ficha .sheet-overview-links button{flex:1 1 100px}
+#tela-ficha .sheet-overview-note{margin:16px 0 0;color:#bba5a8;font-size:11px;line-height:1.5}
+@media(max-width:900px) {
+  #tela-ficha .sheet-header{flex-wrap:wrap}
+  #tela-ficha .sheet-overview-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #tela-ficha .sheet-overview-lower{grid-template-columns:1fr}
+}
+@media(max-width:610px) {
+  #tela-ficha .sheet-header{gap:14px}
+  #tela-ficha .portrait{width:95px;height:117px}
+  #tela-ficha .identity{flex:1 1 100%}
+  #tela-ficha .resources{grid-template-columns:1fr}
+  #tela-ficha .resources .relationship-resource{grid-column:auto}
+  #tela-ficha .sheet-tabs{display:flex;overflow-x:auto;gap:7px;scroll-snap-type:x mandatory}
+  #tela-ficha .sheet-tab{flex:0 0 129px;scroll-snap-align:start;font-size:11px}
+  #tela-ficha .sheet-overview-attributes{gap:5px}
+  #tela-ficha .sheet-overview-attribute{padding:12px 2px}
+  #tela-ficha .sheet-overview-attribute strong{font-size:20px}
+}
