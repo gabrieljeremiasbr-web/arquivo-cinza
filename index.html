@@ -577,29 +577,45 @@
         <div id="aba-inventario" class="sheet-page" role="tabpanel"
              aria-labelledby="aba-tab-inventario" hidden>
           <section class="character-subsection panel inventory-section" aria-labelledby="ficha-inventario-titulo">
-            <header class="sheet-section-heading">
+            <header class="sheet-section-heading cs-inventory-heading">
               <span aria-hidden="true">▤</span>
               <div>
+                <span class="eyebrow">◈ ARQUIVO / EQUIPAMENTOS</span>
                 <h3 id="ficha-inventario-titulo">Inventário do investigador</h3>
-                <p>Equipamentos e objetos carregados.</p>
+                <p>Organize os equipamentos, ferramentas e objetos do personagem.</p>
               </div>
+              <span id="inventario-contador" class="cs-inventory-counter" aria-live="polite">0 itens</span>
             </header>
-            <form id="form-inventario" class="inventory-form">
-              <label>Nome do item
-                <input id="item-nome" required placeholder="Ex.: Lanterna">
-              </label>
-              <div class="inventory-fields">
-                <label>Quantidade
-                  <input id="item-quantidade" type="number" min="1" step="1"
-                         value="1" required>
-                </label>
-                <label>Observações (opcional)
-                  <input id="item-observacoes" placeholder="Ex.: pilhas extras">
-                </label>
+            <div class="cs-inventory-layout">
+              <div class="cs-inventory-list-column">
+                <div class="cs-inventory-subheading">
+                  <h4>▤ ITENS CARREGADOS</h4>
+                  <span>REGISTRO DE EQUIPAMENTOS</span>
+                </div>
+                <div id="lista-inventario" class="inventory-list"></div>
               </div>
-              <button class="primary" type="submit">+ ADICIONAR ITEM</button>
-            </form>
-            <div id="lista-inventario" class="inventory-list"></div>
+              <aside class="cs-inventory-form-column">
+                <div class="cs-inventory-subheading">
+                  <h4>✦ ADICIONAR EQUIPAMENTO</h4>
+                  <span>NOVO REGISTRO</span>
+                </div>
+                <form id="form-inventario" class="inventory-form">
+                  <label for="item-nome">Nome do item
+                    <input id="item-nome" required maxlength="120" autocomplete="off" placeholder="Ex.: Lanterna">
+                  </label>
+                  <div class="inventory-fields">
+                    <label for="item-quantidade">Quantidade
+                      <input id="item-quantidade" type="number" min="1" step="1" value="1" required>
+                    </label>
+                    <label for="item-observacoes">Observações (opcional)
+                      <input id="item-observacoes" maxlength="500" placeholder="Ex.: pilhas extras">
+                    </label>
+                  </div>
+                  <button class="primary" type="submit">＋ ADICIONAR ITEM</button>
+                </form>
+                <p class="cs-inventory-tip">◈ Os itens ficam vinculados à ficha deste investigador.</p>
+              </aside>
+            </div>
           </section>
         </div>
 
