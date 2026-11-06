@@ -1346,6 +1346,13 @@ document.querySelectorAll('[data-ficha-atalho]').forEach(botao => {
     document.querySelector('#tela-ficha .sheet-tabs')?.scrollIntoView({behavior:'smooth',block:'start'});
   });
 });
+document.querySelectorAll('[data-ficha-ancora]').forEach(botao => {
+  botao.addEventListener('click',()=>{
+    selecionarAba('resumo');
+    const destino = $(botao.dataset.fichaAncora);
+    destino?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
 
 
 function renderizarMenuLateralFicha(idSelecionado = personagemAberto) {
@@ -1416,9 +1423,11 @@ document.querySelectorAll('#tela-ficha [data-ficha-recurso]').forEach(bot => {
 });
 
 function abrirFicha(idFicha) {
-  const abaDeRetorno = !$('tela-ficha').hidden && personagemAberto === idFicha
+  const abaAnterior = !$('tela-ficha').hidden && personagemAberto === idFicha
     ? document.querySelector('#tela-ficha .sheet-tab.active')?.dataset.aba || 'resumo'
     : 'resumo';
+  const abaDeRetorno = ['resumo','combate','inventario','perfil'].includes(abaAnterior)
+    ? abaAnterior : 'resumo';
   const telaAnterior = document.querySelector('.app-pagina:not([hidden])');
   if (telaAnterior && telaAnterior.id !== 'tela-ficha') telaAnteriorFicha = telaAnterior.id;
   $('voltar-personagens').textContent = telaAnteriorFicha === 'tela-mestre'
