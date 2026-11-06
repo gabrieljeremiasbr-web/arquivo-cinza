@@ -5769,3 +5769,22 @@ footer {
 #tela-ficha .cs-attack-pe-actions>span{font-size:11px;font-weight:700;color:#ffc0cc}
 #tela-ficha .cs-attack-pe-actions .cs-attack-pe-button{width:auto;max-width:100%;padding:10px 12px;border:1px solid #ef5a72;border-radius:7px;background:linear-gradient(180deg,#a7203a,#74162a);color:#fff;font-size:11px;font-weight:800;white-space:normal}
 #tela-ficha .cs-attack-pe-actions .cs-attack-pe-button:disabled{opacity:.45;cursor:not-allowed}
+
+/* Painel principal: arquivo de investigação organizado em grade */
+#painel-principal .dashboard-heading{max-width:1100px;margin:24px auto 18px;align-items:end}
+#painel-principal .dashboard-heading h3{font:700 clamp(24px,3vw,34px)/1.15 Georgia,serif;letter-spacing:.5px;color:#f9e8e0}
+#painel-principal .dashboard-heading>.muted{font-size:12px;max-width:290px;text-align:right}
+#painel-principal .menu{width:100%;max-width:1100px;margin:0 auto;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+#painel-principal .menu-card{position:relative;display:grid;grid-template-columns:56px minmax(0,1fr) 20px;align-items:center;gap:16px;min-height:136px;padding:23px 21px;border:1px solid #743342;border-radius:12px;background:linear-gradient(135deg,rgba(54,24,35,.96),rgba(23,12,19,.96));box-shadow:0 12px 28px #0005,inset 0 1px #ffffff0b;overflow:hidden}
+#painel-principal .menu-card::before{content:'';position:absolute;left:0;top:15%;bottom:15%;width:3px;background:#b72c46;border-radius:0 4px 4px 0;opacity:.7;transition:opacity .2s}
+#painel-principal .menu-card:hover,#painel-principal .menu-card:focus-visible{border-color:#e7546c;background:linear-gradient(135deg,#4a1d2e,#211019);transform:translateY(-2px);box-shadow:0 16px 32px #0008,0 0 18px #bd2b4020}
+#painel-principal .menu-card:hover::before,#painel-principal .menu-card:focus-visible::before{opacity:1}
+#painel-principal .menu-icon{width:56px;height:56px;border:1px solid #974057;border-radius:11px;background:linear-gradient(140deg,#582135,#2a111d);color:#ff718a;font-size:26px}
+#painel-principal .menu-card-copy{gap:8px;min-width:0}
+#painel-principal .menu-card-copy strong{font:700 clamp(16px,1.6vw,20px)/1.2 Georgia,serif;color:#ffece5;letter-spacing:.3px}
+#painel-principal .menu-card-copy small{font-size:12px;color:#c4a4ac;line-height:1.5}
+#painel-principal .menu-arrow{display:block;font-size:22px;color:#f07a8d;opacity:.8}
+#painel-principal .menu-card:last-child{grid-column:1/-1;min-height:112px;background:linear-gradient(110deg,#531b2e,#27111d 60%,#170d14);border-color:#a64459}
+#painel-principal .menu-card:last-child .menu-icon{background:#6a2135;border-color:#df5a73}
+@media(max-width:720px){#painel-principal .dashboard-heading{align-items:start;flex-direction:column;gap:7px}#painel-principal .dashboard-heading>.muted{text-align:left;max-width:none}#painel-principal .menu{grid-template-columns:1fr;gap:11px}#painel-principal .menu-card{min-height:102px;padding:16px;grid-template-columns:48px minmax(0,1fr) 18px;gap:12px}#painel-principal .menu-card:last-child{grid-column:auto;min-height:102px}#painel-principal .menu-icon{width:48px;height:48px;font-size:23px}}
+@media(max-width:390px){#painel-principal .menu-card{grid-template-columns:42px minmax(0,1fr) 14px;padding:13px;gap:10px}#painel-principal .menu-icon{width:42px;height:42px}#painel-principal .menu-card-copy strong{font-size:15px}#painel-principal .menu-card-copy small{font-size:11px}}
