@@ -706,6 +706,7 @@ periciasRPG.forEach(([nome, atributo], indice) => {
 
   campo.append(titulo, descricao, seletor);
   $('lista-pericias').append(campo);
+  seletor.addEventListener('change', atualizarResumoPericias);
 });
 atualizarLimitesTreinamento();
 
@@ -865,18 +866,19 @@ $('form-personagem').onsubmit = async e => {
 
   const atributos = atributosForm();
 
-  const totalAtributos = Object.values(atributos).reduce(
-    (soma, valor) => soma + (Number.isFinite(valor) ? valor : 0),
-    0
-  );
-  if (
-    Object.values(atributos).some(
-      valor => !Number.isInteger(valor) || valor < 1 || valor > 3
-    ) ||
-    totalAtributos < atributosInfo.length ||
-    totalAtributos - atributosInfo.length > 5
-  ) {
-    alert('Cada atributo começa em 1. Distribua até 5 pontos extras, com até 3 em cada atributo.');
+  const somaAtributos = Object.values(atributos).reduce((soma, valor) => soma + valor, 0);
+  const zeros = Object.values(atributos).filter(valor => valor === 0).length;
+  const limiteAtributos = ($('personagem-classe-base').value === 'sobrevivente' ? 3 : 4) + (zeros === 1 ? 1 : 0);
+  if (Object.values(atributos).some(valor => !Number.isInteger(valor) || valor < 0 || valor > 3) ||
+      zeros > 1 || somaAtributos - 5 > limiteAtributos) {
+    alert('Atributos inválidos: 4 pontos extras para agentes (3 para Sobrevivente), um único atributo pode ser reduzido a 0, máximo inicial 3.');
+    return;
+  }
+  const classeBase = $('personagem-classe-base').value;
+  const nex = nexFormulario();
+  const estagio = Number($('personagem-estagio').value || 1);
+  if (classeBase !== 'sobrevivente' && ![...Array.from({length:19}, (_,i)=>5+i*5), 99].includes(nex)) {
+    alert('Escolha um NEX válido (5% a 95% de 5 em 5, ou 99%).');
     return;
   }
 
@@ -885,7 +887,7 @@ $('form-personagem').onsubmit = async e => {
   ) || carregar('personagens').find(
     item => item.id === personagemEditandoId
   );
-  const bonusMaximo = bonusMaximoTreinamento();
+  const bonusMaximo = bonusMaximoTreinamento(nex);
   const pericias = Object.fromEntries(
     periciasRPG.map(([nome], indice) => [
       nome,
@@ -898,9 +900,26 @@ $('form-personagem').onsubmit = async e => {
     pericias[nome] > Number(fichaExistente?.pericias?.[nome] || 0)
   );
   if (aumentouAcimaDoNex) {
-    alert(
-      `Com NEX ${nexAtualDaMesa()}%, o treinamento máximo novo é +${bonusMaximo}.`
-    );
+    alert('Seu NEX individual (' + nex + '%) permite, no máximo, treinamento +' + bonusMaximo + '.');
+    return;
+  }
+
+  const treinadas = Object.values(pericias).filter(valor => valor >= 5).length;
+  const maximoTreinadas = limitePericiasClasse(classeBase, atributos.int);
+  if (treinadas > maximoTreinadas) {
+    alert('Você selecionou ' + treinadas + ' perícias treinadas. A classe-base permite ' + maximoTreinadas +
+      ' (sem contar as 2 recebidas da origem, que exigem conferência do mestre).');
+    return;
+  }
+  if (classeBase === 'combatente' &&
+      (!(pericias.Luta >= 5 || pericias.Pontaria >= 5) ||
+       !(pericias.Fortitude >= 5 || pericias.Reflexos >= 5))) {
+    alert('Combatente precisa treinar Luta ou Pontaria, e Fortitude ou Reflexos.');
+    return;
+  }
+  if (classeBase === 'ocultista' &&
+      (!(pericias.Ocultismo >= 5) || !(pericias.Vontade >= 5))) {
+    alert('Ocultista precisa treinar Ocultismo e Vontade.');
     return;
   }
 
@@ -934,6 +953,11 @@ $('form-personagem').onsubmit = async e => {
     id: personagemEditandoId || id(),
     titulo: nome,
     classe,
+    classeBase,
+    origem: $('personagem-origem').value.trim(),
+    nex,
+    estagio: classeBase === 'sobrevivente' ? estagio : null,
+    regras: 'ordem-v1.3-adaptado',
     historia,
     habilidades,
     imagem,
@@ -977,7 +1001,7 @@ $('form-personagem').onsubmit = async e => {
     '+  CRIAR PERSONAGEM';
   $('cancelar-edicao-personagem').hidden = true;
   atualizarTotal();
-  calcularRecursosPersonagem();
+  prepararCamposProgressao();
   abrirFicha(personagem.id);
 };
 
@@ -989,7 +1013,7 @@ $('cancelar-edicao-personagem').onclick = () => {
     '+  CRIAR PERSONAGEM';
   $('cancelar-edicao-personagem').hidden = true;
   atualizarTotal();
-  calcularRecursosPersonagem();
+  prepararCamposProgressao();
 };
 
 /* ==========================================
