@@ -5540,3 +5540,30 @@ footer {
   #tela-ficha .cs-summary-expanded{grid-template-columns:minmax(0,1fr)}
   #tela-ficha #ficha-resumo-pericias-detalhes .ability-skills{max-height:none;overflow:visible}
 }
+
+/* Roda de atributos compacta, sem alterar dados ou rolagens */
+@media(min-width:1121px){
+  #tela-ficha #ficha-resumo-roda .attribute-stage{
+    position:relative;
+    min-height:400px;
+    height:400px;
+    overflow:hidden;
+  }
+  #tela-ficha #ficha-resumo-roda .dice-wheel{
+    position:absolute;
+    width:560px;
+    max-width:none;
+    height:580px;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(.67);
+    transform-origin:center;
+  }
+  #tela-ficha #ficha-resumo-roda .arcane-ring{
+    width:360px;
+    max-width:90%;
+  }
+  #tela-ficha #ficha-resumo-roda .attribute-center{
+    transform:scale(.82);
+  }
+}
