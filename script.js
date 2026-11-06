@@ -1790,6 +1790,41 @@ function mostrarAtaques(personagem) {
       habilidade.textContent = '✦ Habilidade especial (regra da casa): ' + ataque.habilidade;
       cartao.append(habilidade);
     }
+    const custoPE = Number.isInteger(Number(ataque.custoPE)) && Number(ataque.custoPE) >= 0
+      ? Number(ataque.custoPE)
+      : (/\\b1\\s*PE\\b/i.test(ataque.habilidade || '') ? 1 : 0);
+    const podeEditarAtaque = !campanhaCompartilhada.fichas.some(item => item.id === personagemAberto)
+      || campanhaCompartilhada.papel === 'mestre';
+    if (ataque.habilidade && custoPE > 0) {
+      const recurso = document.createElement('div');
+      recurso.className = 'cs-attack-pe-actions';
+      const peAtual = Math.max(0, Number(personagem.peAtual ?? personagem.pe ?? 0) || 0);
+      const indicador = document.createElement('span');
+      indicador.textContent = 'PE: ' + peAtual + ' · Custo: ' + custoPE;
+      recurso.append(indicador);
+      if (podeEditarAtaque) {
+        const usar = botao('✦ USAR HABILIDADE (−' + custoPE + ' PE)', () => {
+          let descontou = false;
+          atualizarPersonagem(ficha => {
+            const disponivel = Math.max(0, Number(ficha.peAtual ?? ficha.pe ?? 0) || 0);
+            if (disponivel < custoPE) return;
+            ficha.peAtual = disponivel - custoPE;
+            descontou = true;
+          });
+          if (!descontou) {
+            alert('PE insuficiente para usar esta habilidade.');
+            return;
+          }
+          abrirFicha(personagemAberto);
+          selecionarAba('combate');
+        });
+        usar.classList.add('cs-attack-pe-button');
+        usar.disabled = peAtual < custoPE;
+        usar.title = usar.disabled ? 'PE insuficiente' : 'Descontar PE da ficha';
+        recurso.append(usar);
+      }
+      cartao.append(recurso);
+    }
     if (
       !campanhaCompartilhada.fichas.some(item => item.id === personagemAberto) ||
       campanhaCompartilhada.papel === 'mestre'
@@ -1813,21 +1848,24 @@ const armasSolicitadas = {
     dano: '1d6',
     critico: '18',
     nota: 'Adaptação do florete do livro: arma ágil, corte, categoria I, 1 espaço. O disfarce de bengala é narrativo.',
-    habilidade: 'Estocada Precisa (regra da casa): uma vez por cena, antes de atacar com esta arma, gaste 1 PE para receber +2 no teste de ataque.'
+    habilidade: 'Estocada Precisa (regra da casa): uma vez por cena, antes de atacar com esta arma, gaste 1 PE para receber +2 no teste de ataque.',
+    custoPE: 1
   },
   garras: {
     nome: 'Luva com Garras',
     dano: '1d6',
     critico: '20',
     nota: 'Regra da casa sugerida: corpo a corpo, corte, 1 espaço. Não é uma arma da tabela oficial; mestre pode alterar.',
-    habilidade: 'Garras Afiadas (regra da casa): uma vez por cena, após acertar um ataque com esta arma, gaste 1 PE para causar +2 pontos de dano.'
+    habilidade: 'Garras Afiadas (regra da casa): uma vez por cena, após acertar um ataque com esta arma, gaste 1 PE para causar +2 pontos de dano.',
+    custoPE: 1
   },
   bisturi: {
     nome: 'Bisturi',
     dano: '1d4',
     critico: '20',
     nota: 'Regra da casa: arma leve de corpo a corpo, dano de corte, 1 espaço. Os valores não são uma ficha oficial de bisturi do livro e podem ser alterados pelo mestre.',
-    habilidade: 'Corte Preciso (regra da casa): uma vez por cena, antes de atacar com o bisturi, gaste 1 PE para receber +2 no teste de ataque. Não acumula com outros bônus da mesma habilidade.'
+    habilidade: 'Corte Preciso (regra da casa): uma vez por cena, antes de atacar com o bisturi, gaste 1 PE para receber +2 no teste de ataque. Não acumula com outros bônus da mesma habilidade.',
+    custoPE: 1
   }
 };
 $('arma-modelo').addEventListener('change', () => {
@@ -1840,6 +1878,7 @@ $('arma-modelo').addEventListener('change', () => {
   $('ataque-dano').value = arma.dano;
   $('ataque-critico').value = arma.critico;
   $('ataque-habilidade').value = arma.habilidade;
+  $('ataque-custo-pe').value = arma.custoPE;
   $('arma-modelo-regra').textContent = arma.nota;
 });
 
@@ -1850,6 +1889,7 @@ $('form-ataque').onsubmit = e => {
   const dano = $('ataque-dano').value.trim();
   const critico = $('ataque-critico').value.trim();
   const habilidade = $('ataque-habilidade').value.trim();
+  const custoPE = Math.max(0, Math.min(99, Math.trunc(Number($('ataque-custo-pe').value) || 0)));
 
   if (!nome || !dano || !critico) return;
 
@@ -1862,11 +1902,13 @@ $('form-ataque').onsubmit = e => {
       nome,
       dano,
       critico,
-      habilidade
+      habilidade,
+      custoPE
     });
   });
 
   $('form-ataque').reset();
+  $('ataque-custo-pe').value = 0;
   $('arma-modelo').value = '';
   $('arma-modelo-regra').textContent = 'Selecione uma arma para preencher o ataque ou cadastre um ataque personalizado.';
   abrirFicha(personagemAberto);
