@@ -279,7 +279,7 @@
             <span aria-hidden="true">03</span>
             <div>
               <h4>Atributos</h4>
-              <p>Cada atributo começa em 1. Distribua 4 pontos extras (3 para Sobrevivente); pode reduzir apenas um atributo a 0 para ganhar 1 ponto. Máximo inicial: 3.</p>
+              <p>Cada atributo começa em 1. Distribua 4 pontos iniciais (3 para Sobrevivente). Pode reduzir um atributo a 0 para ganhar 1 ponto. Agentes ganham aumentos nos NEX 20%, 50%, 80% e 95%; Sobreviventes ganham um aumento no estágio 3.</p>
             </div>
           </div>
           <div class="attribute-inputs">
@@ -686,12 +686,12 @@
             </select>
             <p id="sessao-codigo-atual" class="session-code-current" hidden></p>
             <div class="nex-control">
-              <span>NEX DA MESA</span>
+              <span>NEX DE REFERÊNCIA DA MESA</span>
               <output id="nex-valor" for="nex-ajuste nex-diminuir nex-aumentar">0%</output>
               <input id="nex-ajuste" type="range" min="0" max="100" step="5" value="0"
                      aria-label="Ajustar NEX compartilhado da mesa"
                      aria-describedby="nex-ajuda">
-              <small id="nex-ajuda">Grupo humano · ajuste de 5 em 5</small>
+              <small id="nex-ajuda">Usado apenas como referência geral e em fichas antigas. Fichas novas têm NEX individual.</small>
               <div class="nex-stepper">
                 <button id="nex-diminuir" type="button" aria-label="Diminuir NEX">−</button>
                 <button id="nex-aumentar" type="button" aria-label="Aumentar NEX">+</button>
