@@ -1897,6 +1897,14 @@ function mostrarInventario(personagem) {
   });
 }
 
+$('inventario-catalogo').addEventListener('change', () => {
+  const selecionado = $('inventario-catalogo').value;
+  if (selecionado) {
+    $('item-nome').value = selecionado;
+    $('item-quantidade').value = 1;
+  }
+});
+
 $('form-inventario').onsubmit = e => {
   e.preventDefault();
 
@@ -1918,6 +1926,7 @@ $('form-inventario').onsubmit = e => {
   });
 
   $('form-inventario').reset();
+  $('inventario-catalogo').value = '';
   $('item-quantidade').value = 1;
   abrirFicha(personagemAberto);
   selecionarAba('inventario');
