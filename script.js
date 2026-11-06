@@ -637,6 +637,26 @@ function atributosForm() {
   );
 }
 
+
+// Regras iniciais personalizadas do Código Sombrio (ajustáveis pelo mestre).
+const recursosPorClasse = {
+  'Perito Criminal': [18, 4, 22],
+  'Médico Legista': [20, 4, 22],
+  'Policial Tático': [26, 3, 18],
+  'Investigador Disfarçado': [20, 5, 20],
+  'Interrogador': [20, 5, 20],
+  'Analista Criminal': [18, 5, 24]
+};
+function calcularRecursosPersonagem() {
+  const base = recursosPorClasse[$('personagem-classe').value] || [20, 3, 20];
+  const forca = Number($('atributo-for').value) || 1;
+  const inteligencia = Number($('atributo-int').value) || 1;
+  const carisma = Number($('atributo-car').value) || 1;
+  $('personagem-pv').value = base[0] + 5 * (forca - 1);
+  $('personagem-pe').value = base[1] + 2 * (inteligencia - 1);
+  $('personagem-san').value = base[2] + 2 * (carisma - 1);
+}
+
 function atualizarTotal(chaveAlterada) {
   const atributos = Object.fromEntries(
     atributosInfo.map(([chave]) => [
@@ -688,6 +708,7 @@ function atualizarTotal(chaveAlterada) {
   const pontosExtras = total - atributosInfo.length;
   indicador.textContent = `Pontos extras: ${pontosExtras} / 5`;
   indicador.classList.toggle('is-over-limit', pontosExtras > 5);
+  if (!personagemEditandoId) calcularRecursosPersonagem();
 }
 
 atributosInfo.forEach(([chave]) => {
@@ -717,6 +738,7 @@ function atualizarCampoClassePersonalizada() {
 
 $('personagem-classe').addEventListener('change', () => {
   atualizarCampoClassePersonalizada();
+  calcularRecursosPersonagem();
   if ($('personagem-classe').value === '__outra__') {
     $('personagem-classe-personalizada').focus();
   }
@@ -871,6 +893,7 @@ $('form-personagem').onsubmit = async e => {
     '+  CRIAR PERSONAGEM';
   $('cancelar-edicao-personagem').hidden = true;
   atualizarTotal();
+  calcularRecursosPersonagem();
   abrirFicha(personagem.id);
 };
 
@@ -882,6 +905,7 @@ $('cancelar-edicao-personagem').onclick = () => {
     '+  CRIAR PERSONAGEM';
   $('cancelar-edicao-personagem').hidden = true;
   atualizarTotal();
+  calcularRecursosPersonagem();
 };
 
 /* ==========================================
