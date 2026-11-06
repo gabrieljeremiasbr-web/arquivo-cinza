@@ -5621,3 +5621,38 @@ footer {
 #tela-ficha #ataque-habilidade{width:100%;min-height:88px;resize:vertical;padding:11px;border:1px solid #934052;border-radius:8px;background:#170d13;color:#fff0e8;font:inherit}
 #tela-ficha #ataque-habilidade:focus-visible{outline:2px solid #fa7087;outline-offset:2px}
 #tela-ficha .cs-attack-ability{margin:10px 0 0;padding:10px 12px;border-left:3px solid #ed667f;background:#351723;color:#f4c5ce;font-size:12px;line-height:1.6;white-space:pre-wrap}
+
+/* Arsenal — ficha de combate em duas colunas */
+#tela-ficha .cs-combat-panel{padding:clamp(15px,2vw,26px);border:1px solid #873649;border-radius:13px;background:linear-gradient(140deg,#28141e,#130b10 72%)}
+#tela-ficha .cs-combat-heading{display:flex;align-items:center;gap:15px;padding:0 0 21px;margin-bottom:20px;border-bottom:1px solid #703042}
+#tela-ficha .cs-combat-mark{display:grid;place-items:center;flex:none;width:49px;height:49px;border:1px solid #b84960;border-radius:12px;background:#511c2c;color:#ffa4b2;font-size:23px}
+#tela-ficha .cs-combat-heading>div{flex:1;min-width:0}
+#tela-ficha .cs-combat-eyebrow{display:block;color:#f18b9d;font-size:10px;letter-spacing:1.7px;margin-bottom:7px}
+#tela-ficha .cs-combat-heading h3{font:normal clamp(23px,2.5vw,30px)/1.2 Georgia,serif;margin:0 0 6px;color:#ffede5}
+#tela-ficha .cs-combat-heading p{margin:0;color:#c5a3ab;font-size:12px;line-height:1.5}
+#tela-ficha .cs-combat-heading-badge{padding:9px 11px;border:1px solid #783447;border-radius:6px;color:#e6a3af;background:#381722;font-size:9px;letter-spacing:1px;white-space:nowrap}
+#tela-ficha .cs-combat-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:16px;align-items:start}
+#tela-ficha .cs-combat-column{min-width:0;padding:18px;border:1px solid #753345;border-radius:10px;background:linear-gradient(150deg,#29151e,#1a0e14)}
+#tela-ficha .cs-combat-column-title{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding-bottom:13px;border-bottom:1px solid #693040}
+#tela-ficha .cs-combat-column-title h4{margin:0;color:#f5bac4;font-size:11px;letter-spacing:1px}
+#tela-ficha .cs-combat-column-title span{font-size:9px;color:#b98f9b;letter-spacing:.7px}
+#tela-ficha .cs-combat-attack-list{display:grid;gap:10px;padding-top:15px}
+#tela-ficha .cs-combat-attack-list>.muted{margin:0;padding:44px 15px;text-align:center;border:1px dashed #774052;border-radius:9px;background:#211018;color:#cba7af;font-size:12px}
+#tela-ficha .cs-combat-attack-list .attack-card{display:flex;flex-direction:column;gap:7px;margin:0;padding:15px;border:1px solid #883d50;border-radius:9px;background:#391925}
+#tela-ficha .cs-combat-attack-list .attack-card strong{font-size:15px;color:#ffeae5}
+#tela-ficha .cs-combat-attack-list .attack-card small{color:#f2a2b0;font-size:11px}
+#tela-ficha .cs-combat-attack-list .attack-card button{align-self:flex-start;padding:8px 12px;border:1px solid #a44456;border-radius:6px;background:#431a29;color:#f9c9d0}
+#tela-ficha .cs-combat-editor .cs-weapon-presets{margin:16px 0 18px;padding:14px;border-color:#914055;border-radius:8px}
+#tela-ficha .cs-combat-editor .attack-form{display:grid;grid-template-columns:1fr;gap:14px;width:100%;max-width:none;margin:0}
+#tela-ficha .cs-combat-editor .attack-form>label{min-width:0}
+#tela-ficha .cs-combat-editor .attack-form .two-fields{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+#tela-ficha .cs-combat-editor .attack-form .two-fields label{min-width:0}
+#tela-ficha .cs-combat-editor .attack-form input,#tela-ficha .cs-combat-editor .attack-form textarea{width:100%;min-width:0;border:1px solid #834153;border-radius:7px;background:#160c11;color:#fff0e9}
+#tela-ficha .cs-combat-editor .attack-form input{min-height:43px}
+#tela-ficha .cs-combat-editor .attack-form input:focus,#tela-ficha .cs-combat-editor .attack-form textarea:focus{outline:2px solid #e95c76;outline-offset:1px}
+#tela-ficha .cs-combat-editor .cs-weapon-ability-label small{margin-left:5px;color:#bc8996;font-size:9px;letter-spacing:.8px}
+#tela-ficha .cs-combat-submit{width:100%;min-height:48px;border-radius:7px;background:linear-gradient(180deg,#bd243e,#7e1429);border:1px solid #f04e69;color:#fff;font-weight:800;letter-spacing:.4px}
+#tela-ficha .cs-combat-submit:hover{filter:brightness(1.15)}
+#tela-ficha .cs-combat-tip{margin:14px 0 0;color:#b99ca5;font-size:11px;line-height:1.6}
+@media(max-width:1050px){#tela-ficha .cs-combat-grid{grid-template-columns:1fr}}
+@media(max-width:560px){#tela-ficha .cs-combat-column{padding:12px}#tela-ficha .cs-combat-heading-badge{display:none}#tela-ficha .cs-combat-editor .attack-form .two-fields{grid-template-columns:1fr}}
