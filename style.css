@@ -4476,3 +4476,15 @@ footer {
 @media(max-width:1000px){#tela-sessao .master-dashboard{grid-template-columns:minmax(220px,.85fr) minmax(0,1.5fr)}}
 @media(max-width:750px){#tela-sessao .master-dashboard{grid-template-columns:1fr}#tela-sessao .master-rail{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:550px){#tela-sessao .master-rail{grid-template-columns:1fr}#tela-sessao .master-secondary-grid,#tela-sessao .master-dice-content{grid-template-columns:1fr}}
+
+
+/* Opções compactas de gerenciamento alinhadas à direita */
+#tela-mestre .master-management-layout {display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,290px);align-items:stretch;gap:18px;margin:18px 0 22px}
+#tela-mestre .master-management-layout .session-entry-card {margin:0;min-width:0}
+#tela-mestre .master-management-links {display:flex;flex-direction:column;align-self:start;gap:9px;padding:17px;border:1px solid #75414b;border-radius:13px;background:linear-gradient(150deg,#281a20,#151116);box-shadow:0 10px 24px #0004}
+#tela-mestre .master-management-links>.eyebrow {margin-bottom:4px;color:#df9da0;font-size:10px;letter-spacing:2px}
+#tela-mestre .master-management-links button {display:flex;align-items:center;gap:10px;width:100%;min-height:47px;padding:11px 12px;text-align:left;line-height:1.35;font-size:12px;font-weight:700;color:#f1dcd7;border:1px solid #67414a;border-radius:8px;background:#2b2027;cursor:pointer;transition:background .18s,border-color .18s}
+#tela-mestre .master-management-links button:hover {background:#482b35;border-color:#c27c87}
+#tela-mestre .master-management-links button:focus-visible {outline:2px solid #e8a4a8;outline-offset:2px}
+#tela-mestre .master-management-intro {margin-top:26px}
+@media(max-width:750px){#tela-mestre .master-management-layout{grid-template-columns:1fr}#tela-mestre .master-management-links{width:100%}}
