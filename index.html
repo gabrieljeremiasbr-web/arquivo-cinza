@@ -412,6 +412,22 @@
 
     <!-- FICHA COMPLETA DO PERSONAGEM -->
     <section id="tela-ficha" class="app-pagina" hidden>
+      <div class="cs-fullsheet-layout">
+        <aside class="cs-fullsheet-sidebar" aria-label="Personagens disponíveis">
+          <div class="cs-fullsheet-brand"><span class="eyebrow">CÓDIGO SOMBRIO</span><strong>ARQUIVO DE INVESTIGADORES</strong></div>
+          <div class="cs-fullsheet-sidebar-heading"><span class="eyebrow">ESCOLHER INVESTIGADOR</span><h3>Personagens</h3></div>
+          <label class="cs-fullsheet-search" for="ficha-lista-busca"><span aria-hidden="true">⌕</span>
+            <input id="ficha-lista-busca" type="search" placeholder="Buscar personagem..." autocomplete="off">
+          </label>
+          <div class="cs-fullsheet-sidebar-counter" id="ficha-lista-contador" aria-live="polite">Suas fichas</div>
+          <div class="cs-fullsheet-roster" id="ficha-lista-personagens" aria-label="Selecionar personagem"></div>
+          <div class="cs-fullsheet-sidebar-footer"><span>◈ CENTRAL DE INVESTIGAÇÃO</span></div>
+        </aside>
+        <div class="cs-fullsheet-body">
+          <div class="cs-fullsheet-topbar">
+            <span>◈ ARQUIVO / FICHA / <strong id="ficha-caminho-nome">INVESTIGADOR</strong></span>
+            <span id="ficha-acesso-label">FICHA DO PERSONAGEM</span>
+          </div>
       <button class="back" id="voltar-personagens">
         ← VOLTAR AOS PERSONAGENS
       </button>
@@ -673,6 +689,8 @@
             </header>
             <p id="ficha-historia" class="story"></p>
           </section>
+        </div>
+      </div>
         </div>
       </div>
     </section>
