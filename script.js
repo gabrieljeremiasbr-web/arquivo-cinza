@@ -1348,6 +1348,9 @@ document.querySelectorAll('[data-ficha-atalho]').forEach(botao => {
 });
 
 function abrirFicha(idFicha) {
+  const abaDeRetorno = !$('tela-ficha').hidden && personagemAberto === idFicha
+    ? document.querySelector('#tela-ficha .sheet-tab.active')?.dataset.aba || 'resumo'
+    : 'resumo';
   const telaAnterior = document.querySelector('.app-pagina:not([hidden])');
   if (telaAnterior && telaAnterior.id !== 'tela-ficha') telaAnteriorFicha = telaAnterior.id;
   $('voltar-personagens').textContent = telaAnteriorFicha === 'tela-mestre'
@@ -1357,9 +1360,8 @@ function abrirFicha(idFicha) {
       : '← VOLTAR AOS PERSONAGENS';
   personagemAberto = idFicha;
 
-  const personagem = carregar('personagens').find(
-    item => item.id === idFicha
-  ) || campanhaCompartilhada.fichas.find(item => item.id === idFicha);
+  const personagem = campanhaCompartilhada.fichas.find(item => item.id === idFicha) ||
+    carregar('personagens').find(item => item.id === idFicha);
 
   if (!personagem) return;
   const somenteLeitura =
@@ -1547,7 +1549,7 @@ function abrirFicha(idFicha) {
 
   mostrarAtaques(personagem);
   preencherResumoFicha(personagem,somenteLeitura);
-  selecionarAba('resumo');
+  selecionarAba(abaDeRetorno);
   abrirTela('tela-ficha');
 }
 
@@ -1594,11 +1596,8 @@ function renderizarHabilidades(habilidades) {
 function atualizarPersonagem(funcao) {
   const registros = carregar('personagens');
 
-  const personagem = registros.find(
-    item => item.id === personagemAberto
-  ) || campanhaCompartilhada.fichas.find(
-    item => item.id === personagemAberto
-  );
+  const personagem = campanhaCompartilhada.fichas.find(item => item.id === personagemAberto) ||
+    registros.find(item => item.id === personagemAberto);
 
   if (!personagem) return;
   if (
@@ -2319,6 +2318,7 @@ $('master-players-search').addEventListener('input', renderizarFichasJogadoresMe
 
 function atualizarPainelMestre() {
   if (!$('visao-mesa-personagens')) return;
+  if (!$('painel-fichas-personagem').hidden) renderizarGaleriaFichas();
   const fichasUnicas = [...new Map([...carregar('personagens'), ...campanhaCompartilhada.fichas].map(f => [f.id, f])).values()];
   const contadores = {
     'mestre-total-pjs': fichasUnicas.filter(f => f.tipo !== 'npc').length,
