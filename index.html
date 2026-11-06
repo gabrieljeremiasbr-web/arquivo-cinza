@@ -357,56 +357,19 @@
 
       <section id="painel-fichas-personagem" class="character-area-panel"
                role="tabpanel" aria-labelledby="aba-fichas-personagem" hidden>
-        <div class="cs-dossier" aria-label="Dossiê dos personagens">
-          <aside class="cs-dossier-sidebar" aria-label="Lista de personagens">
-            <div class="cs-dossier-sidebar-head">
-              <span class="eyebrow">ESCOLHER INVESTIGADOR</span>
-              <h3>Lista de personagens</h3>
-              <label class="cs-dossier-search" for="jogadores-busca">
-                <span aria-hidden="true">⌕</span>
-                <input id="jogadores-busca" type="search" autocomplete="off" placeholder="Buscar nome ou classe..." aria-label="Buscar personagem">
-              </label>
-            </div>
-            <div class="cs-dossier-sidebar-filters">
-              <label for="jogadores-filtro">EXIBIR
-                <select id="jogadores-filtro">
-                  <option value="todos">Todos</option>
-                  <option value="pj">Jogadores</option>
-                  <option value="npc">NPCs</option>
-                </select>
-              </label>
-              <span id="jogadores-contador" aria-live="polite">0 fichas</span>
-            </div>
-            <div id="lista-personagens" class="cs-dossier-roster" aria-label="Personagens disponíveis"></div>
-            <div class="cs-dossier-sidebar-foot">
-              <button id="jogadores-atualizar" type="button" class="outline">↻ ATUALIZAR FICHAS</button>
-              <button id="jogadores-novo" type="button" class="primary">+ NOVA FICHA</button>
-            </div>
-          </aside>
-          <div class="cs-dossier-main">
-            <header class="cs-dossier-topbar">
-              <span>◈ ARQUIVO / PERSONAGENS / <strong id="cs-dossier-breadcrumb">—</strong></span>
-              <span id="cs-dossier-access">CÓDIGO SOMBRIO · FICHA DE RPG</span>
-            </header>
-            <div class="cs-dossier-main-inner">
-              <div id="cs-dossier-hero" class="cs-dossier-hero" aria-live="polite"></div>
-              <div id="cs-dossier-resources" class="cs-dossier-resources"></div>
-              <nav class="cs-dossier-tabs" aria-label="Seções do personagem">
-                <button type="button" data-cs-tab="resumo" class="is-active" aria-pressed="true">◈ RESUMO</button>
-                <button type="button" data-cs-tab="atributos" aria-pressed="false">⬡ ATRIBUTOS</button>
-                <button type="button" data-cs-tab="pericias" aria-pressed="false">◎ PERÍCIAS</button>
-                <button type="button" data-cs-tab="combate" aria-pressed="false">⚔ COMBATE</button>
-                <button type="button" data-cs-tab="inventario" aria-pressed="false">▤ INVENTÁRIO</button>
-                <button type="button" data-cs-tab="historia" aria-pressed="false">▣ HISTÓRIA</button>
-              </nav>
-              <div id="cs-dossier-content" class="cs-dossier-content" aria-live="polite"></div>
-              <div class="cs-dossier-footer">
-                <span>◈ CÓDIGO SOMBRIO · DOSSIÊ DOS INVESTIGADORES</span>
-                <button id="cs-dossier-open-full" type="button" class="outline">▤ ABRIR FICHA COMPLETA</button>
-              </div>
-            </div>
-          </div>
+        <header class="player-archive-heading"><span class="eyebrow">ARQUIVO DOS INVESTIGADORES</span><h3>FICHAS DOS JOGADORES</h3><p>Consulte as fichas locais e os personagens compartilhados com a campanha.</p></header>
+        <div class="player-archive-tools">
+          <label class="player-archive-search" for="jogadores-busca">
+            <span aria-hidden="true">⌕</span>
+            <input id="jogadores-busca" type="search" placeholder="Buscar nome ou especialidade..." autocomplete="off">
+          </label>
+          <label class="player-archive-filter" for="jogadores-filtro">Exibir
+            <select id="jogadores-filtro"><option value="todos">Todos</option><option value="pj">Jogadores</option><option value="npc">NPCs</option></select>
+          </label>
+          <span id="jogadores-contador" aria-live="polite">0 fichas</span>
+          <button id="jogadores-atualizar" type="button" class="outline">↻ ATUALIZAR</button>
         </div>
+        <div id="lista-personagens" class="player-archive-grid" aria-live="polite"></div>
       </section>
     </section>
 
@@ -953,7 +916,7 @@
             <h3 id="master-players-title">FICHAS DOS JOGADORES</h3>
             <p>Escolha um investigador para consultar o dossiê e abrir a ficha completa.</p>
           </div>
-          <div class="master-dossier-head-actions"><button type="button" id="master-open-player-dossier" class="primary">▤ ABRIR DOSSIÊ COMPLETO</button><button type="button" id="master-players-refresh" class="outline">↻ ATUALIZAR FICHAS</button></div>
+          <div class="master-dossier-head-actions"><button type="button" id="master-open-player-dossier" class="primary">▤ VER FICHAS DOS JOGADORES</button><button type="button" id="master-players-refresh" class="outline">↻ ATUALIZAR FICHAS</button></div>
         </header>
         <div class="master-dossier-toolbar">
           <label class="master-dossier-search" for="master-players-search">
