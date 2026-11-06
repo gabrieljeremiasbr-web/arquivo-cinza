@@ -624,7 +624,94 @@ function botao(texto, funcao, classe = 'outline') {
    REGISTROS
 ========================================== */
 
+function renderizarGaleriaFichas() {
+  const area = $('lista-personagens');
+  if (!area) return;
+  area.replaceChildren();
+  const busca = $('jogadores-busca').value.trim().toLocaleLowerCase('pt-BR');
+  const filtro = $('jogadores-filtro').value;
+  const fichas = fichasDaMesa().filter(ficha => {
+    if (filtro !== 'todos' && (ficha.tipo === 'npc' ? 'npc' : 'pj') !== filtro) return false;
+    return [ficha.titulo, ficha.classe, ficha.classeBase, ficha.origem]
+      .filter(Boolean).join(' ').toLocaleLowerCase('pt-BR').includes(busca);
+  }).sort((a,b)=>String(a.titulo || '').localeCompare(String(b.titulo || ''),'pt-BR'));
+  $('jogadores-contador').textContent = fichas.length + (fichas.length === 1 ? ' ficha encontrada' : ' fichas encontradas');
+  if (!fichas.length) {
+    const vazio=document.createElement('p');
+    vazio.className='player-archive-empty';
+    vazio.textContent = busca ? 'Nenhuma ficha corresponde à pesquisa.' :
+      'Ainda não há personagens nesta lista. Crie uma ficha ou acesse uma campanha compartilhada.';
+    area.append(vazio);
+    return;
+  }
+  const criar=(tag,cls,txt)=>{
+    const el=document.createElement(tag);
+    if(cls)el.className=cls;
+    if(txt!==undefined)el.textContent=String(txt);
+    return el;
+  };
+  fichas.forEach(ficha=>{
+    const compartilhada=campanhaCompartilhada.fichas.some(f=>f.id===ficha.id);
+    const local=carregar('personagens').some(f=>f.id===ficha.id);
+    const podeEditar=compartilhada ? campanhaCompartilhada.papel==='mestre' : local;
+    const card=criar('article','player-archive-card');
+    const cab=criar('div','player-archive-card-header');
+    cab.append(criarRetratoMestre(ficha,'player-archive-portrait'));
+    const info=criar('div','player-archive-card-info');
+    info.append(
+      criar('span','player-archive-source',compartilhada?'◈ CAMPANHA':'◈ FICHA LOCAL'),
+      criar('h4','',ficha.titulo || 'Investigador'),
+      criar('p','',ficha.classe || 'Investigador')
+    );
+    cab.append(info);
+    card.append(cab);
+    const subtitulo=criar('p','player-archive-subtitle',
+      fichaUsaRegrasAntigas(ficha) ? 'Regras originais do Código Sombrio' :
+      (ficha.classeBase || 'Especialista') + ' · ' +
+      (ficha.classeBase==='sobrevivente'?'Estágio '+(ficha.estagio||1):'NEX '+nexFicha(ficha)+'%')
+    );
+    card.append(subtitulo);
+    const stats=criar('div','player-archive-stats');
+    for(const [rotulo,atual,max] of [
+      ['♥ VIDA',ficha.pvAtual ?? ficha.pv,ficha.pv],
+      ['◈ SAN',ficha.sanAtual ?? ficha.san,ficha.san],
+      ['✦ PE',ficha.peAtual ?? ficha.pe,ficha.pe],
+      ['⬡ DEF',ficha.defesa,ficha.defesa]
+    ]){
+      const item=criar('div','player-archive-stat');
+      item.append(criar('small','',rotulo),
+        criar('strong','',rotulo==='⬡ DEF' ? (max??'—') : (atual??'—')+'/'+(max??'—')));
+      stats.append(item);
+    }
+    card.append(stats);
+    const acoes=criar('div','player-archive-actions');
+    acoes.append(botao('VER FICHA COMPLETA',()=>abrirFicha(ficha.id),'primary'));
+    if(podeEditar){
+      acoes.append(botao('EDITAR',()=>editarFichaCompartilhada(ficha),'outline'));
+    }
+    if(local && !compartilhada){
+      acoes.append(botao('EXCLUIR',()=>{
+        if(!confirm('Excluir a ficha local de '+(ficha.titulo||'este personagem')+'?'))return;
+        const novas=carregar('personagens').filter(item=>item.id!==ficha.id);
+        if(salvar('personagens',novas)) {
+          renderizarGaleriaFichas();
+          atualizarPainelMestre();
+        }
+      },'outline player-archive-delete'));
+    }
+    card.append(acoes);
+    area.append(card);
+  });
+}
+$('jogadores-busca').addEventListener('input',renderizarGaleriaFichas);
+$('jogadores-filtro').addEventListener('change',renderizarGaleriaFichas);
+$('jogadores-atualizar').addEventListener('click',renderizarGaleriaFichas);
+
 function mostrarRegistros(tipo, container) {
+  if(tipo==='personagens' && container==='lista-personagens') {
+    renderizarGaleriaFichas();
+    return;
+  }
   const alvo = $(container);
   alvo.replaceChildren();
 
