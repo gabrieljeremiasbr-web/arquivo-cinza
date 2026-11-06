@@ -5611,3 +5611,8 @@ footer {
 #tela-ficha .cs-inventory-catalog select{width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid #a34a5e;border-radius:7px;background:#170c12;color:#ffe9e4;font:inherit}
 #tela-ficha .cs-inventory-catalog select:focus-visible{outline:2px solid #ff7589;outline-offset:2px}
 #tela-ficha .cs-inventory-catalog p{margin:0;font-size:11px;line-height:1.5;color:#c7a2ac}
+
+#tela-ficha .cs-weapon-presets{display:grid;gap:9px;margin:16px 0;padding:16px;border:1px solid #863749;border-radius:9px;background:linear-gradient(130deg,#321622,#190d13)}
+#tela-ficha .cs-weapon-presets label{color:#f6b6c2;font-size:12px;font-weight:800;letter-spacing:.4px}
+#tela-ficha .cs-weapon-presets select{width:100%;min-height:44px;padding:10px;border:1px solid #9e4053;border-radius:7px;background:#140b10;color:#f9e4e2}
+#tela-ficha .cs-weapon-presets p{margin:0;color:#cdaab1;font-size:11px;line-height:1.6}
