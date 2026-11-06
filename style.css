@@ -5430,3 +5430,74 @@ footer {
 }
 
 
+
+
+/* Resumo completo: atributos, perícias e habilidades reunidos na mesma aba */
+#tela-ficha .cs-summary-expanded {
+  display:grid;
+  gap:21px;
+  margin-top:23px;
+  padding-top:22px;
+  border-top:1px solid #6d2638;
+}
+#tela-ficha .cs-summary-section {
+  min-width:0;
+  scroll-margin-top:90px;
+  border:1px solid #7a3042;
+  border-radius:11px;
+  padding:clamp(13px,2vw,22px);
+  background:radial-gradient(ellipse at 80% 0,#571d3235,transparent 60%),#1c1017;
+}
+#tela-ficha .cs-summary-section .cs-fullsheet-section-intro{
+  margin-bottom:18px;
+}
+#tela-ficha .cs-summary-section .cs-fullsheet-section-intro .eyebrow {
+  font-size:10px;
+  color:#ec8395;
+  letter-spacing:1.5px;
+}
+#tela-ficha .cs-summary-section .cs-fullsheet-section-intro h3 {
+  font:normal clamp(23px,2.6vw,30px)/1.2 Georgia,serif;
+  color:#fbe8df;
+}
+#tela-ficha .cs-summary-section .sheet-dice-calculator{
+  margin:0 0 14px;
+}
+#tela-ficha .cs-summary-section .attribute-stage{
+  max-width:730px;
+  margin:0 auto;
+  min-height:520px;
+  border-color:#953b50;
+}
+#tela-ficha .cs-summary-section .dice-wheel {max-width:570px}
+#tela-ficha .cs-summary-section.cs-fullsheet-skills{
+  display:grid;
+  gap:15px;
+}
+#tela-ficha .cs-summary-section.cs-fullsheet-skills > .character-subsection {
+  margin:0;
+  min-width:0;
+}
+#tela-ficha .cs-summary-section .ability-skills .skills-display{
+  width:100%;
+}
+#tela-ficha .cs-summary-section .special-abilities-section{
+  margin-top:0;
+}
+#tela-ficha .cs-summary-section .panel{
+  border-color:#783044;
+  background:linear-gradient(145deg,#26141d,#150b11);
+}
+#tela-ficha .cs-summary-section button:focus-visible{
+  outline:2px solid #ff7185;
+  outline-offset:3px;
+}
+@media(max-width:760px) {
+  #tela-ficha .cs-summary-expanded{gap:15px;margin-top:16px;padding-top:16px}
+  #tela-ficha .cs-summary-section{padding:13px}
+  #tela-ficha .cs-summary-section .attribute-stage{min-height:460px}
+}
+@media(max-width:420px) {
+  #tela-ficha .cs-summary-section .attribute-stage{min-height:380px}
+  #tela-ficha .cs-summary-section .dice-wheel{height:380px}
+}
