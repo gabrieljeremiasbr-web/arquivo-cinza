@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Código Sombrio | Investigação</title>
-<link rel="stylesheet" href="style.css?v=20261106-9">
+<link rel="stylesheet" href="style.css?v=20261106-10">
 <link rel="icon" type="image/png" href="imagem/logo.png">
 <meta name="description" content="Código Sombrio: central de investigação para RPG com fichas, casos, dados e área do mestre.">
 </head>
@@ -555,6 +555,15 @@
             </header>
             <div id="lista-ataques"></div>
 
+            <div class="cs-weapon-presets">
+              <label for="arma-modelo">Armas solicitadas pelos jogadores</label>
+              <select id="arma-modelo">
+                <option value="">Escolha uma arma para preencher o ataque...</option>
+                <option value="bengala">Bengala-florete (adaptação do florete)</option>
+                <option value="garras">Luva com Garras (arma personalizada)</option>
+              </select>
+              <p id="arma-modelo-regra">O florete segue a tabela do livro. A luva com garras usa uma proposta de regra da casa, ajustável pelo mestre.</p>
+            </div>
             <form id="form-ataque" class="attack-form">
               <label>Nome
                 <input id="ataque-nome" placeholder="Ex.: Florete" required>
@@ -1010,7 +1019,7 @@
   <footer>◈ CÓDIGO SOMBRIO · SISTEMA DE INVESTIGAÇÃO</footer>
 </div>
 
-<script type="module" src="script.js?v=20261106-9"></script>
+<script type="module" src="script.js?v=20261106-10"></script>
 <script src="ambiente.js"></script>
 </body>
 </html>
