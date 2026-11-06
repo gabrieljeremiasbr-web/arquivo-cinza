@@ -1821,6 +1821,13 @@ const armasSolicitadas = {
     critico: '20',
     nota: 'Regra da casa sugerida: corpo a corpo, corte, 1 espaço. Não é uma arma da tabela oficial; mestre pode alterar.',
     habilidade: 'Garras Afiadas (regra da casa): uma vez por cena, após acertar um ataque com esta arma, gaste 1 PE para causar +2 pontos de dano.'
+  },
+  bisturi: {
+    nome: 'Bisturi',
+    dano: '1d4',
+    critico: '20',
+    nota: 'Regra da casa: arma leve de corpo a corpo, dano de corte, 1 espaço. Os valores não são uma ficha oficial de bisturi do livro e podem ser alterados pelo mestre.',
+    habilidade: 'Corte Preciso (regra da casa): uma vez por cena, antes de atacar com o bisturi, gaste 1 PE para receber +2 no teste de ataque. Não acumula com outros bônus da mesma habilidade.'
   }
 };
 $('arma-modelo').addEventListener('change', () => {
