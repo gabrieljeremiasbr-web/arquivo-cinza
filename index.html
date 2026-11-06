@@ -792,12 +792,31 @@
       </nav>
 
       <div class="master-overview" aria-label="Resumo da campanha"><div class="master-overview-stat"><span>INVESTIGADORES</span><strong id="mestre-total-pjs">0</strong></div><div class="master-overview-stat"><span>NPCs</span><strong id="mestre-total-npcs">0</strong></div><div class="master-overview-stat"><span>CASOS</span><strong id="mestre-total-casos">0</strong></div><div class="master-overview-stat"><span>OBJETIVOS</span><strong id="mestre-total-objetivos">0</strong></div></div>
-      <section class="master-players-panel" aria-labelledby="master-players-title">
-        <div class="master-players-heading">
-          <div><span class="eyebrow">ARQUIVO DE INVESTIGADORES</span><h3 id="master-players-title">FICHAS DOS JOGADORES</h3><p>Consulte os personagens da campanha e abra suas fichas completas.</p></div>
+      <section class="master-players-panel master-dossier-panel" aria-labelledby="master-players-title">
+        <header class="master-players-heading">
+          <div>
+            <span class="eyebrow">ARQUIVO DE INVESTIGADORES · ACESSO DO MESTRE</span>
+            <h3 id="master-players-title">FICHAS DOS JOGADORES</h3>
+            <p>Escolha um investigador para consultar o dossiê e abrir a ficha completa.</p>
+          </div>
           <button type="button" id="master-players-refresh" class="outline">↻ ATUALIZAR FICHAS</button>
+        </header>
+        <div class="master-dossier-toolbar">
+          <label class="master-dossier-search" for="master-players-search">
+            <span aria-hidden="true">⌕</span>
+            <input id="master-players-search" type="search" autocomplete="off" placeholder="Buscar investigador ou classe…" aria-label="Buscar investigador ou classe">
+          </label>
+          <span id="master-players-count" class="master-dossier-counter" role="status" aria-live="polite">Carregando fichas…</span>
         </div>
-        <div id="master-players-list" class="master-players-grid" aria-live="polite"></div>
+        <div class="master-players-grid master-dossier-layout">
+          <aside class="master-dossier-sidebar" aria-label="Lista dos jogadores">
+            <div class="master-dossier-sidebar-title"><span>INVESTIGADORES</span><span aria-hidden="true">▤</span></div>
+            <div id="master-players-list" class="master-dossier-list" aria-label="Escolher personagem"></div>
+          </aside>
+          <div id="master-dossier-detail" class="master-dossier-detail" aria-live="polite">
+            <p class="master-players-empty">Selecione um investigador para visualizar o dossiê.</p>
+          </div>
+        </div>
       </section>
       <!-- Controles internos preservados para compatibilidade, fora da interface do mestre. -->
       <div id="mestre-controles-internos" hidden aria-hidden="true" style="display:none!important">
