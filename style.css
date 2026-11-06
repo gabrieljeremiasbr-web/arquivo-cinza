@@ -5604,3 +5604,10 @@ footer {
 #tela-ficha .cs-inventory-empty p{max-width:300px;margin:0;color:#c6a4ad;font-size:12px;line-height:1.6}
 @media(max-width:1050px){#tela-ficha .cs-inventory-layout{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:500px){#tela-ficha .cs-inventory-list-column,#tela-ficha .cs-inventory-form-column{padding:12px}#tela-ficha .inventory-section .inventory-fields{grid-template-columns:1fr}#tela-ficha .cs-inventory-counter{margin-left:0}#tela-ficha .inventory-section .inventory-item{flex-wrap:wrap}#tela-ficha .inventory-item .cs-inventory-remove{margin-left:auto}}
+
+/* Catálogo de itens do inventário */
+#tela-ficha .cs-inventory-catalog{display:grid;gap:8px;margin-top:16px;padding:14px;border:1px solid #7b3547;border-radius:8px;background:#321721}
+#tela-ficha .cs-inventory-catalog label{font-size:12px;font-weight:700;color:#f6c0c8}
+#tela-ficha .cs-inventory-catalog select{width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid #a34a5e;border-radius:7px;background:#170c12;color:#ffe9e4;font:inherit}
+#tela-ficha .cs-inventory-catalog select:focus-visible{outline:2px solid #ff7589;outline-offset:2px}
+#tela-ficha .cs-inventory-catalog p{margin:0;font-size:11px;line-height:1.5;color:#c7a2ac}
