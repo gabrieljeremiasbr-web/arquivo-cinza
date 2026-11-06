@@ -1792,7 +1792,7 @@ function mostrarAtaques(personagem) {
     }
     const custoPE = Number.isInteger(Number(ataque.custoPE)) && Number(ataque.custoPE) >= 0
       ? Number(ataque.custoPE)
-      : (/\\b1\\s*PE\\b/i.test(ataque.habilidade || '') ? 1 : 0);
+      : (/\b1\s*PE\b/i.test(ataque.habilidade || '') ? 1 : 0);
     const podeEditarAtaque = !campanhaCompartilhada.fichas.some(item => item.id === personagemAberto)
       || campanhaCompartilhada.papel === 'mestre';
     if (ataque.habilidade && custoPE > 0) {
