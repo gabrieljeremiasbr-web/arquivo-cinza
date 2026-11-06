@@ -135,7 +135,7 @@ function calcularValoresLivro(classe, atributos, nex, estagio) {
     return { pv:8+vig+2*evolucoes, pe:2+pre+evolucoes, san:8+2*evolucoes, defesa:10+agl };
   }
   const base = REGRAS_CLASSE[classe] || REGRAS_CLASSE.especialista;
-  const passos = Math.max(0, Math.floor((Number(nex || 5)-5)/5));
+  const passos = Number(nex) === 99 ? 19 : Math.max(0, Math.floor((Number(nex || 5)-5)/5));
   return {
     pv:base.pv+vig+passos*(base.pvNivel+vig),
     pe:base.pe+pre+passos*(base.peNivel+pre),
@@ -302,7 +302,10 @@ function abrirTela(id) {
   });
 
   $(id).hidden = false;
-  if (id === 'tela-personagens') mostrarAreaPersonagens('criar');
+  if (id === 'tela-personagens') {
+    mostrarAreaPersonagens('criar');
+    atualizarLimitesTreinamento();
+  }
   if (id === 'tela-mestre') {
     atualizarPainelMestre();
   }
@@ -1232,8 +1235,11 @@ function abrirFicha(idFicha) {
 
   $('ficha-nome').textContent = personagem.titulo;
   $('ficha-defesa').textContent = String(personagem.defesa ?? 15);
-  $('ficha-classe').textContent =
-    personagem.classe || 'Investigador';
+  $('ficha-classe').textContent = fichaUsaRegrasAntigas(personagem)
+    ? (personagem.classe || 'Investigador') + ' · regras antigas'
+    : (personagem.classe || 'Investigador') + ' · ' +
+      ({ combatente:'Combatente', especialista:'Especialista', ocultista:'Ocultista', sobrevivente:'Sobrevivente' }[personagem.classeBase] || 'Especialista') +
+      (personagem.origem ? ' · origem: ' + personagem.origem : '');
 
   const retrato = $('ficha-retrato');
   retrato.replaceChildren();
@@ -2056,7 +2062,7 @@ function renderizarFichasJogadoresMestre() {
   identidade.append(
     criar('span', 'master-dossier-kicker', 'DOSSIÊ DO INVESTIGADOR'),
     criar('h4', '', ficha.titulo || 'Investigador'),
-    criar('p', '', ficha.classe || 'Investigador')
+    criar('p', '', (ficha.classe || 'Investigador') + (fichaUsaRegrasAntigas(ficha) ? ' · ficha antiga' : ' · ' + (ficha.classeBase || 'especialista') + ' · ' + (ficha.classeBase === 'sobrevivente' ? 'Estágio ' + (ficha.estagio || 1) : 'NEX ' + nexFicha(ficha) + '%')))
   );
   const defesa = criar('div', 'master-dossier-defense');
   defesa.append(criar('span', '', 'DEFESA'), criar('strong', '', ficha.defesa ?? '—'));
