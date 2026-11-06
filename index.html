@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Código Sombrio | Investigação</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="description" content="Código Sombrio: central de investigação para RPG com fichas, casos, dados e área do mestre.">
+</head>
+<body>
+
+<div id="home-screen" class="splash">
+  <div class="home-topo">◈ SISTEMA DE INVESTIGAÇÃO · CS-001</div>
+  <main class="home-conteudo">
+    <img src="imagem/logo.png" alt="Código Sombrio" class="home-logo"
+         onerror="this.style.display='none'">
+    <h1>CÓDIGO SOMBRIO</h1>
+    <p>CENTRAL DE INVESTIGAÇÃO</p>
+    <p class="motto">A verdade está escondida nos detalhes.</p>
+    <button id="enter-button" class="primary">ENTRAR NA INVESTIGAÇÃO</button>
+  </main>
+</div>
+
+<div id="login-screen" class="auth-screen" hidden>
+  <div class="auth-panel">
+    <h1>◈ CÓDIGO SOMBRIO</h1>
+    <p id="auth-title">ACESSO RESTRITO</p>
+
+    <form id="login-form">
+      <label>E-mail
+        <input type="email" id="login-email" autocomplete="email" required>
+      </label>
+      <label>Senha
+        <span class="password-line">
+          <input type="password" id="login-password"
+                 autocomplete="current-password" required>
+          <button type="button" class="mostrar-senha"
+                  aria-label="Mostrar senha">◉</button>
+        </span>
+      </label>
+      <button class="primary" type="submit">ENTRAR</button>
+      <button class="text-button" type="button" id="show-register">Criar conta</button>
+      <button class="text-button" type="button" id="show-recovery">Esqueci minha senha</button>
+    </form>
+
+    <form id="register-form" hidden>
+      <label>Nome<input id="register-name" required></label>
+      <label>E-mail<input id="register-email" type="email" required></label>
+      <label>Senha
+        <input id="register-password" type="password" minlength="6" required>
+      </label>
+      <button class="primary">CRIAR CONTA</button>
+      <button class="text-button back-login" type="button">Voltar</button>
+    </form>
+
+    <form id="recovery-form" hidden>
+      <label>E-mail
+        <input id="recovery-email" type="email" required>
+      </label>
+      <button class="primary">RECUPERAR SENHA</button>
+      <button class="text-button back-login" type="button">Voltar</button>
+    </form>
+
+    <p id="auth-message" role="status"></p>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <header class="site-header">
+    <div>
+      <span class="eyebrow">◈ SISTEMA CS-001</span>
+      <h1>CÓDIGO SOMBRIO</h1>
+    </div>
+    <button id="logout-button" class="outline">SAIR</button>
+  </header>
+
+  <main class="main">
+    <section id="painel-principal">
+      <div class="intro">
+        <span class="eyebrow">DOSSIÊ CONFIDENCIAL</span>
+        <h2>CENTRAL DE INVESTIGAÇÃO</h2>
+        <p id="welcome-message">Selecione uma área para começar.</p>
+      </div>
+      <div class="dashboard-heading">
+        <div>
+          <span class="eyebrow">PAINEL DO INVESTIGADOR</span>
+          <h3>ÁREAS DO ARQUIVO</h3>
+        </div>
+        <p class="muted">Escolha uma seção para continuar sua investigação.</p>
+      </div>
+      <div class="menu">
+        <button class="menu-card" data-tela="tela-personagens">
+          <span class="menu-icon" aria-hidden="true">♟</span>
+          <span class="menu-card-copy">
+            <strong>PERSONAGENS</strong>
+            <small>Fichas e atributos dos investigadores</small>
+          </span>
+          <span class="menu-arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="menu-card" data-tela="tela-casos">
+          <span class="menu-icon" aria-hidden="true">▣</span>
+          <span class="menu-card-copy">
+            <strong>CASOS E PISTAS</strong>
+            <small>Arquivos, evidências e descobertas</small>
+          </span>
+          <span class="menu-arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="menu-card" data-tela="tela-dados">
+          <span class="menu-icon" aria-hidden="true">⚄</span>
+          <span class="menu-card-copy">
+            <strong>ROLAGEM DE DADOS</strong>
+            <small>Role dados para testes e desafios</small>
+          </span>
+          <span class="menu-arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="menu-card" data-tela="tela-anotacoes">
+          <span class="menu-icon" aria-hidden="true">✎</span>
+          <span class="menu-card-copy">
+            <strong>ANOTAÇÕES</strong>
+            <small>Registre ideias e detalhes importantes</small>
+          </span>
+          <span class="menu-arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="menu-card" data-tela="tela-mestre">
+          <span class="menu-icon" aria-hidden="true">♜</span>
+          <span class="menu-card-copy">
+            <strong>ÁREA DO MESTRE</strong>
+            <small>Organize campanha, sessões e objetivos</small>
+          </span>
+          <span class="menu-arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="tela-personagens" class="app-pagina" hidden>
+      <button class="back voltar-painel">← VOLTAR AO PAINEL</button>
+      <div class="section-heading">
+        <span class="eyebrow">REGISTRO DE AGENTES</span>
+        <h2>PERSONAGENS</h2>
+      </div>
+
+      <nav class="character-area-tabs" role="tablist" aria-label="Áreas de personagens">
+        <button id="aba-criar-personagem" class="character-area-tab active"
+                type="button" role="tab" aria-selected="true"
+                aria-controls="painel-criacao-personagem">
+          + &nbsp; CRIAR PERSONAGEM
+        </button>
+        <button id="aba-fichas-personagem" class="character-area-tab"
+                type="button" role="tab" aria-selected="false"
+                aria-controls="painel-fichas-personagem">
+          ◈ &nbsp; FICHAS DE PERSONAGENS
+        </button>
+      </nav>
+
+      <div id="painel-criacao-personagem" class="character-area-panel"
+           role="tabpanel" aria-labelledby="aba-criar-personagem">
+      <form id="form-personagem" class="panel form-interno character-form">
+        <header class="character-form-heading">
+          <span class="eyebrow">DOSSIÊ DE INVESTIGADOR</span>
+          <h3>◈ CRIAR PERSONAGEM</h3>
+          <p>Defina a identidade, os recursos e as habilidades do seu investigador.</p>
+        </header>
+
+        <section class="character-form-section">
+          <div class="character-form-section-heading">
+            <span aria-hidden="true">01</span>
+            <div>
+              <h4>Identidade</h4>
+              <p>Como este investigador será conhecido?</p>
+            </div>
+          </div>
+          <div class="character-identity-fields">
+            <label>Nome do personagem
+              <input id="personagem-nome" required placeholder="Nome do investigador">
+            </label>
+            <div class="profession-field">
+              <label for="personagem-classe">Classe ou especialidade</label>
+              <div class="profession-select-wrap">
+                <span class="profession-mark" aria-hidden="true">✦</span>
+                <select id="personagem-classe" required>
+                  <option value="" disabled selected>Escolha uma classe ou especialidade</option>
+                  <option value="Perito Criminal">Perito Criminal</option>
+                  <option value="Médico Legista">Médico Legista</option>
+                  <option value="Policial Tático">Policial Tático</option>
+                  <option value="Investigador Disfarçado">Investigador Disfarçado</option>
+                  <option value="Interrogador">Interrogador</option>
+                  <option value="Analista Criminal">Analista Criminal</option>
+                  <option value="__outra__">Outra especialidade</option>
+                </select>
+                <span class="profession-chevron" aria-hidden="true">⌄</span>
+              </div>
+              <label id="personagem-classe-personalizada-wrap" for="personagem-classe-personalizada" hidden>
+                Nome da especialidade
+                <input id="personagem-classe-personalizada" maxlength="80"
+                       placeholder="Digite a especialidade">
+              </label>
+            </div>
+            <label class="character-image-field">Imagem do personagem <small>(URL opcional)</small>
+              <input id="personagem-imagem" type="url" placeholder="https://...">
+            </label>
+          </div>
+        </section>
+
+        <section class="character-form-section">
+          <div class="character-form-section-heading">
+            <span aria-hidden="true">02</span>
+            <div>
+              <h4>Recursos iniciais</h4>
+              <p>Configure os limites de sobrevivência e esforço.</p>
+            </div>
+          </div>
+          <div class="resource-form">
+            <label>PV máximo
+              <input type="number" id="personagem-pv" min="1" value="20" required>
+            </label>
+            <label>PE máximo
+              <input type="number" id="personagem-pe" min="0" value="3" required>
+            </label>
+            <label>SAN máxima
+              <input type="number" id="personagem-san" min="0" value="20" required>
+            </label>
+          </div>
+        </section>
+
+        <section class="character-form-section">
+          <div class="character-form-section-heading">
+            <span aria-hidden="true">03</span>
+            <div>
+              <h4>Atributos</h4>
+              <p>Cada atributo começa com 1 ponto gratuito. Distribua até 5 pontos extras, com no máximo 3 em cada atributo.</p>
+            </div>
+          </div>
+          <div class="attribute-inputs">
+            <label>AGL<input id="atributo-agl" type="number" min="1" max="3" step="1" value="1" required></label>
+            <label>FOR<input id="atributo-for" type="number" min="1" max="3" step="1" value="1" required></label>
+            <label>INT<input id="atributo-int" type="number" min="1" max="3" step="1" value="1" required></label>
+            <label>CAR<input id="atributo-car" type="number" min="1" max="3" step="1" value="1" required></label>
+            <label>PEC<input id="atributo-pec" type="number" min="1" max="3" step="1" value="1" required></label>
+          </div>
+          <p id="total-atributos" class="character-attribute-total" aria-live="polite">Pontos extras: 0 / 5</p>
+        </section>
+
+        <section class="character-form-section character-type-section">
+          <div class="character-form-section-heading">
+            <span aria-hidden="true">04</span>
+            <div>
+              <h4>Tipo de ficha</h4>
+              <p>Escolha como este personagem participa da campanha.</p>
+            </div>
+          </div>
+          <label class="character-type-field" for="personagem-tipo">
+            <select id="personagem-tipo">
+              <option value="pj">Personagem jogador (PJ)</option>
+              <option value="npc">Personagem não jogador (NPC)</option>
+            </select>
+          </label>
+        </section>
+
+        <section class="character-form-section">
+          <div class="character-form-section-heading">
+            <span aria-hidden="true">05</span>
+            <div>
+              <h4>Perícias</h4>
+              <p>Treinado +5 · Veterano +10 a partir de NEX 35% · Expert +15 a partir de NEX 70%.</p>
+            </div>
+          </div>
+          <div id="lista-pericias" class="skills-form"></div>
+        </section>
+
+        <section class="character-form-section">
+          <div class="character-form-section-heading">
+            <span aria-hidden="true">06</span>
+            <div>
+              <h4>Habilidades especiais</h4>
+              <p>Adicione talentos, poderes ou habilidades; escreva uma por linha.</p>
+            </div>
+          </div>
+          <textarea id="personagem-habilidades" rows="4"
+                    placeholder="Ex.: Perito em cenas de crime&#10;Memória fotográfica"></textarea>
+        </section>
+
+        <section class="character-form-section">
+          <div class="character-form-section-heading">
+            <span aria-hidden="true">07</span>
+            <div>
+              <h4>História</h4>
+              <p>Registre o passado ou os detalhes importantes do investigador.</p>
+            </div>
+          </div>
+          <textarea id="personagem-historia" rows="5"
+                    placeholder="História do personagem..."></textarea>
+        </section>
+
+        <div class="character-form-actions">
+          <button class="primary character-create-button" type="submit">
+            + &nbsp; CRIAR PERSONAGEM
+          </button>
+          <button id="cancelar-edicao-personagem" class="outline" type="button" hidden>
+            CANCELAR EDIÇÃO
+          </button>
+        </div>
+      </form>
+      </div>
+
+      <section id="painel-fichas-personagem" class="character-area-panel"
+               role="tabpanel" aria-labelledby="aba-fichas-personagem" hidden>
+        <h3 class="list-heading">FICHAS DE PERSONAGENS</h3>
+        <div id="lista-personagens" class="records"></div>
+      </section>
+    </section>
+
+    <!-- FICHA COMPLETA DO PERSONAGEM -->
+    <section id="tela-ficha" class="app-pagina" hidden>
+      <button class="back" id="voltar-personagens">
+        ← VOLTAR AOS PERSONAGENS
+      </button>
+
+      <div class="sheet">
+        <div class="sheet-header">
+          <div class="portrait" id="ficha-retrato">◈</div>
+
+          <div class="identity">
+            <span class="eyebrow">DOSSIÊ / INVESTIGADOR</span>
+            <h2 id="ficha-nome">INVESTIGADOR</h2>
+            <p id="ficha-classe">Especialidade</p>
+
+            <div class="resources">
+              <div class="resource">
+                <div class="resource-top">
+                  <span>♥ PV</span>
+                  <div>
+                    <input id="pv-atual" type="number" min="0"
+                           aria-label="PV atual">
+                    / <span id="pv-max">20</span>
+                  </div>
+                </div>
+                <div class="track">
+                  <div class="fill pv" id="pv-bar"></div>
+                </div>
+              </div>
+
+              <div class="resource">
+                <div class="resource-top">
+                  <span>✦ PE</span>
+                  <div>
+                    <input id="pe-atual" type="number" min="0"
+                           aria-label="PE atual">
+                    / <span id="pe-max">3</span>
+                  </div>
+                </div>
+                <div class="track">
+                  <div class="fill pe" id="pe-bar"></div>
+                </div>
+              </div>
+
+              <div class="resource">
+                <div class="resource-top">
+                  <span>◈ SAN</span>
+                  <div>
+                    <input id="san-atual" type="number" min="0"
+                           aria-label="SAN atual">
+                    / <span id="san-max">20</span>
+                  </div>
+                </div>
+                <div class="track">
+                  <div class="fill san" id="san-bar"></div>
+                </div>
+              </div>
+
+              <div class="resource relationship-resource">
+                <div class="resource-top">
+                  <span>♡ RELAÇÃO COM O JOGADOR</span>
+                  <div class="relationship-controls">
+                    <button id="relacao-diminuir" type="button"
+                            aria-label="Diminuir relação" disabled>−</button>
+                    <output id="relacao-atual" aria-live="polite">0</output>
+                    <button id="relacao-aumentar" type="button"
+                            aria-label="Aumentar relação">+</button>
+                  </div>
+                </div>
+                <small class="relationship-hint">Ajuste conforme as conversas e escolhas da campanha.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sheet-tabs" role="tablist" aria-label="Seções da ficha">
+          <button class="sheet-tab active" id="aba-tab-combate" data-aba="combate"
+                  aria-controls="aba-combate" aria-selected="true" type="button" role="tab">
+            ⚔ COMBATE
+          </button>
+          <button class="sheet-tab" id="aba-tab-habilidades" data-aba="habilidades"
+                  aria-controls="aba-habilidades" aria-selected="false" type="button" role="tab">
+            ◈ HABILIDADES
+          </button>
+          <button class="sheet-tab" id="aba-tab-inventario" data-aba="inventario"
+                  aria-controls="aba-inventario" aria-selected="false" type="button" role="tab">
+            ▤ INVENTÁRIO
+          </button>
+          <button class="sheet-tab" id="aba-tab-perfil" data-aba="perfil"
+                  aria-controls="aba-perfil" aria-selected="false" type="button" role="tab">
+            ▣ PERFIL
+          </button>
+        </div>
+
+        <div id="aba-combate" class="sheet-page" role="tabpanel"
+             aria-labelledby="aba-tab-combate">
+          <div class="attack-panel panel">
+            <header class="sheet-section-heading">
+              <span aria-hidden="true">⚔</span>
+              <div>
+                <h3>Combate</h3>
+                <p>Gerencie os ataques deste investigador.</p>
+              </div>
+            </header>
+            <div id="lista-ataques"></div>
+
+            <form id="form-ataque" class="attack-form">
+              <label>Nome
+                <input id="ataque-nome" placeholder="Ex.: Florete" required>
+              </label>
+              <div class="two-fields">
+                <label>Dano
+                  <input id="ataque-dano" placeholder="1d6" required>
+                </label>
+                <label>Crítico
+                  <input id="ataque-critico" placeholder="20" required>
+                </label>
+              </div>
+              <button class="outline" type="submit">
+                + ADICIONAR ATAQUE
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div id="aba-habilidades" class="sheet-page" role="tabpanel"
+             aria-labelledby="aba-tab-habilidades" hidden>
+          <div class="ability-layout">
+            <div class="ability-roll-column">
+              <section class="sheet-dice-calculator panel" aria-labelledby="ficha-calculadora-titulo">
+                <header class="sheet-section-heading">
+                  <span aria-hidden="true">◈</span>
+                  <div>
+                    <h3 id="ficha-calculadora-titulo">Resultado do teste</h3>
+                    <p>Clique em um atributo ou perícia para rolar.</p>
+                  </div>
+                </header>
+                <div id="ficha-resultado-dados" class="sheet-dice-result"
+                     role="status" aria-live="polite">
+                  O cálculo e o resultado aparecerão aqui.
+                </div>
+              </section>
+
+              <div class="attribute-stage">
+                <div class="arcane-ring"></div>
+                <div class="attribute-center">
+                  <span>◈</span>
+                  ATRIBUTOS
+                  <small>CLIQUE EM UM DADO PARA ROLAR</small>
+                </div>
+                <div id="ficha-atributos" class="dice-wheel"></div>
+              </div>
+            </div>
+
+            <section class="character-subsection panel ability-skills" aria-labelledby="ficha-pericias-titulo">
+              <header class="sheet-section-heading">
+                <span aria-hidden="true">◎</span>
+                <div>
+                  <h3 id="ficha-pericias-titulo">Perícias</h3>
+                  <p>NEX <span id="ficha-nex-atual">0%</span> · Treinado +5 · Veterano +10 (35%) · Expert +15 (70%)</p>
+                </div>
+              </header>
+              <div id="ficha-pericias" class="skills-display"></div>
+            </section>
+          </div>
+          <section class="character-subsection panel special-abilities-section"
+                   aria-labelledby="ficha-habilidades-titulo">
+            <header class="sheet-section-heading">
+              <span aria-hidden="true">✦</span>
+              <div>
+                <h3 id="ficha-habilidades-titulo">Habilidades especiais</h3>
+                <p>Talentos, poderes e capacidades deste personagem.</p>
+              </div>
+            </header>
+            <div id="ficha-habilidades" class="special-abilities-list"></div>
+          </section>
+        </div>
+
+        <div id="aba-inventario" class="sheet-page" role="tabpanel"
+             aria-labelledby="aba-tab-inventario" hidden>
+          <section class="character-subsection panel inventory-section" aria-labelledby="ficha-inventario-titulo">
+            <header class="sheet-section-heading">
+              <span aria-hidden="true">▤</span>
+              <div>
+                <h3 id="ficha-inventario-titulo">Inventário do investigador</h3>
+                <p>Equipamentos e objetos carregados.</p>
+              </div>
+            </header>
+            <form id="form-inventario" class="inventory-form">
+              <label>Nome do item
+                <input id="item-nome" required placeholder="Ex.: Lanterna">
+              </label>
+              <div class="inventory-fields">
+                <label>Quantidade
+                  <input id="item-quantidade" type="number" min="1" step="1"
+                         value="1" required>
+                </label>
+                <label>Observações (opcional)
+                  <input id="item-observacoes" placeholder="Ex.: pilhas extras">
+                </label>
+              </div>
+              <button class="primary" type="submit">+ ADICIONAR ITEM</button>
+            </form>
+            <div id="lista-inventario" class="inventory-list"></div>
+          </section>
+        </div>
+
+        <div id="aba-perfil" class="sheet-page" role="tabpanel"
+             aria-labelledby="aba-tab-perfil" hidden>
+          <section class="panel profile-story-panel">
+            <header class="sheet-section-heading">
+              <span aria-hidden="true">▣</span>
+              <div>
+                <h3>História do investigador</h3>
+                <p>O passado que acompanha este personagem.</p>
+              </div>
+            </header>
+            <p id="ficha-historia" class="story"></p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- CASOS -->
+    <section id="tela-casos" class="app-pagina" hidden>
+      <button class="back voltar-painel">← VOLTAR AO PAINEL</button>
+      <h2>CASOS E PISTAS</h2>
+      <form id="form-caso" class="panel form-interno">
+        <label>Nome do caso
+          <input id="caso-titulo" required>
+        </label>
+        <label>Descrição e pistas
+          <textarea id="caso-descricao" rows="5" required></textarea>
+        </label>
+        <button class="primary">SALVAR CASO</button>
+      </form>
+      <div id="lista-casos" class="records"></div>
+    </section>
+
+    <!-- DADOS -->
+    <section id="tela-dados" class="app-pagina" hidden>
+      <button class="back voltar-painel">← VOLTAR AO PAINEL</button>
+      <h2>ROLAGEM DE DADOS</h2>
+      <div class="dice-main">
+        <section class="centro dice-stage" aria-label="Resultado das rolagens">
+          <div class="dice-playfield">
+            <div id="cenario-dados" class="active-dice" aria-label="Dados em 2D">
+            </div>
+            <aside class="dice-total-card" aria-label="Resultado da rolagem">
+              <span class="dice-total-caption">◈ &nbsp; CÓDIGO SOMBRIO · DADOS</span>
+              <strong id="total" aria-live="polite">—</strong>
+              <span id="detalhes">Selecione dados ou digite uma fórmula.</span>
+            </aside>
+          </div>
+          <section class="painel dice-selector" aria-labelledby="dice-selector-title">
+            <h2 id="dice-selector-title">DADOS &amp; FÓRMULAS</h2>
+            <div id="seletores" class="dice-count-list"></div>
+            <div class="dice-formula-tools">
+              <label class="dice-formula-field">Fórmula
+                <input id="dice-formula" type="text" inputmode="text"
+                       placeholder="Ex.: 3d20+2" autocomplete="off"
+                       aria-label="Fórmula de rolagem">
+              </label>
+              <label class="dice-macro-field">Macros
+                <select id="dice-macro" aria-label="Fórmulas rápidas">
+                  <option value="">Escolher macro</option>
+                  <option value="1d20">Teste · 1d20</option>
+                  <option value="2d20">Vantagem · 2d20</option>
+                  <option value="2d6">Dano · 2d6</option>
+                </select>
+              </label>
+            </div>
+            <div class="dice-color-tools">
+              <span class="dice-color-label">Cor dos dados</span>
+              <div id="dice-color-swatches" class="dice-color-swatches" role="group" aria-label="Escolher cor dos dados"></div>
+              <label class="dice-color-custom" title="Escolher qualquer cor">
+                <input id="dice-color-picker" type="color" value="#e53935" aria-label="Cor personalizada dos dados">
+                <span>Outra cor</span>
+              </label>
+            </div>
+            <p class="dice-formula-hint">Use NdX e modificadores (3d20+2); a fórmula digitada tem prioridade sobre os seletores.</p>
+            <div class="dice-toolbar-actions">
+              <button id="rolar" type="button" disabled>⚄ &nbsp; ROLAR DADOS</button>
+              <button id="limpar" type="button">↻ &nbsp; LIMPAR</button>
+            </div>
+          </section>
+        </section>
+
+        <section class="painel dice-history-panel" aria-labelledby="dice-history-title">
+          <h2 id="dice-history-title">HISTÓRICO DE ROLAGENS</h2>
+          <div id="historico" aria-live="polite"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ANOTAÇÕES -->
+    <section id="tela-anotacoes" class="app-pagina" hidden>
+      <button class="back voltar-painel">← VOLTAR AO PAINEL</button>
+      <h2>ANOTAÇÕES</h2>
+      <form id="form-anotacao" class="panel form-interno">
+        <label>Nova anotação
+          <textarea id="anotacao-texto" rows="5" required></textarea>
+        </label>
+        <button class="primary">SALVAR ANOTAÇÃO</button>
+      </form>
+      <div id="lista-anotacoes" class="records"></div>
+    </section>
+
+    <!-- ÁREA DO MESTRE -->
+    <section id="tela-mestre" class="app-pagina" hidden>
+      <button class="back voltar-painel">← VOLTAR AO PAINEL</button>
+      <header class="master-hero">
+        <div>
+          <span class="eyebrow">♛ &nbsp; CONTROLE DA CAMPANHA</span>
+          <h2>PAINEL DA MESTRA</h2>
+          <p>CÓDIGO SOMBRIO &nbsp; · &nbsp; CENTRAL DE INVESTIGAÇÃO</p>
+        </div>
+      </header>
+
+      <nav class="master-nav" aria-label="Navegação do painel da mestra">
+        <button type="button" class="master-nav-link active" data-tela="tela-mestre">
+          ♛ &nbsp; MESTRA
+        </button>
+        <button type="button" class="master-nav-link" data-tela="tela-personagens">
+          ♙ &nbsp; PERSONAGENS
+        </button>
+        <button type="button" class="master-nav-link" data-tela="tela-casos">
+          ▱ &nbsp; CASOS
+        </button>
+        <button type="button" class="master-nav-link" data-tela="tela-anotacoes">
+          ▤ &nbsp; ANOTAÇÕES
+        </button>
+        <button type="button" class="master-nav-link" data-tela="tela-dados">
+          ⚄ &nbsp; DADOS
+        </button>
+      </nav>
+
+      <div class="master-dashboard">
+        <aside class="master-rail">
+          <section class="master-card current-session-card">
+            <header class="master-card-heading">
+              <span aria-hidden="true">▷</span>
+              <h3>SESSÃO ATUAL</h3>
+            </header>
+            <label for="sessao-atual-seletor">Sessão da campanha</label>
+            <select id="sessao-atual-seletor">
+              <option value="">Nenhuma sessão criada</option>
+            </select>
+            <p id="sessao-codigo-atual" class="session-code-current" hidden></p>
+            <div class="nex-control">
+              <span>NEX DA MESA</span>
+              <output id="nex-valor" for="nex-ajuste nex-diminuir nex-aumentar">0%</output>
+              <input id="nex-ajuste" type="range" min="0" max="100" step="5" value="0"
+                     aria-label="Ajustar NEX compartilhado da mesa"
+                     aria-describedby="nex-ajuda">
+              <small id="nex-ajuda">Grupo humano · ajuste de 5 em 5</small>
+              <div class="nex-stepper">
+                <button id="nex-diminuir" type="button" aria-label="Diminuir NEX">−</button>
+                <button id="nex-aumentar" type="button" aria-label="Aumentar NEX">+</button>
+              </div>
+            </div>
+            <button id="iniciar-sessao-atual" class="primary master-start-session"
+                    type="button">▷ &nbsp; INICIAR SESSÃO</button>
+            <p id="sessao-atual-status" class="master-inline-status"
+               role="status" aria-live="polite"></p>
+            <button id="abrir-criacao-sessao" class="master-text-action" type="button">
+              + Planejar uma nova sessão
+            </button>
+          </section>
+
+          <section class="master-card master-tools-card">
+            <header class="master-card-heading">
+              <span aria-hidden="true">⚒</span>
+              <h3>FERRAMENTAS DA MESTRA</h3>
+            </header>
+            <button type="button" class="master-tool" data-master-action="npc">
+              ♟ &nbsp; Gerenciar NPCs
+            </button>
+            <button type="button" class="master-tool" data-master-action="cases">
+              ▱ &nbsp; Casos e pistas
+            </button>
+            <button type="button" class="master-tool" data-master-action="notes">
+              ▤ &nbsp; Anotações da campanha
+            </button>
+            <button type="button" class="master-tool" data-master-action="dice">
+              ⚄ &nbsp; Rolagem de dados
+            </button>
+            <button type="button" class="master-tool" data-master-action="sessions">
+              ▷ &nbsp; Cronologia das sessões
+            </button>
+          </section>
+        </aside>
+
+        <div class="master-main-column">
+          <section class="master-card table-view-card">
+            <header class="master-card-heading">
+              <span aria-hidden="true">♟</span>
+              <h3>VISÃO DA MESA</h3>
+              <button type="button" class="master-add-link" data-master-action="pj">
+                + ADICIONAR PERSONAGEM
+              </button>
+            </header>
+            <div id="visao-mesa-personagens" class="master-character-grid"></div>
+          </section>
+
+          <div class="master-secondary-grid">
+            <section class="master-card master-npc-card">
+              <header class="master-card-heading">
+                <span aria-hidden="true">🎭</span>
+                <h3>CONTROLE DE NPCs</h3>
+                <button type="button" class="master-add-link" data-master-action="npc">
+                  + ADICIONAR
+                </button>
+              </header>
+              <div id="painel-npcs" class="master-npc-list"></div>
+            </section>
+
+            <section class="master-card master-notes-card">
+              <header class="master-card-heading">
+                <span aria-hidden="true">▤</span>
+                <h3>ANOTAÇÕES DA MESTRA</h3>
+                <button type="button" class="master-add-link" data-master-action="notes">
+                  VER TODAS
+                </button>
+              </header>
+              <div id="painel-anotacoes" class="master-note-list"></div>
+              <form id="form-anotacao-mestre" class="master-note-form">
+                <label class="sr-only" for="anotacao-mestre-texto">Nova anotação</label>
+                <input id="anotacao-mestre-texto" required
+                       placeholder="Registrar uma pista ou ideia...">
+                <button class="outline" type="submit">+ ANOTAR</button>
+              </form>
+            </section>
+          </div>
+
+          <section class="master-card master-initiative-card">
+            <header class="master-card-heading">
+              <span aria-hidden="true">⚔</span>
+              <h3>ORDEM DE INICIATIVA</h3>
+              <button id="rolar-iniciativa" class="master-add-link" type="button">
+                ROLAR INICIATIVA · D20
+              </button>
+            </header>
+            <p class="master-initiative-rule">
+              Regra: role 1d20, some o bônus de Iniciativa da ficha e ordene do maior para o menor.
+            </p>
+            <ol id="ordem-iniciativa" class="initiative-results" aria-live="polite">
+              <li class="master-empty">A ordem aparecerá aqui depois da rolagem.</li>
+            </ol>
+          </section>
+
+          <section class="master-card master-dice-card dice-roller">
+            <header class="master-card-heading">
+              <span aria-hidden="true">⚄</span>
+              <h3>ROLAGEM RÁPIDA</h3>
+            </header>
+            <div class="master-dice-content">
+              <div class="master-dice-buttons">
+                <button type="button" data-dado="4">D4</button>
+                <button type="button" data-dado="6">D6</button>
+                <button type="button" data-dado="8">D8</button>
+                <button type="button" data-dado="10">D10</button>
+                <button type="button" data-dado="12">D12</button>
+                <button type="button" data-dado="20">D20</button>
+                <button type="button" data-dado="100">D100</button>
+              </div>
+              <div class="master-dice-display">
+                <div class="dice-3d" data-sides="20" aria-hidden="true">
+                  <svg class="dice-model" viewBox="0 0 120 120"></svg>
+                  <span class="dice-face-value">?</span>
+                  <span class="dice-face-label">D20</span>
+                </div>
+                <output id="master-roll-result" aria-live="polite">ESCOLHA UM DADO</output>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <details id="mestre-configuracao" class="master-disclosure">
+        <summary>◈ &nbsp; CONFIGURAÇÃO E COMPARTILHAMENTO DA CAMPANHA</summary>
+        <div class="master-setup">
+          <form id="form-campanha" class="panel form-interno">
+            <h3>◈ CAMPANHA</h3>
+            <label>Nome da campanha
+              <input id="campanha-nome" required placeholder="Nome da campanha">
+            </label>
+            <label>Premissa e informações
+              <textarea id="campanha-descricao" rows="4"
+                        placeholder="Resumo, ambientação ou informações importantes"></textarea>
+            </label>
+            <button class="primary" type="submit">SALVAR CAMPANHA</button>
+            <p id="campanha-status" class="muted" role="status" aria-live="polite"></p>
+          </form>
+
+          <section class="panel campaign-sharing">
+            <h3>◈ FICHAS COMPARTILHADAS</h3>
+            <p class="muted">
+              Compartilhe fichas de PJs com os jogadores. NPCs ficam visíveis
+              apenas para o mestre.
+            </p>
+            <div class="sharing-actions">
+              <button id="criar-campanha-compartilhada" class="primary" type="button">
+                CRIAR CAMPANHA COMPARTILHADA
+              </button>
+              <form id="form-entrar-campanha" class="join-campaign-form">
+                <label for="codigo-campanha">Código da campanha</label>
+                <input id="codigo-campanha" autocomplete="off" required
+                       pattern="[a-fA-F0-9]{16}" maxlength="16"
+                       placeholder="Código de 16 caracteres">
+                <button class="outline" type="submit">ENTRAR NA CAMPANHA</button>
+              </form>
+            </div>
+            <p id="compartilhamento-status" class="muted" role="status" aria-live="polite"></p>
+            <div id="lista-fichas-compartilhadas" class="records"></div>
+          </section>
+        </div>
+      </details>
+
+      <details id="mestre-sessoes" class="master-disclosure">
+        <summary>▷ &nbsp; PLANEJAR SESSÃO E VER CRONOLOGIA</summary>
+        <div class="master-disclosure-content">
+          <form id="form-sessao" class="panel form-interno session-builder">
+            <header class="session-builder-heading">
+              <span class="session-builder-icon" aria-hidden="true">▣</span>
+              <div>
+                <h3>NOVA SESSÃO</h3>
+                <p class="eyebrow">CRIAR UMA SESSÃO DA CAMPANHA</p>
+              </div>
+            </header>
+
+            <div class="session-builder-content">
+              <div class="session-fields">
+                <label>Título da sessão
+                  <input id="sessao-nome" required
+                         placeholder="Ex.: O desaparecimento de Clara — Sessão 01">
+                </label>
+
+                <label>Código aleatório da sessão
+                  <input id="sessao-codigo" class="session-code-input"
+                         aria-describedby="sessao-codigo-ajuda" readonly>
+                  <small id="sessao-codigo-ajuda" class="session-code-help">
+                    Gerado automaticamente e exclusivo para esta sessão.
+                  </small>
+                </label>
+
+                <label>Caso vinculado
+                  <select id="sessao-caso">
+                    <option value="">Selecione um caso</option>
+                  </select>
+                </label>
+
+                <div class="session-inline-fields">
+                  <label>Data da sessão
+                    <input id="sessao-data" type="date">
+                  </label>
+                  <label>Duração prevista
+                    <select id="sessao-duracao">
+                      <option value="">Selecione a duração</option>
+                      <option value="1 hora">1 hora</option>
+                      <option value="2 horas">2 horas</option>
+                      <option value="3 horas">3 horas</option>
+                      <option value="4 horas">4 horas</option>
+                      <option value="5 horas">5 horas</option>
+                      <option value="Dia inteiro">Dia inteiro</option>
+                    </select>
+                  </label>
+                </div>
+
+                <label>Resumo / objetivo
+                  <textarea id="sessao-descricao" rows="4"
+                            placeholder="Descreva o que acontece nesta sessão..."></textarea>
+                </label>
+
+                <fieldset class="session-status-field">
+                  <legend>Status da sessão</legend>
+                  <div class="session-status-options">
+                    <label>
+                      <input type="radio" name="sessao-status" value="planejada" checked>
+                      <span>▷ &nbsp; Planejada</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="sessao-status" value="andamento">
+                      <span>⟳ &nbsp; Em andamento</span>
+                    </label>
+                    <label>
+                      <input type="radio" name="sessao-status" value="concluida">
+                      <span>✓ &nbsp; Concluída</span>
+                    </label>
+                  </div>
+                </fieldset>
+              </div>
+
+              <aside class="session-participants">
+                <div class="session-participants-heading">
+                  <span aria-hidden="true">♟</span>
+                  <h3>PARTICIPANTES</h3>
+                </div>
+                <p class="muted">Selecione os investigadores desta sessão:</p>
+                <div id="sessao-participantes" class="session-participant-list"></div>
+              </aside>
+            </div>
+
+            <p id="sessao-status-mensagem" class="session-save-status"
+               role="status" aria-live="polite"></p>
+            <footer class="session-builder-actions">
+              <button id="limpar-form-sessao" class="outline" type="reset">LIMPAR</button>
+              <button class="primary" type="submit">▷ &nbsp; CRIAR SESSÃO</button>
+            </footer>
+          </form>
+          <div id="lista-sessoes" class="records"></div>
+        </div>
+      </details>
+
+      <details id="mestre-objetivos" class="master-disclosure">
+        <summary>✦ &nbsp; OBJETIVOS DA CAMPANHA</summary>
+        <div class="master-disclosure-content">
+          <form id="form-objetivo" class="panel form-interno">
+            <label>Objetivo
+              <input id="objetivo-nome" required placeholder="Ex.: Encontrar a testemunha">
+            </label>
+            <label>Detalhes (opcional)
+              <textarea id="objetivo-descricao" rows="3"
+                        placeholder="Pistas, prazo ou observações"></textarea>
+            </label>
+            <button class="outline" type="submit">ADICIONAR OBJETIVO</button>
+          </form>
+          <div id="lista-objetivos" class="records"></div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <footer>◈ CÓDIGO SOMBRIO · SISTEMA DE INVESTIGAÇÃO</footer>
+</div>
+
+<script type="module" src="script.js"></script>
+<script src="ambiente.js"></script>
+</body>
+</html>
