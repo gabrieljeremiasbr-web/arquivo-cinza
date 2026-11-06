@@ -2488,7 +2488,19 @@ $('master-players-search').addEventListener('input', renderizarFichasJogadoresMe
 
 /* Gerenciador de combate: estado local, fichas originais preservadas */
 const csCmKey = () => chave('gerenciador-combate');
-let csCm = (() => { try { const v = JSON.parse(localStorage.getItem(csCmKey()) || 'null'); return v && Array.isArray(v.items) ? v : {items:[],round:1,turn:0,selected:null,log:[]}; } catch { return {items:[],round:1,turn:0,selected:null,log:[]}; } })();
+let csCm = {items:[],round:1,turn:0,selected:null,log:[]};
+let csCmLoadedFor = null;
+function csCmLoad() {
+  if (!auth.currentUser) return;
+  const key = csCmKey();
+  if (csCmLoadedFor === key) return;
+  try {
+    const data = JSON.parse(localStorage.getItem(key) || 'null');
+    csCm = data && Array.isArray(data.items) && Array.isArray(data.log)
+      ? data : {items:[],round:1,turn:0,selected:null,log:[]};
+  } catch { csCm = {items:[],round:1,turn:0,selected:null,log:[]}; }
+  csCmLoadedFor = key;
+}
 function csCmSave() { try { localStorage.setItem(csCmKey(), JSON.stringify(csCm)); } catch(e) { console.warn('Combate não salvo',e); } }
 function csCmNote(msg) { csCm.log.unshift({at:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),msg}); csCm.log=csCm.log.slice(0,70); csCmSave(); }
 function csCmEl(tag, cls, value) { const e=document.createElement(tag);if(cls)e.className=cls;if(value!==undefined)e.textContent=String(value);return e; }
@@ -2516,6 +2528,7 @@ function csCmChange(item, type, delta) {
   csCmSave();csCmRender();
 }
 function csCmRender() {
+  csCmLoad();
   const list=$('cs-cm-list'), detail=$('cs-cm-detail'), log=$('cs-cm-log');
   if(!list || !detail || !log)return;
   list.replaceChildren();detail.replaceChildren();log.replaceChildren();
@@ -2587,9 +2600,9 @@ $('cs-cm-form').onsubmit=e=>{
   csCmNote(name+' entrou no combate.');$('cs-cm-dialog').close();csCmRender();
 };
 $('cs-cm-roll').onclick=()=>{
-  csCm.items.forEach(x=>{x.init=Math.floor(Math.random()*20)+1+Number(csCmSheet(x)?.agl||0);});
+  csCm.items.forEach(x=>{x.init=Math.floor(Math.random()*20)+1;});
   csCm.items.sort((a,b)=>b.init-a.init);csCm.turn=0;csCm.round=1;csCm.selected=csCm.items[0]?.id||null;
-  csCmNote('Iniciativa rolada (1d20 + AGL, simplificação da mesa).');csCmRender();
+  csCmNote('Iniciativa rápida: 1d20 por combatente, sem modificadores. Edite o valor ao adicionar ou use a rolagem da ficha para regras completas.');csCmRender();
 };
 $('cs-cm-next').onclick=()=>{
   if(!csCm.items.length)return;
