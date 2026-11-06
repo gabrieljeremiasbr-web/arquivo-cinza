@@ -148,6 +148,19 @@ function limitePericiasClasse(classe, int) {
   const base = REGRAS_CLASSE[classe] || REGRAS_CLASSE.especialista;
   return base.periciasBase + Math.max(0, Number(int) || 0);
 }
+function limitePericiasDisponiveis(classe, int, origem) {
+  // Uma origem do livro fornece duas perícias treinadas; os nomes exatos
+  // devem ser conferidos com a origem escolhida pelo mestre.
+  return limitePericiasClasse(classe, int) + (String(origem || '').trim() ? 2 : 0);
+}
+function limitesGrausTreinamento(nex, int) {
+  const porMarco = 2 + Math.max(0, Number(int) || 0);
+  return {
+    veteranas: Number(nex) >= 70 ? 2 * porMarco : Number(nex) >= 35 ? porMarco : 0,
+    experts: Number(nex) >= 70 ? porMarco : 0
+  };
+}
+
 
 /* ==========================================
    NAVEGAÇÃO
@@ -780,12 +793,14 @@ atributosInfo.forEach(([chave]) => {
 function atualizarResumoPericias() {
   const classe = $('personagem-classe-base').value;
   const inteligencia = Number($('atributo-int').value) || 0;
-  const maximo = limitePericiasClasse(classe, inteligencia);
+  const maximo = limitePericiasDisponiveis(classe, inteligencia, $('personagem-origem').value);
   const selecionadas = [...document.querySelectorAll('#lista-pericias select')]
     .filter(select => Number(select.value) >= 5).length;
   const local = $('pericias-limite-info');
-  if (local) local.textContent = 'Perícias treinadas pela classe: ' + selecionadas + ' / ' + maximo +
-    ' (as perícias da origem, quando aplicáveis, devem ser adicionadas pelo mestre).';
+  if (local) local.textContent = 'Perícias treinadas: ' + selecionadas + ' / ' + maximo +
+    ' (' + limitePericiasClasse(classe, inteligencia) + ' da classe' +
+    ($('personagem-origem').value.trim() ? ' + 2 da origem' : '') +
+    '). Confira as perícias obrigatórias e as duas da origem no livro.';
 }
 
 function prepararCamposProgressao() {
@@ -802,6 +817,7 @@ $('personagem-nex').addEventListener('change', () => {
   calcularRecursosPersonagem();
 });
 $('personagem-estagio').addEventListener('change', calcularRecursosPersonagem);
+$('personagem-origem').addEventListener('input', atualizarResumoPericias);
 
 atualizarTotal();
 
@@ -909,10 +925,10 @@ $('form-personagem').onsubmit = async e => {
   }
 
   const treinadas = Object.values(pericias).filter(valor => valor >= 5).length;
-  const maximoTreinadas = limitePericiasClasse(classeBase, atributos.int);
+  const maximoTreinadas = limitePericiasDisponiveis(classeBase, atributos.int, $('personagem-origem').value);
   if (treinadas > maximoTreinadas) {
     alert('Você selecionou ' + treinadas + ' perícias treinadas. A classe-base permite ' + maximoTreinadas +
-      ' (sem contar as 2 recebidas da origem, que exigem conferência do mestre).');
+      ' (incluindo 2 da origem, se informada; confira as perícias específicas no livro).');
     return;
   }
   if (classeBase === 'combatente' &&
@@ -924,6 +940,14 @@ $('form-personagem').onsubmit = async e => {
   if (classeBase === 'ocultista' &&
       (!(pericias.Ocultismo >= 5) || !(pericias.Vontade >= 5))) {
     alert('Ocultista precisa treinar Ocultismo e Vontade.');
+    return;
+  }
+
+  const graus = limitesGrausTreinamento(nex, atributos.int);
+  const veteranas = Object.values(pericias).filter(valor => Number(valor) >= 10).length;
+  const experts = Object.values(pericias).filter(valor => Number(valor) >= 15).length;
+  if (veteranas > graus.veteranas || experts > graus.experts) {
+    alert('Graus de treinamento excedem as escolhas liberadas em NEX 35% e 70%. Confira a evolução de perícias da classe no livro.');
     return;
   }
 
@@ -1323,7 +1347,7 @@ function abrirFicha(idFicha) {
       if (somenteLeitura || novoValor === valorTreinamento) return;
       if (!fichaUsaRegrasAntigas(personagem) && valorTreinamento === 0 && novoValor > 0) {
         const total = Object.values(personagem.pericias || {}).filter(valor => Number(valor) >= 5).length;
-        const limite = limitePericiasClasse(personagem.classeBase, personagem.atributos?.int);
+        const limite = limitePericiasDisponiveis(personagem.classeBase, personagem.atributos?.int, personagem.origem);
         if (total >= limite) {
           alert('Limite de perícias treinadas da classe atingido. Verifique as perícias adicionais recebidas pela origem com o mestre.');
           return;
