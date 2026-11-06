@@ -798,9 +798,16 @@
         </button>
       </nav>
 
-      <div class="session-entry-card"><span class="eyebrow">CENTRAL DE SESSÕES</span><h3>Prepare sua próxima investigação</h3><p>Crie uma sessão e abra uma área exclusiva com a mesa, os NPCs, a iniciativa, as anotações e os dados.</p><button type="button" id="abrir-mesa-sessao" class="primary">▷ ABRIR MESA DA SESSÃO</button><p id="aviso-mesa-sessao" class="muted" role="status"></p></div>
-
-      <div class="master-section-intro master-management-intro"><span class="eyebrow">03 / ADMINISTRAÇÃO</span><h3>GERENCIAMENTO DA CAMPANHA</h3><p>Configure a campanha, planeje sessões e acompanhe os objetivos.</p></div>
+      <div class="master-management-layout">
+        <div class="session-entry-card"><span class="eyebrow">CENTRAL DE SESSÕES</span><h3>Prepare sua próxima investigação</h3><p>Crie uma sessão e abra uma área exclusiva com a mesa, os NPCs, a iniciativa, as anotações e os dados.</p><button type="button" id="abrir-mesa-sessao" class="primary">▷ ABRIR MESA DA SESSÃO</button><p id="aviso-mesa-sessao" class="muted" role="status"></p></div>
+        <nav class="master-management-links" aria-label="Opções de gerenciamento da campanha">
+          <span class="eyebrow">GERENCIAMENTO</span>
+          <button type="button" data-master-section="mestre-configuracao">◈ <span>Configuração e compartilhamento</span></button>
+          <button type="button" data-master-section="mestre-sessoes">▷ <span>Planejar sessão e cronologia</span></button>
+          <button type="button" data-master-section="mestre-objetivos">✦ <span>Objetivos da campanha</span></button>
+        </nav>
+      </div>
+      <div class="master-section-intro master-management-intro"><span class="eyebrow">ADMINISTRAÇÃO</span><h3>GERENCIAMENTO DA CAMPANHA</h3><p>Selecione uma opção à direita para abrir suas configurações.</p></div>
       <details id="mestre-configuracao" class="master-disclosure">
         <summary>◈ &nbsp; CONFIGURAÇÃO E COMPARTILHAMENTO DA CAMPANHA</summary>
         <div class="master-setup">
