@@ -1784,6 +1784,12 @@ function mostrarAtaques(personagem) {
       `Dano: ${ataque.dano} · Crítico: ${ataque.critico}`;
 
     cartao.append(nome, detalhes);
+    if (ataque.habilidade) {
+      const habilidade = document.createElement('p');
+      habilidade.className = 'cs-attack-ability';
+      habilidade.textContent = '✦ Habilidade especial (regra da casa): ' + ataque.habilidade;
+      cartao.append(habilidade);
+    }
     if (
       !campanhaCompartilhada.fichas.some(item => item.id === personagemAberto) ||
       campanhaCompartilhada.papel === 'mestre'
@@ -1806,13 +1812,15 @@ const armasSolicitadas = {
     nome: 'Bengala-florete',
     dano: '1d6',
     critico: '18',
-    nota: 'Adaptação do florete do livro: arma ágil, corte, categoria I, 1 espaço. O disfarce de bengala é narrativo.'
+    nota: 'Adaptação do florete do livro: arma ágil, corte, categoria I, 1 espaço. O disfarce de bengala é narrativo.',
+    habilidade: 'Estocada Precisa (regra da casa): uma vez por cena, antes de atacar com esta arma, gaste 1 PE para receber +2 no teste de ataque.'
   },
   garras: {
     nome: 'Luva com Garras',
     dano: '1d6',
     critico: '20',
-    nota: 'Regra da casa sugerida: corpo a corpo, corte, 1 espaço. Não é uma arma da tabela oficial; mestre pode alterar.'
+    nota: 'Regra da casa sugerida: corpo a corpo, corte, 1 espaço. Não é uma arma da tabela oficial; mestre pode alterar.',
+    habilidade: 'Garras Afiadas (regra da casa): uma vez por cena, após acertar um ataque com esta arma, gaste 1 PE para causar +2 pontos de dano.'
   }
 };
 $('arma-modelo').addEventListener('change', () => {
@@ -1824,6 +1832,7 @@ $('arma-modelo').addEventListener('change', () => {
   $('ataque-nome').value = arma.nome;
   $('ataque-dano').value = arma.dano;
   $('ataque-critico').value = arma.critico;
+  $('ataque-habilidade').value = arma.habilidade;
   $('arma-modelo-regra').textContent = arma.nota;
 });
 
@@ -1833,6 +1842,7 @@ $('form-ataque').onsubmit = e => {
   const nome = $('ataque-nome').value.trim();
   const dano = $('ataque-dano').value.trim();
   const critico = $('ataque-critico').value.trim();
+  const habilidade = $('ataque-habilidade').value.trim();
 
   if (!nome || !dano || !critico) return;
 
@@ -1844,7 +1854,8 @@ $('form-ataque').onsubmit = e => {
     personagem.ataques.push({
       nome,
       dano,
-      critico
+      critico,
+      habilidade
     });
   });
 
