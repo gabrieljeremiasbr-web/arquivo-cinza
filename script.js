@@ -306,6 +306,26 @@ document.querySelectorAll('[data-master-action]').forEach(botao => {
   };
 });
 
+document.querySelectorAll('[data-master-section]').forEach(botao => {
+  botao.onclick = () => {
+    const secao = $(botao.dataset.masterSection);
+    if (secao) { secao.open = true; secao.scrollIntoView({behavior:'smooth',block:'start'}); }
+  };
+});
+$('concluir-sessao-atual').onclick = () => {
+  const selecionada = $('sessao-atual-seletor').value;
+  const sessoes = carregar('sessoes');
+  const sessao = sessoes.find(item => item.id === selecionada);
+  if (!sessao) { $('sessao-atual-status').textContent = 'Selecione uma sessão.'; return; }
+  if (!confirm('Concluir esta sessão?')) return;
+  sessao.status = 'concluida';
+  if (salvar('sessoes', sessoes)) {
+    atualizarPainelMestre();
+    $('sessao-atual-seletor').value = selecionada;
+    mostrarRegistros('sessoes','lista-sessoes');
+    $('sessao-atual-status').textContent = 'Sessão concluída.';
+  }
+};
 $('abrir-criacao-sessao').onclick = () => {
   $('mestre-sessoes').open = true;
   $('form-sessao').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1820,6 +1840,15 @@ function renderizarOrdemIniciativa() {
 
 function atualizarPainelMestre() {
   if (!$('visao-mesa-personagens')) return;
+  const fichasUnicas = [...new Map([...carregar('personagens'), ...campanhaCompartilhada.fichas].map(f => [f.id, f])).values()];
+  const contadores = {
+    'mestre-total-pjs': fichasUnicas.filter(f => f.tipo !== 'npc').length,
+    'mestre-total-npcs': fichasUnicas.filter(f => f.tipo === 'npc').length,
+    'mestre-total-sessoes': carregar('sessoes').length,
+    'mestre-total-casos': carregar('casos').length,
+    'mestre-total-objetivos': carregar('objetivos').length
+  };
+  Object.entries(contadores).forEach(([id, n]) => { if ($(id)) $(id).textContent = String(n); });
   renderizarVisaoMesa();
   renderizarPainelNpcs();
   renderizarAnotacoesMestra();
