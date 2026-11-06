@@ -432,15 +432,20 @@ $('rolar-iniciativa').onclick = () => {
 
   somDadosRPG(personagens.length);
   resultadosIniciativa = personagens.map(personagem => {
-    const dado = rolarDado(20);
-    const bonus = Number(personagem.pericias?.Iniciativa ?? 0);
-
+    const agilidade = Math.max(0, Math.floor(Number(personagem.atributos?.agl) || 0));
+    const quantidade = agilidade === 0 ? 2 : Math.min(agilidade, 10);
+    const dados = Array.from({length:quantidade}, () => rolarDado(20));
+    const escolhido = agilidade === 0 ? Math.min(...dados) : Math.max(...dados);
+    const bonusBruto = Number(personagem.pericias?.Iniciativa ?? 0);
+    const bonus = Number.isFinite(bonusBruto) ? bonusBruto : 0;
     return {
       id: personagem.id,
       nome: personagem.titulo || 'Personagem sem nome',
-      dado,
-      bonus: Number.isFinite(bonus) ? bonus : 0,
-      total: dado + (Number.isFinite(bonus) ? bonus : 0)
+      dado: escolhido,
+      dados,
+      atributo: agilidade,
+      bonus,
+      total: escolhido + bonus
     };
   }).sort((a, b) =>
     b.total - a.total ||
@@ -1934,7 +1939,8 @@ function renderizarOrdemIniciativa() {
     const conta = document.createElement('span');
     conta.className = 'initiative-calculation';
     conta.textContent =
-      `D20 ${resultado.dado} ${resultado.bonus >= 0 ? '+' : '−'} ${Math.abs(resultado.bonus)} = ${resultado.total}`;
+      `AGL ${resultado.atributo ?? 1} · D20 [${(resultado.dados || [resultado.dado]).join(', ')}] ` +
+      `→ ${resultado.dado} ${resultado.bonus >= 0 ? '+' : '−'} ${Math.abs(resultado.bonus)} = ${resultado.total}`;
 
     linha.append(posicao, nome, conta);
     lista.append(linha);
