@@ -1588,7 +1588,9 @@ h1, h2, h3, p { margin-top: 0; }
 .die-agl { --attr-light: #ff9a8d; --attr-deep: #a91c38; --attr-glow: #ff5363; }
 .die-for { --attr-light: #ff796c; --attr-deep: #951328; --attr-glow: #f5324d; }
 .die-car { --attr-light: #ffb17a; --attr-deep: #9c2635; --attr-glow: #ef5963; }
+.die-pre { --attr-light: #ff8892; --attr-deep: #990e22; --attr-glow: #e33c52; }
 .die-pec { --attr-light: #f88d9c; --attr-deep: #851b34; --attr-glow: #e83c61; }
+.die-vig { --attr-light: #fa6174; --attr-deep: #690a1d; --attr-glow: #d32947; }
 .die-int { --attr-light: #ffa08c; --attr-deep: #7c1830; --attr-glow: #d83a58; }
 
 .die-agl {
@@ -1598,8 +1600,8 @@ h1, h2, h3, p { margin-top: 0; }
 }
 
 .die-for { top: 185px; right: 0; }
-.die-car { bottom: 0; right: 52px; }
-.die-pec { bottom: 0; left: 52px; }
+.die-car, .die-pre { bottom: 0; right: 52px; }
+.die-pec, .die-vig { bottom: 0; left: 52px; }
 .die-int { top: 185px; left: 0; }
 
 /* PERÍCIAS E ROLAGEM */
@@ -2632,8 +2634,8 @@ footer {
   .attribute-die .name { font-size: 9px; }
   .attribute-die .abbr { font-size: 14px; }
   .die-for, .die-int { top: 112px; }
-  .die-car { right: 28px; }
-  .die-pec { left: 28px; }
+  .die-car, .die-pre { right: 28px; }
+  .die-pec, .die-vig { left: 28px; }
   .attribute-center { font-size: 11px; letter-spacing: 2px; }
   .arcane-ring { width: 90%; }
   .resource-form, .attribute-inputs { grid-template-columns: repeat(3, 1fr); }
