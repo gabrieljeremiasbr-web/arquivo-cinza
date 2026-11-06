@@ -630,11 +630,11 @@
           <section class="master-card current-session-card">
             <header class="master-card-heading">
               <span aria-hidden="true">▷</span>
-              <h3>SESSÃO ATUAL</h3>
+              <h3>CONTROLE DA MESA</h3>
             </header>
-            <label for="sessao-atual-seletor">Sessão da campanha</label>
+            <label for="sessao-atual-seletor">Sessões anteriores (opcional)</label>
             <select id="sessao-atual-seletor">
-              <option value="">Nenhuma sessão criada</option>
+              <option value="">Mesa livre · sem sessão cadastrada</option>
             </select>
             <p id="sessao-codigo-atual" class="session-code-current" hidden></p>
             <div class="nex-control">
@@ -649,8 +649,7 @@
                 <button id="nex-aumentar" type="button" aria-label="Aumentar NEX">+</button>
               </div>
             </div>
-            <button id="iniciar-sessao-atual" class="primary master-start-session"
-                    type="button">▷ &nbsp; INICIAR SESSÃO</button><button id="concluir-sessao-atual" class="outline master-start-session" type="button">✓ CONCLUIR SESSÃO</button>
+            <button id="iniciar-sessao-atual" class="primary master-start-session" type="button">▷ &nbsp; INICIAR MESA</button><button id="concluir-sessao-atual" class="outline master-start-session" type="button">✓ ENCERRAR MESA</button>
             <p id="sessao-atual-status" class="master-inline-status"
                role="status" aria-live="polite"></p>
           </section>
@@ -658,7 +657,7 @@
           <section class="master-card master-tools-card">
             <header class="master-card-heading">
               <span aria-hidden="true">⚒</span>
-              <h3>FERRAMENTAS DA MESTRE</h3>
+              <h3>ACESSOS RÁPIDOS</h3>
             </header>
             <button type="button" class="master-tool" data-master-action="npc">
               ♟ &nbsp; Gerenciar NPCs
@@ -702,7 +701,7 @@
             <section class="master-card master-notes-card">
               <header class="master-card-heading">
                 <span aria-hidden="true">▤</span>
-                <h3>ANOTAÇÕES DA MESTRE</h3>
+                <h3>ANOTAÇÕES DO MESTRE</h3>
                 <button type="button" class="master-add-link" data-master-action="notes">
                   VER TODAS
                 </button>
@@ -792,15 +791,16 @@
         </button>
       </nav>
 
+      <div class="master-overview" aria-label="Resumo da campanha"><div class="master-overview-stat"><span>INVESTIGADORES</span><strong id="mestre-total-pjs">0</strong></div><div class="master-overview-stat"><span>NPCs</span><strong id="mestre-total-npcs">0</strong></div><div class="master-overview-stat"><span>CASOS</span><strong id="mestre-total-casos">0</strong></div><div class="master-overview-stat"><span>OBJETIVOS</span><strong id="mestre-total-objetivos">0</strong></div></div>
       <div class="master-management-layout">
-        <div class="session-entry-card"><span class="eyebrow">CENTRAL DE SESSÕES</span><h3>Prepare sua próxima investigação</h3><p>Crie uma sessão e abra uma área exclusiva com a mesa, os NPCs, a iniciativa, as anotações e os dados.</p><button type="button" id="abrir-mesa-sessao" class="primary">▷ ABRIR MESA DA SESSÃO</button><p id="aviso-mesa-sessao" class="muted" role="status"></p></div>
+        <div class="session-entry-card"><span class="eyebrow">SALA DE INVESTIGAÇÃO</span><h3>Sua mesa está pronta</h3><p>Abra o painel de jogo sem precisar criar uma sessão. Acesse fichas, NPCs, pistas, iniciativa, anotações e dados durante a investigação.</p><button type="button" id="abrir-mesa-sessao" class="primary">▷ ABRIR PAINEL DA MESA</button><p id="aviso-mesa-sessao" class="muted" role="status"></p></div>
         <nav class="master-management-links" aria-label="Opções de gerenciamento da campanha">
           <span class="eyebrow">GERENCIAMENTO</span>
           <button type="button" data-master-section="mestre-configuracao">◈ <span>Configuração e compartilhamento</span></button>
           <button type="button" data-master-section="mestre-objetivos">✦ <span>Objetivos da campanha</span></button>
         </nav>
       </div>
-      <div class="master-section-intro master-management-intro"><span class="eyebrow">ADMINISTRAÇÃO</span><h3>GERENCIAMENTO DA CAMPANHA</h3><p>Selecione uma opção à direita para abrir suas configurações.</p></div>
+      <div class="master-section-intro master-management-intro"><span class="eyebrow">ADMINISTRAÇÃO</span><h3>GERENCIAMENTO DA CAMPANHA</h3><p>Organize sua campanha e compartilhe as fichas com os jogadores.</p></div>
       <details id="mestre-configuracao" class="master-disclosure">
         <summary>◈ &nbsp; CONFIGURAÇÃO E COMPARTILHAMENTO DA CAMPANHA</summary>
         <div class="master-setup">
