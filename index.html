@@ -434,6 +434,7 @@
 
       <div class="sheet">
         <div class="sheet-header">
+          <div class="sheet-header-identity">
           <div class="portrait" id="ficha-retrato">◈</div>
 
           <div class="identity">
@@ -447,14 +448,18 @@
             </div>
 
             <p class="character-defense" style="margin:10px 0;color:#d8c8a7;font-weight:700">🛡 DEFESA: <span id="ficha-defesa">15</span></p>
+
+          </div>
+          </div>
             <div class="resources">
               <div class="resource">
                 <div class="resource-top">
                   <span>♥ PV</span>
-                  <div>
-                    <input id="pv-atual" type="number" min="0"
-                           aria-label="PV atual">
-                    / <span id="pv-max">20</span>
+                  <div class="cs-fullsheet-resource-controls">
+                    <button type="button" data-ficha-recurso="pv" data-ficha-passo="-1" aria-label="Diminuir Vida">−</button>
+                    <input id="pv-atual" type="number" min="0" aria-label="Vida atual">
+                    <span class="cs-fullsheet-resource-max">/ <span id="pv-max">20</span></span>
+                    <button type="button" data-ficha-recurso="pv" data-ficha-passo="1" aria-label="Aumentar Vida">+</button>
                   </div>
                 </div>
                 <div class="track">
@@ -465,10 +470,11 @@
               <div class="resource">
                 <div class="resource-top">
                   <span>✦ PE</span>
-                  <div>
-                    <input id="pe-atual" type="number" min="0"
-                           aria-label="PE atual">
-                    / <span id="pe-max">3</span>
+                  <div class="cs-fullsheet-resource-controls">
+                    <button type="button" data-ficha-recurso="pe" data-ficha-passo="-1" aria-label="Diminuir Esforço">−</button>
+                    <input id="pe-atual" type="number" min="0" aria-label="Esforço atual">
+                    <span class="cs-fullsheet-resource-max">/ <span id="pe-max">3</span></span>
+                    <button type="button" data-ficha-recurso="pe" data-ficha-passo="1" aria-label="Aumentar Esforço">+</button>
                   </div>
                 </div>
                 <div class="track">
@@ -479,10 +485,11 @@
               <div class="resource">
                 <div class="resource-top">
                   <span>◈ SAN</span>
-                  <div>
-                    <input id="san-atual" type="number" min="0"
-                           aria-label="SAN atual">
-                    / <span id="san-max">20</span>
+                  <div class="cs-fullsheet-resource-controls">
+                    <button type="button" data-ficha-recurso="san" data-ficha-passo="-1" aria-label="Diminuir Sanidade">−</button>
+                    <input id="san-atual" type="number" min="0" aria-label="Sanidade atual">
+                    <span class="cs-fullsheet-resource-max">/ <span id="san-max">20</span></span>
+                    <button type="button" data-ficha-recurso="san" data-ficha-passo="1" aria-label="Aumentar Sanidade">+</button>
                   </div>
                 </div>
                 <div class="track">
@@ -504,7 +511,6 @@
                 <small class="relationship-hint">Ajuste conforme as conversas e escolhas da campanha.</small>
               </div>
             </div>
-          </div>
         </div>
 
         <div class="sheet-tabs" role="tablist" aria-label="Seções da ficha">
