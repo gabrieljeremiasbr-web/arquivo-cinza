@@ -990,7 +990,9 @@ $('form-personagem').onsubmit = async e => {
     }
   } else {
     const registros = carregar('personagens');
-    registros.push(personagem);
+    const indiceExistente = registros.findIndex(item => item.id === personagem.id);
+    if (indiceExistente >= 0) registros[indiceExistente] = personagem;
+    else registros.push(personagem);
 
     if (!salvar('personagens', registros)) return;
     garantirCodigosSessoes();
@@ -1319,6 +1321,14 @@ function abrirFicha(idFicha) {
         Math.min(bonusMaximoTreinamento(nexFicha(personagem)), valorTreinamento + variacao)
       );
       if (somenteLeitura || novoValor === valorTreinamento) return;
+      if (!fichaUsaRegrasAntigas(personagem) && valorTreinamento === 0 && novoValor > 0) {
+        const total = Object.values(personagem.pericias || {}).filter(valor => Number(valor) >= 5).length;
+        const limite = limitePericiasClasse(personagem.classeBase, personagem.atributos?.int);
+        if (total >= limite) {
+          alert('Limite de perícias treinadas da classe atingido. Verifique as perícias adicionais recebidas pela origem com o mestre.');
+          return;
+        }
+      }
 
       atualizarPersonagem(registro => {
         registro.pericias = {
@@ -2060,7 +2070,7 @@ function renderizarFichasJogadoresMestre() {
   const atributos = criar('section', 'master-dossier-box');
   atributos.append(criar('h5', '', '◈ ATRIBUTOS'));
   const valores = criar('div', 'master-dossier-attributes');
-  for (const [chave, nome, sigla] of atributosInfo) {
+  for (const [chave, nome, sigla] of (fichaUsaRegrasAntigas(ficha) ? atributosInfoLegado : atributosInfo)) {
     const item = criar('div', 'master-dossier-attribute');
     item.append(
       criar('span', '', sigla),
@@ -2226,7 +2236,7 @@ function mostrarFichasCompartilhadas(fichas) {
 
 function editarFichaCompartilhada(ficha) {
   if (fichaUsaRegrasAntigas(ficha)) {
-    alert('Esta ficha usa as regras antigas do Código Sombrio (CAR/PEC). Ela foi preservada para não alterar seus dados. Para usar as novas regras, crie uma ficha nova com PRE/VIG e classe-base; a ficha antiga continuará disponível.');
+    alert('Esta ficha usa as regras antigas (CAR/PEC) e foi preservada. Para seguir as novas regras, crie uma nova ficha com PRE/VIG; você pode consultar a ficha antiga normalmente.');
     abrirFicha(ficha.id);
     return;
   }
