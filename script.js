@@ -758,6 +758,170 @@ document.querySelectorAll('#painel-fichas-personagem [data-cs-tab]').forEach(bot
     renderizarGaleriaFichas();
   });
 });
+
+async function csAlterarRecurso(ficha,chave,valor) {
+  const maximo=Math.max(0,Number(ficha[chave])||0);
+  const novo=Math.max(0,Math.min(maximo,Math.round(Number(valor)||0)));
+  const compartilhada=campanhaCompartilhada.fichas.some(item=>item.id===ficha.id);
+  if(compartilhada && campanhaCompartilhada.papel!=='mestre')return;
+  if(compartilhada){
+    try{
+      await salvarFichaCompartilhada({...ficha,[chave+'Atual']:novo});
+      atualizarPainelMestre();
+    }catch(erro){
+      console.error('Falha ao salvar recurso do personagem:',erro);
+      alert('Não foi possível atualizar a ficha da campanha. Verifique sua conexão.');
+    }
+  } else {
+    const registros=carregar('personagens');
+    const alvo=registros.find(item=>item.id===ficha.id);
+    if(!alvo)return;
+    alvo[chave+'Atual']=novo;
+    if(salvar('personagens',registros))atualizarPainelMestre();
+  }
+}
+
+function csRolarTeste(ficha,atributo,bonus=0,nome='Teste') {
+  const valorBruto=Number(ficha.atributos?.[atributo]??0);
+  const valor=Number.isFinite(valorBruto)?Math.max(0,Math.min(10,Math.floor(valorBruto))):0;
+  const dados=Array.from({length:valor||2},()=>rolarDado(20));
+  const escolhido=valor===0?Math.min(...dados):Math.max(...dados);
+  const treinamento=Number(bonus)||0;
+  const total=escolhido+treinamento;
+  somDadosRPG(dados.length);
+  const saida=$('cs-resultado-rolagem');
+  if(saida){
+    saida.textContent=nome+' · D20 ['+dados.join(', ')+'] → '+escolhido+
+      (treinamento?' + '+treinamento:'')+' = '+total+
+      (valor===0?' (menor resultado: atributo 0)':'');
+    saida.focus({preventScroll:true});
+  }
+}
+
+function renderizarConteudoDossie(ficha) {
+  const area=$('cs-dossier-content');
+  if(!area)return;
+  area.replaceChildren();
+  const titulo=(texto,auxiliar='')=>{
+    const cab=csElemento('div','cs-dossier-panel-heading');
+    cab.append(csElemento('h3','',texto));
+    if(auxiliar)cab.append(csElemento('small','',auxiliar));
+    area.append(cab);
+  };
+  const atributos=fichaUsaRegrasAntigas(ficha)?atributosInfoLegado:atributosInfo;
+  const habilidades=Array.isArray(ficha.habilidades)?ficha.habilidades:
+    typeof ficha.habilidades==='string'?ficha.habilidades.split(/\r?\n/).filter(Boolean):[];
+  const ataques=Array.isArray(ficha.ataques)?ficha.ataques:[];
+  const itens=Array.isArray(ficha.inventario)?ficha.inventario:[];
+  const nome=String(ficha.titulo||'Investigador');
+  if(csDossieAba==='resumo'){
+    titulo('Visão geral do personagem','STATUS / ATRIBUTOS');
+    const sec=csElemento('section','cs-dossier-box');
+    sec.append(csElemento('h4','','◈ ATRIBUTOS'));
+    const grid=csElemento('div','cs-dossier-stat-attrs');
+    atributos.forEach(([chave,nomeA,sigla])=>{
+      const chip=csElemento('button','cs-dossier-stat-attr');
+      chip.type='button';
+      chip.title='Ver e rolar '+nomeA;
+      chip.append(csElemento('span','',sigla),csElemento('strong','',ficha.atributos?.[chave]??'—'));
+      chip.onclick=()=>{csDossieAba='atributos';renderizarGaleriaFichas();};
+      grid.append(chip);
+    });
+    sec.append(grid);
+    const ver=botao('VER ROLAGENS →',()=>{csDossieAba='atributos';renderizarGaleriaFichas();},'cs-dossier-text-action');
+    sec.append(ver);
+    area.append(sec);
+    const registro=csElemento('section','cs-dossier-box');
+    registro.append(csElemento('h4','','▤ REGISTROS DO DOSSIÊ'));
+    const linhas=[
+      ['Habilidades especiais',habilidades.length],
+      ['Ataques cadastrados',ataques.length],
+      ['Itens no inventário',itens.length],
+      ['Perícias treinadas',Object.values(ficha.pericias||{}).filter(v=>Number(v)>0).length]
+    ];
+    linhas.forEach(([nomeCampo,valor])=>{
+      const linha=csElemento('div','cs-dossier-register');
+      linha.append(csElemento('span','',nomeCampo),csElemento('strong','',valor));
+      registro.append(linha);
+    });
+    area.append(registro);
+  } else if(csDossieAba==='atributos'){
+    titulo('Atributos do investigador','CLIQUE NOS DADOS PARA ROLAR');
+    const palco=csElemento('section','cs-dossier-wheel-stage');
+    const aro=csElemento('div','cs-dossier-wheel-ring');
+    const centro=csElemento('div','cs-dossier-wheel-center');
+    centro.append(csElemento('span','','◈'),csElemento('strong','','ATRIBUTOS'),csElemento('small','','ROLE UM ATRIBUTO'));
+    palco.append(aro,centro);
+    atributos.forEach(([chave,nomeA,sigla],indice)=>{
+      const dado=csElemento('button','cs-dossier-die cs-dossier-die-'+indice);
+      dado.type='button';dado.title='Rolar '+nomeA;
+      dado.setAttribute('aria-label','Rolar '+nomeA);
+      dado.append(csElemento('strong','',ficha.atributos?.[chave]??0),csElemento('span','',sigla),csElemento('small','',nomeA));
+      dado.addEventListener('click',()=>csRolarTeste(ficha,chave,0,nomeA));
+      palco.append(dado);
+    });
+    area.append(palco);
+    const resultado=csElemento('p','cs-dossier-roll-result','Escolha um atributo acima para rolar os D20.');
+    resultado.id='cs-resultado-rolagem';resultado.tabIndex=-1;resultado.setAttribute('role','status');
+    area.append(resultado);
+  } else if(csDossieAba==='pericias'){
+    titulo('Perícias do investigador','DADOS + TREINAMENTO');
+    const resultado=csElemento('p','cs-dossier-roll-result','Clique em uma perícia para realizar um teste.');
+    resultado.id='cs-resultado-rolagem';resultado.tabIndex=-1;resultado.setAttribute('role','status');
+    area.append(resultado);
+    const lista=csElemento('div','cs-dossier-skills');
+    (fichaUsaRegrasAntigas(ficha)?periciasRPGLegado:periciasRPG).forEach(([nomeP,atributoP])=>{
+      const bonus=Number(ficha.pericias?.[nomeP]||0);
+      const bot=csElemento('button','cs-dossier-skill');
+      bot.type='button';
+      bot.append(csElemento('span','',nomeP),csElemento('small','',atributoP+' · '+nomeTreinamento(bonus)),csElemento('strong','',bonus>0?'+'+bonus:'—'));
+      bot.onclick=()=>csRolarTeste(ficha,atributoFichaPorSigla(atributoP),bonus,nomeP);
+      lista.append(bot);
+    });
+    area.append(lista);
+    if(habilidades.length){
+      const box=csElemento('section','cs-dossier-box');
+      box.append(csElemento('h4','','✦ HABILIDADES ESPECIAIS'));
+      const ul=csElemento('ul','cs-dossier-simple-list');
+      habilidades.forEach(item=>ul.append(csElemento('li','',String(item))));
+      box.append(ul);area.append(box);
+    }
+  } else if(csDossieAba==='combate'){
+    titulo('Combate e equipamentos','DEFESA '+String(ficha.defesa??'—'));
+    const box=csElemento('section','cs-dossier-box');
+    box.append(csElemento('h4','','⚔ ATAQUES CADASTRADOS'));
+    if(!ataques.length)box.append(csElemento('p','cs-dossier-muted','Nenhum ataque cadastrado.'));
+    ataques.forEach(ataque=>{
+      const lin=csElemento('div','cs-dossier-register');
+      lin.append(csElemento('span','',ataque?.nome||'Ataque'),csElemento('strong','','Dano '+String(ataque?.dano||'—')+' · Crítico '+String(ataque?.critico||'—')));
+      box.append(lin);
+    });
+    box.append(botao('+ GERENCIAR ATAQUES NA FICHA',()=>abrirFicha(ficha.id),'outline'));
+    area.append(box);
+  } else if(csDossieAba==='inventario'){
+    titulo('Inventário do investigador','EQUIPAMENTOS E ITENS');
+    const box=csElemento('section','cs-dossier-box');
+    box.append(csElemento('h4','','▤ OBJETOS CARREGADOS'));
+    if(!itens.length)box.append(csElemento('p','cs-dossier-muted','Nenhum item registrado.'));
+    itens.forEach(item=>{
+      const name=typeof item==='string'?item:item?.nome||item?.titulo||'Item';
+      const qtd=typeof item==='object'&&item!==null&&Number(item.quantidade)>1?' ×'+item.quantidade:'';
+      const lin=csElemento('div','cs-dossier-register');
+      lin.append(csElemento('span','',name),csElemento('strong','',qtd||'◈'));
+      box.append(lin);
+      if(item?.observacoes)box.append(csElemento('small','cs-dossier-muted',item.observacoes));
+    });
+    box.append(botao('+ GERENCIAR INVENTÁRIO NA FICHA',()=>abrirFicha(ficha.id),'outline'));
+    area.append(box);
+  } else if(csDossieAba==='historia'){
+    titulo('História do investigador','REGISTRO CONFIDENCIAL');
+    const box=csElemento('section','cs-dossier-box');
+    box.append(csElemento('h4','','▣ DOSSIÊ PESSOAL — '+nome));
+    box.append(csElemento('p','cs-dossier-story',ficha.historia||'Nenhuma história registrada para este investigador.'));
+    area.append(box);
+  }
+}
+
 $('jogadores-busca').addEventListener('input',renderizarGaleriaFichas);
 $('jogadores-filtro').addEventListener('change',renderizarGaleriaFichas);
 $('jogadores-atualizar').addEventListener('click',renderizarGaleriaFichas);
