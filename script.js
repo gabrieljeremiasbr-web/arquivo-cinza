@@ -815,36 +815,89 @@ function renderizarConteudoDossie(ficha) {
   const itens=Array.isArray(ficha.inventario)?ficha.inventario:[];
   const nome=String(ficha.titulo||'Investigador');
   if(csDossieAba==='resumo'){
-    titulo('Visão geral do personagem','STATUS / ATRIBUTOS');
-    const sec=csElemento('section','cs-dossier-box');
-    sec.append(csElemento('h4','','◈ ATRIBUTOS'));
-    const grid=csElemento('div','cs-dossier-stat-attrs');
+    // Resumo clássico: quatro indicadores e duas caixas lado a lado.
+    // Mantemos o Dossiê Lateral, mas restauramos a apresentação anterior desta aba.
+    const intro=csElemento('header','cs-dossier-classic-intro');
+    intro.append(
+      csElemento('span','eyebrow','VISÃO GERAL DO INVESTIGADOR'),
+      csElemento('h3','','Resumo do personagem'),
+      csElemento('p','','Consulte os recursos, os atributos e os principais registros da ficha.')
+    );
+    area.append(intro);
+    const stats=csElemento('div','cs-dossier-classic-stats');
+    for(const [label,chave,descricao] of [
+      ['♥ VIDA','pv','Pontos de Vida'],
+      ['✦ ESFORÇO','pe','Pontos de Esforço'],
+      ['◈ SANIDADE','san','Pontos de Sanidade'],
+      ['⬡ DEFESA','defesa','Defesa atual']
+    ]){
+      const card=csElemento('article','cs-dossier-classic-stat');
+      const atual=chave==='defesa'?(ficha.defesa??'—'):(ficha[chave+'Atual']??ficha[chave]??'—');
+      const valor=chave==='defesa'?String(atual):String(atual)+' / '+String(ficha[chave]??'—');
+      card.append(
+        csElemento('span','',label),
+        csElemento('strong','',valor),
+        csElemento('small','',descricao)
+      );
+      stats.append(card);
+    }
+    area.append(stats);
+    const colunas=csElemento('div','cs-dossier-classic-columns');
+    const quadroAtributos=csElemento('section','cs-dossier-classic-card');
+    quadroAtributos.append(csElemento('h4','','◈ ATRIBUTOS'));
+    const grid=csElemento('div','cs-dossier-classic-attributes');
     atributos.forEach(([chave,nomeA,sigla])=>{
-      const chip=csElemento('button','cs-dossier-stat-attr');
+      const chip=csElemento('button','cs-dossier-classic-attribute');
       chip.type='button';
-      chip.title='Ver e rolar '+nomeA;
-      chip.append(csElemento('span','',sigla),csElemento('strong','',ficha.atributos?.[chave]??'—'));
-      chip.onclick=()=>{csDossieAba='atributos';renderizarGaleriaFichas();};
+      chip.title='Visualizar o dado de '+nomeA;
+      chip.append(
+        csElemento('small','',sigla),
+        csElemento('strong','',ficha.atributos?.[chave]??'—')
+      );
+      chip.addEventListener('click',()=>{
+        csDossieAba='atributos';
+        renderizarGaleriaFichas();
+      });
       grid.append(chip);
     });
-    sec.append(grid);
-    const ver=botao('VER ROLAGENS →',()=>{csDossieAba='atributos';renderizarGaleriaFichas();},'cs-dossier-text-action');
-    sec.append(ver);
-    area.append(sec);
-    const registro=csElemento('section','cs-dossier-box');
-    registro.append(csElemento('h4','','▤ REGISTROS DO DOSSIÊ'));
-    const linhas=[
+    quadroAtributos.append(grid);
+    quadroAtributos.append(
+      botao('VER ATRIBUTOS E ROLAGENS →',()=>{
+        csDossieAba='atributos';
+        renderizarGaleriaFichas();
+      },'cs-dossier-classic-link')
+    );
+    colunas.append(quadroAtributos);
+    const quadroRegistros=csElemento('section','cs-dossier-classic-card');
+    quadroRegistros.append(csElemento('h4','','▤ REGISTROS'));
+    const registros=csElemento('div','cs-dossier-classic-records');
+    for(const [label,numero] of [
       ['Habilidades especiais',habilidades.length],
-      ['Ataques cadastrados',ataques.length],
-      ['Itens no inventário',itens.length],
+      ['Inventário',itens.length],
+      ['Ataques',ataques.length],
       ['Perícias treinadas',Object.values(ficha.pericias||{}).filter(v=>Number(v)>0).length]
-    ];
-    linhas.forEach(([nomeCampo,valor])=>{
-      const linha=csElemento('div','cs-dossier-register');
-      linha.append(csElemento('span','',nomeCampo),csElemento('strong','',valor));
-      registro.append(linha);
-    });
-    area.append(registro);
+    ]){
+      const row=csElemento('div','cs-dossier-classic-record');
+      row.append(csElemento('span','',label),csElemento('strong','',numero));
+      registros.append(row);
+    }
+    quadroRegistros.append(registros);
+    const links=csElemento('div','cs-dossier-classic-actions');
+    for(const [label,aba] of [
+      ['⚔ COMBATE','combate'],
+      ['▤ INVENTÁRIO','inventario'],
+      ['▣ HISTÓRIA','historia']
+    ]){
+      links.append(botao(label,()=>{
+        csDossieAba=aba;
+        renderizarGaleriaFichas();
+      },'cs-dossier-classic-link'));
+    }
+    quadroRegistros.append(links);
+    colunas.append(quadroRegistros);
+    area.append(colunas);
+    area.append(csElemento('p','cs-dossier-classic-note',
+      'Os pontos atuais podem ser alterados nos cartões acima quando a conta tem permissão de edição.'));
   } else if(csDossieAba==='atributos'){
     titulo('Atributos do investigador','CLIQUE NOS DADOS PARA ROLAR');
     const palco=csElemento('section','cs-dossier-wheel-stage');
