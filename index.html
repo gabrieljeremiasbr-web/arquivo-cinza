@@ -792,6 +792,13 @@
       </nav>
 
       <div class="master-overview" aria-label="Resumo da campanha"><div class="master-overview-stat"><span>INVESTIGADORES</span><strong id="mestre-total-pjs">0</strong></div><div class="master-overview-stat"><span>NPCs</span><strong id="mestre-total-npcs">0</strong></div><div class="master-overview-stat"><span>CASOS</span><strong id="mestre-total-casos">0</strong></div><div class="master-overview-stat"><span>OBJETIVOS</span><strong id="mestre-total-objetivos">0</strong></div></div>
+      <section class="master-players-panel" aria-labelledby="master-players-title">
+        <div class="master-players-heading">
+          <div><span class="eyebrow">ARQUIVO DE INVESTIGADORES</span><h3 id="master-players-title">FICHAS DOS JOGADORES</h3><p>Consulte os personagens da campanha e abra suas fichas completas.</p></div>
+          <button type="button" id="master-players-refresh" class="outline">↻ ATUALIZAR FICHAS</button>
+        </div>
+        <div id="master-players-list" class="master-players-grid" aria-live="polite"></div>
+      </section>
       <!-- Controles internos preservados para compatibilidade, fora da interface do mestre. -->
       <div id="mestre-controles-internos" hidden aria-hidden="true" style="display:none!important">
       <details id="mestre-configuracao" class="master-disclosure">
