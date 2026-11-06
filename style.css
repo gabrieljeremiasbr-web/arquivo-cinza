@@ -5848,3 +5848,51 @@ footer {
 .cs-cm-dialog-actions{display:flex;justify-content:end;flex-wrap:wrap;gap:10px}
 @media(max-width:850px){#tela-mestre .cs-cm-layout{grid-template-columns:1fr}}
 @media(max-width:480px){#tela-mestre .cs-cm-column{padding:12px}#tela-mestre .cs-cm-actions{grid-template-columns:1fr}.cs-cm-fields{grid-template-columns:1fr}#tela-mestre .cs-cm-header-actions{width:100%}#tela-mestre .cs-cm-header-actions button{flex:1}}
+
+/* Layout dossiê tático: referência visual da mesa */
+#tela-mestre .cs-combat-manager{padding:0;border-color:#93364b;background:linear-gradient(140deg,#210e17,#11090e);overflow:hidden}
+#tela-mestre .cs-cm-header{padding:24px 27px 20px;background:linear-gradient(90deg,#271018,#1b0c13);border-bottom:1px solid #853044}
+#tela-mestre .cs-cm-header h3{font-size:clamp(24px,2.6vw,36px);letter-spacing:.2px}
+#tela-mestre .cs-cm-header h3 span{color:#ff526d;margin-right:10px}
+#tela-mestre .cs-cm-header-actions button{border-color:#db425d;background:#35111f;padding:12px 16px;font-size:11px;font-weight:800}
+#tela-mestre .cs-cm-layout{grid-template-columns:minmax(230px,.95fr) minmax(340px,1.35fr) minmax(220px,.75fr);gap:13px;padding:16px}
+#tela-mestre .cs-cm-column{padding:15px;border-color:#7c3042;background:linear-gradient(150deg,#261018,#170b11)}
+#tela-mestre .cs-cm-section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:15px}
+#tela-mestre .cs-cm-section-heading h4{margin:0;color:#f7e5e3;font-size:16px}
+#tela-mestre .cs-cm-round-badge{padding:8px;border:1px solid #bf3f57;border-radius:7px;color:#ffb3c0;font-size:10px;font-weight:800;white-space:nowrap}
+#tela-mestre .cs-cm-entry{padding:10px;min-height:58px;background:#210e16}
+#tela-mestre .cs-cm-entry.current{border-color:#ff627d;background:#461522}
+#tela-mestre .cs-cm-entry-name{font-size:12px}
+#tela-mestre .cs-cm-next{display:block;width:100%;margin-top:18px;min-height:46px;background:linear-gradient(#6c1b31,#411020);border:1px solid #f04c69}
+#tela-mestre .cs-cm-turn{text-align:center;margin:10px 0 4px;color:#f2aab8;font-size:11px;font-weight:700}
+#tela-mestre .cs-cm-count{display:block;text-align:center;color:#a47b86;font-size:10px}
+#tela-mestre .cs-cm-person{display:flex;align-items:center;gap:14px;border-bottom:1px solid #6c2b3e;padding-bottom:18px}
+#tela-mestre .cs-cm-avatar{display:grid;place-items:center;width:70px;height:82px;flex:none;border:1px solid #cb4b64;border-radius:8px;background:#4a1426;font-size:32px;color:#e99aa9}
+#tela-mestre .cs-cm-identity{flex:1;min-width:0}
+#tela-mestre .cs-cm-identity small{font-size:10px;letter-spacing:1.4px;color:#ef9cad;font-weight:800}
+#tela-mestre .cs-cm-identity h4{font:700 clamp(21px,2vw,29px) Georgia,serif;margin:7px 0;color:#fff0e8;overflow-wrap:anywhere}
+#tela-mestre .cs-cm-identity p{font-size:11px;color:#cfa7b0;margin:0;line-height:1.4}
+#tela-mestre .cs-cm-defense{padding:11px;border:1px solid #c64a63;border-radius:9px;background:#4c1527;color:#ffe3e7;font-size:11px;white-space:nowrap}
+#tela-mestre .cs-cm-stats-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0}
+#tela-mestre .cs-cm-stat{display:grid;gap:7px;min-width:0;padding:12px 10px;border:1px solid #7e3448;border-radius:8px;background:#32131f}
+#tela-mestre .cs-cm-stat small{color:#f3b5bf;font-size:10px;font-weight:800}
+#tela-mestre .cs-cm-stat strong{font-size:17px;color:#fff0eb}
+#tela-mestre .cs-cm-stat .cs-cm-track{height:7px}
+#tela-mestre .cs-cm-stat-san .cs-cm-track span{background:#c47aaf}
+#tela-mestre .cs-cm-stat-pe .cs-cm-track span{background:#efa08a}
+#tela-mestre .cs-cm-attributes{margin:12px 0;padding:13px;border:1px solid #7b3449;border-radius:9px;background:#2b111d}
+#tela-mestre .cs-cm-attributes h5{margin:0 0 10px;color:#e9a5b3;font-size:11px;letter-spacing:1px}
+#tela-mestre .cs-cm-attr-cells{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+#tela-mestre .cs-cm-attr-cells>div{display:grid;place-items:center;gap:7px;min-width:0;padding:9px 3px;border-radius:6px;background:#4c1c2b}
+#tela-mestre .cs-cm-attr-cells small{font-size:9px;color:#e6b4be}
+#tela-mestre .cs-cm-attr-cells strong{font-size:18px;color:#fff0eb}
+#tela-mestre .cs-cm-sidebar h4{margin:0 0 11px;font-size:16px;color:#fff0e8}
+#tela-mestre .cs-cm-quick-actions{display:grid;gap:7px}
+#tela-mestre .cs-cm-quick-actions button{width:100%;padding:11px 12px;min-height:39px;border:1px solid #b64057;border-radius:6px;background:#431624;color:#ffe7e6;text-align:left;font-size:12px}
+#tela-mestre .cs-cm-quick-actions button:hover{background:#6b2035}
+#tela-mestre .cs-cm-tools-heading{margin-top:25px!important;padding-top:17px;border-top:1px solid #793146}
+#tela-mestre .cs-cm-log-box{margin:0 16px 16px}
+#tela-mestre .cs-cm-disclaimer{padding:0 16px 16px}
+@media(max-width:1150px){#tela-mestre .cs-cm-layout{grid-template-columns:minmax(220px,1fr) minmax(320px,1.4fr)}#tela-mestre .cs-cm-sidebar{grid-column:1/-1}#tela-mestre .cs-cm-sidebar .cs-cm-quick-actions{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){#tela-mestre .cs-cm-layout{grid-template-columns:1fr}#tela-mestre .cs-cm-sidebar{grid-column:auto}#tela-mestre .cs-cm-sidebar .cs-cm-quick-actions{grid-template-columns:1fr 1fr}#tela-mestre .cs-cm-header{padding:17px}}
+@media(max-width:420px){#tela-mestre .cs-cm-sidebar .cs-cm-quick-actions{grid-template-columns:1fr}#tela-mestre .cs-cm-avatar{width:48px;height:60px}#tela-mestre .cs-cm-stats-grid{gap:5px}#tela-mestre .cs-cm-stat{padding:9px 6px}#tela-mestre .cs-cm-stat strong{font-size:14px}}
