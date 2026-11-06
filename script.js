@@ -1566,6 +1566,74 @@ document.querySelectorAll('[data-ficha-atalho]').forEach(botao => {
   });
 });
 
+
+function renderizarMenuLateralFicha(idSelecionado = personagemAberto) {
+  const lista = $('ficha-lista-personagens');
+  if (!lista) return;
+  lista.replaceChildren();
+  const busca = $('ficha-lista-busca').value.trim().toLocaleLowerCase('pt-BR');
+  const fichas = fichasDaMesa()
+    .filter(ficha => [ficha.titulo,ficha.classe,ficha.classeBase]
+      .filter(Boolean).join(' ').toLocaleLowerCase('pt-BR').includes(busca))
+    .sort((a,b) => String(a.titulo || '').localeCompare(String(b.titulo || ''),'pt-BR'));
+  $('ficha-lista-contador').textContent =
+    fichas.length + (fichas.length === 1 ? ' personagem disponível' : ' personagens disponíveis');
+  if (!fichas.length) {
+    const vazio = document.createElement('p');
+    vazio.className = 'cs-fullsheet-empty';
+    vazio.textContent = busca ? 'Nenhum personagem encontrado.' : 'Não há fichas disponíveis.';
+    lista.append(vazio);
+  }
+  fichas.forEach(ficha => {
+    const bot = document.createElement('button');
+    bot.type = 'button';
+    bot.className = 'cs-fullsheet-player' + (ficha.id === idSelecionado ? ' is-selected' : '');
+    bot.setAttribute('aria-pressed', String(ficha.id === idSelecionado));
+    bot.append(criarRetratoMestre(ficha, 'cs-fullsheet-player-photo'));
+    const info=document.createElement('span');
+    info.className='cs-fullsheet-player-info';
+    const nome=document.createElement('strong');
+    nome.textContent=ficha.titulo || 'Investigador';
+    const classe=document.createElement('small');
+    classe.textContent=ficha.classe || 'Personagem';
+    const pv=document.createElement('small');
+    pv.className='cs-fullsheet-player-life';
+    pv.textContent='♥ '+(ficha.pvAtual ?? ficha.pv ?? '—')+'/'+(ficha.pv ?? '—')+' PV';
+    info.append(nome,classe,pv);
+    const seta=document.createElement('span');
+    seta.className='cs-fullsheet-player-arrow';
+    seta.textContent='›';
+    bot.append(info,seta);
+    bot.addEventListener('click',()=>{if(ficha.id !== personagemAberto)abrirFicha(ficha.id)});
+    lista.append(bot);
+  });
+}
+
+function atualizarBotoesDeRecursosFicha() {
+  document.querySelectorAll('#tela-ficha [data-ficha-recurso]').forEach(bot => {
+    const chave = bot.dataset.fichaRecurso;
+    const passo = Number(bot.dataset.fichaPasso);
+    const campo = $(chave + '-atual');
+    const max = Number(campo.max) || 0;
+    const valor = Number(campo.value) || 0;
+    bot.disabled = campo.disabled || (passo < 0 ? valor <= 0 : valor >= max);
+  });
+}
+
+$('ficha-lista-busca').addEventListener('input', () => renderizarMenuLateralFicha(personagemAberto));
+document.querySelectorAll('#tela-ficha [data-ficha-recurso]').forEach(bot => {
+  bot.addEventListener('click', () => {
+    const chave = bot.dataset.fichaRecurso;
+    const passo = Number(bot.dataset.fichaPasso);
+    const input = $(chave + '-atual');
+    if (input.disabled) return;
+    const limite = Number(input.max) || 0;
+    const atual = Number(input.value) || 0;
+    input.value = String(Math.max(0, Math.min(limite, atual + passo)));
+    input.dispatchEvent(new Event('change', {bubbles:true}));
+  });
+});
+
 function abrirFicha(idFicha) {
   const abaDeRetorno = !$('tela-ficha').hidden && personagemAberto === idFicha
     ? document.querySelector('#tela-ficha .sheet-tab.active')?.dataset.aba || 'resumo'
@@ -1769,6 +1837,10 @@ function abrirFicha(idFicha) {
   mostrarAtaques(personagem);
   preencherResumoFicha(personagem,somenteLeitura);
   selecionarAba(abaDeRetorno);
+  $('ficha-caminho-nome').textContent = personagem.titulo || 'INVESTIGADOR';
+  $('ficha-acesso-label').textContent = somenteLeitura ? '◈ ACESSO DE LEITURA' : '◈ FICHA EDITÁVEL';
+  renderizarMenuLateralFicha(personagem.id);
+  atualizarBotoesDeRecursosFicha();
   abrirTela('tela-ficha');
 }
 
@@ -1854,6 +1926,8 @@ function atualizarPersonagem(funcao) {
 
     input.value = numero;
     if ($('ficha-resumo-' + chave)) $('ficha-resumo-' + chave).textContent = numero + ' / ' + maximo;
+    atualizarBotoesDeRecursosFicha();
+    renderizarMenuLateralFicha(personagemAberto);
 
     $(chave + '-bar').style.width =
       (maximo ? numero / maximo * 100 : 0) + '%';
