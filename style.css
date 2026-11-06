@@ -5732,3 +5732,92 @@ footer {
   #tela-ficha .cs-fullsheet-attributes .attribute-stage{min-height:390px}
   #tela-ficha .cs-fullsheet-attributes .dice-wheel{height:390px}
 }
+
+
+/* Restauração visual da aba Resumo — indicadores e cartões no formato anterior */
+#painel-fichas-personagem .cs-dossier-classic-intro{display:grid;gap:7px;margin-bottom:3px}
+#painel-fichas-personagem .cs-dossier-classic-intro .eyebrow{color:#e68490;font-size:10px;letter-spacing:1.8px}
+#painel-fichas-personagem .cs-dossier-classic-intro h3{
+  color:#f9e8dc;font:normal clamp(23px,2.5vw,31px)/1.15 Georgia,serif;margin:0
+}
+#painel-fichas-personagem .cs-dossier-classic-intro p{
+  margin:0;color:#c9acae;font-size:12px;line-height:1.6
+}
+#painel-fichas-personagem .cs-dossier-classic-stats{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px
+}
+#painel-fichas-personagem .cs-dossier-classic-stat{
+  min-width:0;display:flex;flex-direction:column;gap:10px;
+  padding:17px 15px;border:1px solid #703040;border-radius:9px;
+  background:linear-gradient(145deg,#301620,#190e14)
+}
+#painel-fichas-personagem .cs-dossier-classic-stat span{
+  font-size:10px;letter-spacing:1.2px;color:#e98998;font-weight:800
+}
+#painel-fichas-personagem .cs-dossier-classic-stat strong{
+  font-size:clamp(19px,2.4vw,27px);font-variant-numeric:tabular-nums;color:#fff0e6
+}
+#painel-fichas-personagem .cs-dossier-classic-stat small{color:#c6a5ac;font-size:11px}
+#painel-fichas-personagem .cs-dossier-classic-columns{
+  display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:stretch;gap:12px
+}
+#painel-fichas-personagem .cs-dossier-classic-card{
+  display:flex;flex-direction:column;min-width:0;padding:18px;
+  border:1px solid #783343;border-radius:10px;
+  background:linear-gradient(145deg,#29151e,#160c11)
+}
+#painel-fichas-personagem .cs-dossier-classic-card h4{
+  margin:0 0 17px;font-size:12px;letter-spacing:1.1px;color:#efb2b7
+}
+#painel-fichas-personagem .cs-dossier-classic-attributes{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px
+}
+#painel-fichas-personagem .cs-dossier-classic-attribute{
+  min-width:0;display:flex;align-items:center;flex-direction:column;gap:9px;
+  padding:14px 2px;border:1px solid #843448;border-radius:7px;
+  background:#401827;color:#fff1e7
+}
+#painel-fichas-personagem .cs-dossier-classic-attribute:hover{background:#5f2132;border-color:#ee6178}
+#painel-fichas-personagem .cs-dossier-classic-attribute small{
+  color:#d9a5ae;font-size:10px
+}
+#painel-fichas-personagem .cs-dossier-classic-attribute strong{font-size:22px}
+#painel-fichas-personagem .cs-dossier-classic-link{
+  min-height:39px;padding:9px 11px;
+  border:1px solid #a24050;border-radius:6px;
+  background:#391824;color:#fbe6de;
+  font-size:10px;letter-spacing:.3px;font-weight:800
+}
+#painel-fichas-personagem .cs-dossier-classic-link:hover{background:#6f2034;border-color:#fa6176}
+#painel-fichas-personagem .cs-dossier-classic-card>.cs-dossier-classic-link{
+  margin-top:auto;width:100%;margin-bottom:0
+}
+#painel-fichas-personagem .cs-dossier-classic-records{margin-bottom:15px}
+#painel-fichas-personagem .cs-dossier-classic-record{
+  display:flex;justify-content:space-between;gap:10px;
+  padding:11px 0;border-bottom:1px solid #5e2834;
+  font-size:12px;color:#edceca
+}
+#painel-fichas-personagem .cs-dossier-classic-record strong{color:#f5b6bf}
+#painel-fichas-personagem .cs-dossier-classic-actions{
+  display:flex;flex-wrap:wrap;gap:6px;margin-top:auto
+}
+#painel-fichas-personagem .cs-dossier-classic-actions button{
+  flex:1 1 100px
+}
+#painel-fichas-personagem .cs-dossier-classic-note{
+  font-size:11px;color:#bfa6ab;line-height:1.6;margin:2px 0 0
+}
+@media(max-width:1150px){
+  #painel-fichas-personagem .cs-dossier-classic-stats{
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+  #painel-fichas-personagem .cs-dossier-classic-columns{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  #painel-fichas-personagem .cs-dossier-classic-stat{padding:12px}
+  #painel-fichas-personagem .cs-dossier-classic-card{padding:14px}
+  #painel-fichas-personagem .cs-dossier-classic-attributes{gap:4px}
+  #painel-fichas-personagem .cs-dossier-classic-attribute{padding:11px 2px}
+  #painel-fichas-personagem .cs-dossier-classic-attribute strong{font-size:19px}
+}
