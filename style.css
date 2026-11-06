@@ -4369,3 +4369,32 @@ footer {
 #tela-dados .dice-cube-d6-face{background:linear-gradient(135deg,color-mix(in srgb,var(--dice-accent) 55%,#ffffff 10%),color-mix(in srgb,var(--dice-accent) 35%,#0b0809));border-color:color-mix(in srgb,var(--dice-accent) 85%,#ffffff)}
 #tela-dados .dice-2d{filter:drop-shadow(0 18px 12px #000b) drop-shadow(0 0 16px color-mix(in srgb,var(--dice-accent) 45%,transparent))}
 .master-overview{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:18px 0}.master-overview>div{padding:17px;border:1px solid #685a48;border-radius:12px;background:#22252a;display:flex;flex-direction:column;gap:8px}.master-overview small{color:#bcb2a5;font-size:11px;letter-spacing:.1em}.master-overview strong{font-size:32px;color:#f0e4d3}.master-shortcuts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.master-shortcuts button{padding:12px 16px;background:#24272b;border:1px solid #78664e;border-radius:9px;color:#f2e6d4;cursor:pointer;font-weight:700}.master-shortcuts button:hover{background:#39332c}#concluir-sessao-atual{width:100%;margin-top:9px}@media(max-width:800px){.master-overview{grid-template-columns:repeat(3,1fr)}}@media(max-width:520px){.master-overview{grid-template-columns:repeat(2,1fr)}.master-shortcuts button{flex:1 1 100%}}
+
+/* Código Sombrio — organização visual do painel do mestre */
+#tela-mestre{--master-gold:#d7b57a;--master-line:rgba(205,174,125,.25);--master-panel:#1c2026}
+#tela-mestre .master-hero{position:relative;overflow:hidden;border:1px solid var(--master-line);border-radius:18px;padding:clamp(22px,4vw,38px);background:radial-gradient(ellipse at 95% 0%,rgba(178,129,68,.17),transparent 55%),linear-gradient(135deg,#25272c,#111419)}
+#tela-mestre .master-hero h2{letter-spacing:.055em;line-height:1.12}
+#tela-mestre .master-nav{display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:#15181d;border:1px solid var(--master-line);border-radius:12px;margin:18px 0}
+#tela-mestre .master-nav-link{flex:1 1 auto;min-width:120px;border-radius:8px}
+#tela-mestre .master-section-intro{margin:30px 0 13px;padding-left:15px;border-left:3px solid var(--master-gold)}
+#tela-mestre .master-section-intro h3{font-size:clamp(18px,2.5vw,24px);letter-spacing:.04em;margin:5px 0;color:#f4e9d9}
+#tela-mestre .master-section-intro p{color:#adaaa5;font-size:13px;margin:0}
+#tela-mestre .master-overview{margin-top:14px}
+#tela-mestre .master-overview>div{background:linear-gradient(160deg,#282a30,#191c21);border:1px solid var(--master-line);border-radius:13px;box-shadow:0 8px 22px #0002;min-height:102px}
+#tela-mestre .master-overview>div strong{color:var(--master-gold);font-variant-numeric:tabular-nums}
+#tela-mestre .master-shortcuts{margin:18px 0 8px}
+#tela-mestre .master-shortcuts button{transition:background .2s,border-color .2s,transform .2s}
+#tela-mestre .master-shortcuts button:hover{transform:translateY(-2px);border-color:var(--master-gold)}
+#tela-mestre .master-dashboard{align-items:start;gap:20px}
+#tela-mestre .master-rail,#tela-mestre .master-main-column{min-width:0}
+#tela-mestre .master-card{border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.17)}
+#tela-mestre .master-card-heading{gap:10px}
+#tela-mestre .master-card-heading h3{letter-spacing:.055em}
+#tela-mestre .master-tool{transition:background .18s,transform .18s}
+#tela-mestre .master-tool:hover{transform:translateX(3px)}
+#tela-mestre .master-disclosure{margin-top:14px;border-radius:12px;overflow:hidden}
+#tela-mestre .master-disclosure summary{cursor:pointer;line-height:1.5}
+#tela-mestre .master-disclosure summary:focus-visible,#tela-mestre button:focus-visible{outline:2px solid var(--master-gold);outline-offset:3px}
+#tela-mestre .master-management-intro{margin-top:36px}
+@media(max-width:750px){#tela-mestre .master-dashboard{display:flex;flex-direction:column}#tela-mestre .master-rail,#tela-mestre .master-main-column{width:100%}#tela-mestre .master-nav-link{min-width:calc(50% - 8px)}}
+@media(max-width:480px){#tela-mestre .master-hero{padding:20px}#tela-mestre .master-overview{gap:9px}#tela-mestre .master-overview>div{min-height:85px;padding:12px}#tela-mestre .master-overview strong{font-size:26px}#tela-mestre .master-section-intro{margin-top:24px}}
