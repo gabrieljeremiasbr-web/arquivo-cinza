@@ -4525,3 +4525,9 @@ footer {
 #tela-sessao .master-card{min-width:0}
 @media(max-width:760px){#tela-mestre .master-overview{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:420px){#tela-mestre .master-overview-stat{padding:14px;min-height:84px}#tela-mestre .master-overview-stat span{font-size:9px;letter-spacing:1px}}
+
+/* Área do Mestre sem cartão de abertura de mesa */
+#tela-mestre .master-management-layout{grid-template-columns:1fr;margin:18px 0 22px}
+#tela-mestre .master-management-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;width:100%;max-width:none}
+#tela-mestre .master-management-links>.eyebrow{grid-column:1/-1}
+@media(max-width:600px){#tela-mestre .master-management-links{grid-template-columns:1fr}}
