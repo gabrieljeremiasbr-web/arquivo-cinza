@@ -4488,3 +4488,26 @@ footer {
 #tela-mestre .master-management-links button:focus-visible {outline:2px solid #e8a4a8;outline-offset:2px}
 #tela-mestre .master-management-intro {margin-top:26px}
 @media(max-width:750px){#tela-mestre .master-management-layout{grid-template-columns:1fr}#tela-mestre .master-management-links{width:100%}}
+
+
+/* Menu de gerenciamento: identidade cromática Código Sombrio */
+#tela-mestre .master-management-links {
+  border:1px solid #8d3947;
+  background:radial-gradient(ellipse at top right,rgba(181,39,61,.18),transparent 65%),linear-gradient(155deg,#2a1119,#120b10 88%);
+  box-shadow:inset 0 1px rgba(255,201,205,.09),0 12px 30px rgba(0,0,0,.45);
+}
+#tela-mestre .master-management-links>.eyebrow {color:#f08b95}
+#tela-mestre .master-management-links button {
+  color:#f6e3dc;
+  border:1px solid #82303f;
+  background:linear-gradient(115deg,#421822,#260f17);
+  box-shadow:inset 3px 0 #c74759;
+}
+#tela-mestre .master-management-links button:hover {
+  color:#fff6ef;
+  border-color:#e35e71;
+  background:linear-gradient(115deg,#712435,#38131e);
+  box-shadow:inset 3px 0 #f26a7b,0 0 16px rgba(220,49,75,.2);
+}
+#tela-mestre .master-management-links button:active {background:#7a2838}
+#tela-mestre .master-management-links button:focus-visible {outline:2px solid #f2a0a8;outline-offset:3px}
